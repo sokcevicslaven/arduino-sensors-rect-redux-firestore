@@ -3,6 +3,7 @@
 import React from 'react';
 
 // Materual UI
+import Fade from '@material-ui/core/Fade';
 import Button from '@material-ui/core/Button';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
@@ -22,9 +23,17 @@ const ButtonProgress = ({ loading, children }) => {
 			disabled={loading}
 		>
 			{loading && (
-				<div className={classes.progressWrapper}>
-					<CircularProgress size={30} />
-				</div>
+				<Fade
+					in={loading}
+					style={{
+						transitionDelay: loading ? '800ms' : '0ms'
+					}}
+					unmountOnExit
+				>
+					<div className={classes.progressWrapper}>
+						<CircularProgress size={30} />
+					</div>
+				</Fade>
 			)}
 			{children}
 		</Button>

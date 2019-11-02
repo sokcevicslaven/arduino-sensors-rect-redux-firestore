@@ -6,7 +6,7 @@ import { Link as RouterLink, useHistory } from 'react-router-dom';
 
 // Redux
 import { useDispatch, useSelector } from 'react-redux';
-import { loginAction } from '../../redux/actions/userActions';
+import { loginAction, clearErrorsAction } from '../../redux/actions';
 
 // Components
 import ButtonProgress from '../../components/ButtonProgress';
@@ -26,9 +26,10 @@ import useStyles from './style.js';
 const getErrorControl = code => {
 	console.log('TCL: getErrorControl');
 	let email, password, other;
-	if (/email/.test(code) || /user/.test(code)) email = true;
-	else if (/password/.test(code)) password = true;
-	else other = true;
+	if (code)
+		if (/email/.test(code) || /user/.test(code)) email = true;
+		else if (/password/.test(code)) password = true;
+		else other = true;
 	return [email, password, other];
 };
 
@@ -39,26 +40,31 @@ const Login = () => {
 	const login = useSelector(state => state.user.login);
 	const loading = useSelector(state => state.ui.loading);
 	const error = useSelector(state => state.ui.error);
-	const [state, setState] = useState({ email: '', password: '' });
-
 	const [emailError, passwordError, otherError] = useMemo(() => getErrorControl(error.code), [
 		error.code
 	]);
+
+	useEffect(() => {
+		dispatch(clearErrorsAction());
+	}, []);
 
 	useEffect(() => {
 		if (login) history.push('/dashboard');
 		// eslint-disable-next-line
 	}, [login]);
 
-	const handleChange = (id, value) => {
-		setState(state => ({ ...state, [id]: value }));
-	};
+	// const handleChange = (id, value) => {
+	// 	setState(state => ({ ...state, [id]: value }));
+	// };
 
 	const handleSubmit = e => {
 		e.preventDefault();
 
+		// Get form reference
+		const form = e.target;
+
 		// Dispatch login action
-		dispatch(loginAction(state.email, state.password));
+		dispatch(loginAction(form.email.value, form.password.value));
 	};
 
 	return (
@@ -85,7 +91,7 @@ const Login = () => {
 						autoComplete='email'
 						autoFocus
 						//value={state.email}
-						onChange={e => handleChange(e.target.id, e.target.value)}
+						//{/* onChange={e => handleChange(e.target.id, e.target.value)} */}
 						error={emailError}
 						helperText={emailError && error.message}
 					/>
@@ -101,7 +107,7 @@ const Login = () => {
 						id='password'
 						autoComplete='current-password'
 						//value={state.password}
-						onChange={e => handleChange(e.target.id, e.target.value)}
+						//{/* onChange={e => handleChange(e.target.id, e.target.value)} */}
 						error={passwordError}
 						helperText={passwordError && error.message}
 					/>

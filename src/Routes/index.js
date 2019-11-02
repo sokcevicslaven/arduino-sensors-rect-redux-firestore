@@ -9,7 +9,7 @@ import { CSSTransition } from 'react-transition-group';
 import Copyright from '../components/Copyright';
 
 // Pages
-import Home from '../pages/Home';
+import Dev from '../pages/Dev';
 import Login from '../pages/auth/Login';
 import Signup from '../pages/auth/Signup';
 import Dashboard from '../pages/Dashboard';
@@ -19,10 +19,10 @@ import useStyles from './style';
 
 // Routes => Compoonents
 const routes = [
-	{ name: 'Home', path: '/', Component: Home },
+	{ name: 'Dev', path: '/dev', Component: Dev },
+	{ name: 'Dashboard', path: '/', Component: Dashboard },
 	{ name: 'Login', path: '/login', Component: Login },
-	{ name: 'Signup', path: '/signup', Component: Signup },
-	{ name: 'Dashboard', path: '/dashboard', Component: Dashboard }
+	{ name: 'Signup', path: '/signup', Component: Signup }
 ];
 
 // const Routes = ({ authenticated }) => {

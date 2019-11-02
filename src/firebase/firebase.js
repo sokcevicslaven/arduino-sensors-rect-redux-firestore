@@ -47,8 +47,8 @@ class Firebase {
 	 * @param email The registration email
 	 * @param password The registration password
 	 */
-	signup = (displayName, email, password) =>
-		this.auth.createUserWithEmailAndPassword(email, password);
+	signup = (email, password) => this.auth.createUserWithEmailAndPassword(email, password);
+
 	//.then(result => result.user.updateProfile({ displayName: displayName }));
 	// 	return result.user.updateProfile({ displayName: displayName });
 	// } catch (err) {
@@ -61,23 +61,48 @@ class Firebase {
 	 */
 	getCurrentUser = () => this.auth.currentUser;
 
-	// Add data
-	addData = (collection, data) => {
-		// Add a new document in collection "cities"
-		return this.db.collection(collection).add({
-			arduino: 3,
-			co2: 9,
-			date: new Date(),
-			humidity: 33,
-			temperature: 39
-		});
-		// .then(function() {
-		// 	console.log('Document successfully written!');
-		// })
-		// .catch(function(error) {
-		// 	console.error('Error writing document: ', error);
-		// });
+	/**
+	 * Add a new document to this collection with the specified data
+	 * * Return Promise<DocumentReference>
+	 * @param collection Collections
+	 * @param data Data
+	 */
+	addData = (collection, data) => this.db.collection(collection).add(data);
+
+	/**
+	 * Add a new document to this collection with the specified data
+	 * * Return Promise<void>
+	 * @param collection Document collections
+	 * @param document Document to retreive
+	 */
+	addDocumentData = (collection, document, data) => {
+		return this.db
+			.collection(collection)
+			.doc(document)
+			.set(data);
 	};
+
+	/**
+	 * Reads the document
+	 * * Return Promise<DocumentSnapshot>
+	 * @param collection Document collections
+	 * @param document Document to retreive
+	 */
+	getDocumentData = (collection, document) =>
+		this.db
+			.collection(collection)
+			.doc(document)
+			.get();
+
+	/**
+	 * Reads the username document
+	 * * Return Promise<DocumentSnapshot>
+	 */
+	getByUsername = username =>
+		this.db
+			.collection('users')
+			.doc(username)
+			.get();
 }
 
 export default new Firebase();

@@ -1,9 +1,14 @@
 // Sign up page
 
-import React, { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+// React
+import React, { useState, useEffect, useMemo } from 'react';
 import { Link as RouterLink, useHistory } from 'react-router-dom';
-import { signupAction } from '../../redux/actions/userActions';
+
+// Redux
+import { useDispatch, useSelector } from 'react-redux';
+import { signupAction, clearErrorsAction } from '../../redux/actions';
+
+// Components
 import ButtonProgress from '../../components/ButtonProgress';
 
 // Material UI
@@ -25,12 +30,13 @@ import { isEmptyObj } from '../../lib';
 // Get control that caused error
 const getErrorControl = code => {
 	console.log('TCL: getErrorControl');
-	let email, password, other;
-	if (/email/.test(code)) email = true;
-	else if (/password/.test(code)) password = true;
-	else other = true;
-	console.log('TCL: [email, password, other]', [email, password, other]);
-	return [email, password, other];
+	let username, email, password, other;
+	if (code)
+		if (/username/.test(code)) username = true;
+		else if (/email/.test(code)) email = true;
+		else if (/password/.test(code)) password = true;
+		else other = true;
+	return [username, email, password, other];
 };
 
 const Signup = () => {
@@ -41,7 +47,14 @@ const Signup = () => {
 	const loading = useSelector(state => state.ui.loading);
 	const widthMaxXS = useMediaQuery('(max-width:599.99px)');
 	const [fromErrors, setFormErrors] = useState({});
-	const [emailError, passwordError, otherError] = getErrorControl(error.code);
+	const [usernameError, emailError, passwordError, otherError] = useMemo(
+		() => getErrorControl(error.code),
+		[error.code]
+	);
+
+	useEffect(() => {
+		dispatch(clearErrorsAction());
+	}, []);
 
 	const handleSubmit = e => {
 		e.preventDefault();
@@ -61,12 +74,12 @@ const Signup = () => {
 
 		// Check if all field are provided
 		const errors = {};
-		errors.firstName = !firstName && required;
-		errors.lastName = !lastName && required;
-		errors.username = !username && required;
-		errors.email = !email && required;
-		errors.password = !password && required;
-		errors.confirmPassword = !confirmPassword && required;
+		!firstName && (errors.firstName = required);
+		!lastName && (errors.lastName = required);
+		!username && (errors.username = required);
+		!email && (errors.email = required);
+		!password && (errors.password = required);
+		!confirmPassword && (errors.confirmPassword = required);
 		if (password !== confirmPassword) {
 			errors.password = mismatch;
 			errors.confirmPassword = mismatch;
@@ -149,8 +162,8 @@ const Signup = () => {
 						name='username'
 						label='Username'
 						autoComplete='username'
-						error={!!fromErrors.username}
-						helperText={fromErrors.username}
+						error={!!fromErrors.username || usernameError}
+						helperText={fromErrors.username || (usernameError && error.message)}
 					/>
 
 					{/* email address */}

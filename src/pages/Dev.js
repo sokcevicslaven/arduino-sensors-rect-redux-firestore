@@ -49,14 +49,14 @@ const addData = async dispatch => {
 	}
 };
 
-const Home = () => {
+const Dev = () => {
 	const classes = useStyles();
 	const dispatch = useDispatch();
 	const loading = useSelector(state => state.ui.loading);
 
 	return (
 		<div>
-			{(loading && <h2>Loading...</h2>) || <h2>Home page</h2>}
+			{(loading && <h2>Loading...</h2>) || <h2>Dev page</h2>}
 			<Button variant='contained' className={classes.button} onClick={() => loginHandler(dispatch)}>
 				Login
 			</Button>
@@ -82,4 +82,4 @@ const useStyles = makeStyles(theme => ({
 	}
 }));
 
-export default Home;
+export default Dev;
