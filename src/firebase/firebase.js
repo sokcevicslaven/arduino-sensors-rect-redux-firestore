@@ -17,6 +17,7 @@ const firebaseConfig = {
 
 class Firebase {
 	constructor() {
+		console.log('TCL: Firebase -> constructor -> constructor');
 		// Initialize Firebase
 		app.initializeApp(firebaseConfig);
 		// The Firebase Auth service interface
@@ -46,16 +47,37 @@ class Firebase {
 	 * @param email The registration email
 	 * @param password The registration password
 	 */
-	signin = async (initials, email, password) => {
-		const result = await this.auth.createUserWithEmailAndPassword(email, password);
-		return result.user.updateProfile({ displayName: initials });
-	};
+	signup = (displayName, email, password) =>
+		this.auth.createUserWithEmailAndPassword(email, password);
+	//.then(result => result.user.updateProfile({ displayName: displayName }));
+	// 	return result.user.updateProfile({ displayName: displayName });
+	// } catch (err) {
+	// 	throw err;
+	// }
 
 	/**
-	 * Logout user
+	 * Get current user
 	 * * Return currently logged user object
 	 */
 	getCurrentUser = () => this.auth.currentUser;
+
+	// Add data
+	addData = (collection, data) => {
+		// Add a new document in collection "cities"
+		return this.db.collection(collection).add({
+			arduino: 3,
+			co2: 9,
+			date: new Date(),
+			humidity: 33,
+			temperature: 39
+		});
+		// .then(function() {
+		// 	console.log('Document successfully written!');
+		// })
+		// .catch(function(error) {
+		// 	console.error('Error writing document: ', error);
+		// });
+	};
 }
 
 export default new Firebase();

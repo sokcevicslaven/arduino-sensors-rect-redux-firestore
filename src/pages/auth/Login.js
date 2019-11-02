@@ -1,9 +1,14 @@
 // Login page
 
-import React, { useState, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+// React
+import React, { useState, useEffect, useMemo } from 'react';
 import { Link as RouterLink, useHistory } from 'react-router-dom';
+
+// Redux
+import { useDispatch, useSelector } from 'react-redux';
 import { loginAction } from '../../redux/actions/userActions';
+
+// Components
 import ButtonProgress from '../../components/ButtonProgress';
 
 // Material UI
@@ -17,19 +22,33 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 // Custom styles
 import useStyles from './style.js';
 
+// Get control that caused error
+const getErrorControl = code => {
+	console.log('TCL: getErrorControl');
+	let email, password, other;
+	if (/email/.test(code) || /user/.test(code)) email = true;
+	else if (/password/.test(code)) password = true;
+	else other = true;
+	return [email, password, other];
+};
+
 const Login = () => {
 	const classes = useStyles();
 	const history = useHistory();
 	const dispatch = useDispatch();
 	const login = useSelector(state => state.user.login);
 	const loading = useSelector(state => state.ui.loading);
-	const errors = useSelector(state => state.ui.errors);
+	const error = useSelector(state => state.ui.error);
 	const [state, setState] = useState({ email: '', password: '' });
+
+	const [emailError, passwordError, otherError] = useMemo(() => getErrorControl(error.code), [
+		error.code
+	]);
 
 	useEffect(() => {
 		if (login) history.push('/dashboard');
 		// eslint-disable-next-line
-	}, []);
+	}, [login]);
 
 	const handleChange = (id, value) => {
 		setState(state => ({ ...state, [id]: value }));
@@ -39,7 +58,7 @@ const Login = () => {
 		e.preventDefault();
 
 		// Dispatch login action
-		dispatch(loginAction(state, history));
+		dispatch(loginAction(state.email, state.password));
 	};
 
 	return (
@@ -65,9 +84,10 @@ const Login = () => {
 						name='email'
 						autoComplete='email'
 						autoFocus
+						//value={state.email}
 						onChange={e => handleChange(e.target.id, e.target.value)}
-						error={errors.email ? true : false}
-						helperText={errors.email}
+						error={emailError}
+						helperText={emailError && error.message}
 					/>
 
 					<TextField
@@ -80,22 +100,22 @@ const Login = () => {
 						type='password'
 						id='password'
 						autoComplete='current-password'
-						value={state.password}
+						//value={state.password}
 						onChange={e => handleChange(e.target.id, e.target.value)}
-						error={errors.password ? true : false}
-						helperText={errors.password}
+						error={passwordError}
+						helperText={passwordError && error.message}
 					/>
 
 					{/* error message */}
 					<Typography variant='h6' align='center' color='secondary'>
-						{errors.error}
+						{otherError && error.message}
 					</Typography>
 
 					{/* Submit button with progress */}
 					<ButtonProgress loading={loading}>Log In</ButtonProgress>
 
 					{/* Info text */}
-					<div item className={classes.info}>
+					<div className={classes.info}>
 						<Link component={RouterLink} to='/signup' variant='body2'>
 							Don't have an account? Sign Up
 						</Link>

@@ -1,17 +1,17 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import firebase from '../firebase/firebase';
+import { SET_ERROR } from '../redux/types';
+import { loginAction } from '../redux/actions/userActions';
 
 // MUI
 import Button from '@material-ui/core/Button';
+import { makeStyles } from '@material-ui/core/styles';
 
-const loginHandler = async () => {
-	try {
-		const result = await firebase.login('ivan.brajkovic@icloud.com', '123456789');
-		console.log('Logged in:', result.user.email);
-	} catch (err) {
-		console.log('loginHandler -> err', err);
-	}
+import { logObj } from '../lib';
+
+const loginHandler = dispatch => {
+	dispatch(loginAction('ivan.brajkovic@icloud.com', '123456789'));
 };
 
 const logoutHandler = async () => {
@@ -40,18 +40,46 @@ const getCurrenUserHandler = () => {
 	);
 };
 
+const addData = async dispatch => {
+	try {
+		await firebase.addData('sensors', null);
+	} catch (err) {
+		logObj(err);
+		dispatch({ type: SET_ERROR, payload: err });
+	}
+};
+
 const Home = () => {
+	const classes = useStyles();
+	const dispatch = useDispatch();
 	const loading = useSelector(state => state.ui.loading);
 
 	return (
 		<div>
 			{(loading && <h2>Loading...</h2>) || <h2>Home page</h2>}
-			<Button onClick={loginHandler}>Login</Button>
-			<Button onClick={logoutHandler}>Logout</Button>
-			<Button onClick={getCurrenUserHandler}>Get user</Button>
-			<Button onClick={createUser}>New user</Button>
+			<Button variant='contained' className={classes.button} onClick={() => loginHandler(dispatch)}>
+				Login
+			</Button>
+			<Button variant='contained' className={classes.button} onClick={logoutHandler}>
+				Logout
+			</Button>
+			<Button variant='contained' className={classes.button} onClick={getCurrenUserHandler}>
+				Get user
+			</Button>
+			<Button variant='contained' className={classes.button} onClick={createUser}>
+				New user
+			</Button>
+			<Button variant='contained' className={classes.button} onClick={() => addData(dispatch)}>
+				Add data
+			</Button>
 		</div>
 	);
 };
+
+const useStyles = makeStyles(theme => ({
+	button: {
+		margin: theme.spacing(1)
+	}
+}));
 
 export default Home;

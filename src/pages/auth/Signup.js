@@ -19,31 +19,76 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 // Custom styles
 import useStyles from './style.js';
 
+// Utility
+import { isEmptyObj } from '../../lib';
+
+// Get control that caused error
+const getErrorControl = code => {
+	console.log('TCL: getErrorControl');
+	let email, password, other;
+	if (/email/.test(code)) email = true;
+	else if (/password/.test(code)) password = true;
+	else other = true;
+	console.log('TCL: [email, password, other]', [email, password, other]);
+	return [email, password, other];
+};
+
 const Signup = () => {
 	const classes = useStyles();
 	const history = useHistory();
 	const dispatch = useDispatch();
+	const error = useSelector(state => state.ui.error);
 	const loading = useSelector(state => state.ui.loading);
-	const errors = useSelector(state => state.ui.errors);
-	const [state, setState] = useState({
-		firstName: '',
-		lastName: '',
-		username: '',
-		email: '',
-		password: '',
-		confirmPassword: ''
-	});
 	const widthMaxXS = useMediaQuery('(max-width:599.99px)');
-
-	const handleChange = (id, value) => {
-		setState(state => ({ ...state, [id]: value }));
-	};
+	const [fromErrors, setFormErrors] = useState({});
+	const [emailError, passwordError, otherError] = getErrorControl(error.code);
 
 	const handleSubmit = e => {
 		e.preventDefault();
 
-		// Dispatch signup action
-		dispatch(signupAction(state, history));
+		// Form input fields
+		const form = e.target;
+		const firstName = form.firstName.value;
+		const lastName = form.lastName.value;
+		const username = form.username.value;
+		const email = form.email.value;
+		const password = form.password.value;
+		const confirmPassword = form.confirmPassword.value;
+
+		// Error messages
+		const required = 'Field is required';
+		const mismatch = 'Password mismatch';
+
+		// Check if all field are provided
+		const errors = {};
+		errors.firstName = !firstName && required;
+		errors.lastName = !lastName && required;
+		errors.username = !username && required;
+		errors.email = !email && required;
+		errors.password = !password && required;
+		errors.confirmPassword = !confirmPassword && required;
+		if (password !== confirmPassword) {
+			errors.password = mismatch;
+			errors.confirmPassword = mismatch;
+		}
+
+		// Check if there are errors
+		if (!isEmptyObj(errors)) return setFormErrors(errors);
+		else setFormErrors({});
+
+		// If all field are provided, procceed with signup
+		dispatch(
+			signupAction(
+				{
+					firstName,
+					lastName,
+					username,
+					email,
+					password
+				},
+				history
+			)
+		);
 	};
 
 	return (
@@ -72,10 +117,8 @@ const Signup = () => {
 								id='firstName'
 								autoComplete='fname'
 								autoFocus
-								value={state.firstName}
-								onChange={e => handleChange(e.target.id, e.target.value)}
-								error={errors.firstName ? true : false}
-								helperText={errors.firstName}
+								error={!!fromErrors.firstName}
+								helperText={fromErrors.firstName}
 							/>
 						</Grid>
 
@@ -90,10 +133,8 @@ const Signup = () => {
 								label='Last Name'
 								name='lastName'
 								autoComplete='lname'
-								value={state.lastName}
-								onChange={e => handleChange(e.target.id, e.target.value)}
-								error={errors.lastName ? true : false}
-								helperText={errors.lastName}
+								error={!!fromErrors.lastName}
+								helperText={fromErrors.lastName}
 							/>
 						</Grid>
 					</Grid>
@@ -108,10 +149,8 @@ const Signup = () => {
 						name='username'
 						label='Username'
 						autoComplete='username'
-						value={state.username}
-						onChange={e => handleChange(e.target.id, e.target.value)}
-						error={errors.username ? true : false}
-						helperText={errors.username}
+						error={!!fromErrors.username}
+						helperText={fromErrors.username}
 					/>
 
 					{/* email address */}
@@ -124,10 +163,8 @@ const Signup = () => {
 						label='Email Address'
 						name='email'
 						autoComplete='email'
-						value={state.email}
-						onChange={e => handleChange(e.target.id, e.target.value)}
-						error={errors.email ? true : false}
-						helperText={errors.email}
+						error={!!fromErrors.email || emailError}
+						helperText={fromErrors.email || (emailError && error.message)}
 					/>
 
 					{/* password */}
@@ -141,10 +178,8 @@ const Signup = () => {
 						type='password'
 						id='password'
 						autoComplete='current-password'
-						value={state.password}
-						onChange={e => handleChange(e.target.id, e.target.value)}
-						error={errors.password ? true : false}
-						helperText={errors.password}
+						error={!!fromErrors.password || passwordError}
+						helperText={fromErrors.password || (passwordError && error.message)}
 					/>
 
 					{/* confirm password */}
@@ -157,22 +192,20 @@ const Signup = () => {
 						label='Confirm Password'
 						type='password'
 						id='confirmPassword'
-						value={state.confirmPassword}
-						onChange={e => handleChange(e.target.id, e.target.value)}
-						error={errors.confirmPassword ? true : false}
-						helperText={errors.confirmPassword}
+						error={!!fromErrors.confirmPassword}
+						helperText={fromErrors.confirmPassword}
 					/>
 
 					{/* error message */}
 					<Typography variant='h6' align='center' color='secondary'>
-						{errors.error}
+						{otherError && error.message}
 					</Typography>
 
 					{/* Submit button with progress */}
 					<ButtonProgress loading={loading}>Sign up</ButtonProgress>
 
 					{/* Info text */}
-					<div item className={classes.info}>
+					<div className={classes.info}>
 						<Link component={RouterLink} to='/login' variant='body2'>
 							Already have an account? Log in
 						</Link>

@@ -1,21 +1,21 @@
 // Routes with transition effect
 
-import React from './node_modules/react';
+import React from 'react';
 // import { Route, Redirect } from 'react-router-dom';
-import { Route } from './node_modules/react-router-dom';
-import { CSSTransition } from './node_modules/react-transition-group';
+import { Route } from 'react-router-dom';
+import { CSSTransition } from 'react-transition-group';
 
 // Components
-import Copyright from '../Copyright/Copyright';
+import Copyright from '../components/Copyright';
 
 // Pages
-import Home from '../pages/auth/Home';
-import Login from '../../pages/auth/Login';
-import Signup from '../../pages/auth/Signup';
-import Dashboard from '../pages/dashboard/Dashboard';
+import Home from '../pages/Home';
+import Login from '../pages/auth/Login';
+import Signup from '../pages/auth/Signup';
+import Dashboard from '../pages/Dashboard';
 
 // Styles
-import useStyles from './style.js';
+import useStyles from './style';
 
 // Routes => Compoonents
 const routes = [
