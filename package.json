@@ -5,6 +5,7 @@
 	"dependencies": {
 		"@material-ui/core": "^4.5.2",
 		"@material-ui/icons": "^4.5.1",
+		"apexcharts": "^3.10.1",
 		"firebase": "^7.2.2",
 		"react": "^16.11.0",
 		"react-dom": "^16.11.0",
@@ -18,7 +19,8 @@
 		"start": "react-scripts start",
 		"build": "react-scripts build",
 		"test": "react-scripts test",
-		"eject": "react-scripts eject"
+		"eject": "react-scripts eject",
+		"analyse": "node analyse.js"
 	},
 	"eslintConfig": {
 		"extends": "react-app"
@@ -35,5 +37,8 @@
 			"last 1 safari version"
 		]
 	},
-	"proxy": "https://europe-west1-arduino-sensors-754e5.cloudfunctions.net/api"
+	"proxy": "https://europe-west1-arduino-sensors-754e5.cloudfunctions.net/api",
+	"devDependencies": {
+		"webpack-bundle-analyzer": "^3.6.0"
+	}
 }

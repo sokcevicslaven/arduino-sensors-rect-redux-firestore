@@ -8,12 +8,12 @@ export default makeStyles(theme => ({
 		// background: red[100],
 		display: 'flex'
 	},
-	marginLeft: {
-		marginLeft: theme.spacing(7) + 1,
-		[theme.breakpoints.up('sm')]: {
-			marginLeft: 'auto'
-		}
-	},
+	// marginLeft: {
+	// 	marginLeft: theme.spacing(7) + 1,
+	// 	[theme.breakpoints.up('sm')]: {
+	// 		marginLeft: 'auto'
+	// 	}
+	// },
 	pageContainer: {
 		// background: blue[100],
 		position: 'relative',

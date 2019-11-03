@@ -1,7 +1,7 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import firebase from '../firebase/firebase';
-import { SET_ERROR } from '../redux/types';
+import { SET_ERROR, SET_DARK_THEME } from '../redux/types';
 import { loginAction } from '../redux/actions/userActions';
 
 // MUI
@@ -49,10 +49,13 @@ const addData = async dispatch => {
 	}
 };
 
+const setDarkTheme = (dispatch, dark) => dispatch({ type: SET_DARK_THEME, payload: dark });
+
 const Dev = () => {
 	const classes = useStyles();
 	const dispatch = useDispatch();
 	const loading = useSelector(state => state.ui.loading);
+	const darkTheme = useSelector(state => state.ui.darkTheme);
 
 	return (
 		<div>
@@ -71,6 +74,13 @@ const Dev = () => {
 			</Button>
 			<Button variant='contained' className={classes.button} onClick={() => addData(dispatch)}>
 				Add data
+			</Button>
+			<Button
+				variant='contained'
+				className={classes.button}
+				onClick={() => setDarkTheme(dispatch, !darkTheme)}
+			>
+				Dark teme
 			</Button>
 		</div>
 	);

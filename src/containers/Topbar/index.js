@@ -7,6 +7,7 @@ import { logoutAction } from '../../redux/actions/userActions';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Button from '@material-ui/core/Button';
+import Fab from '@material-ui/core/Fab';
 import Typography from '@material-ui/core/Typography';
 import Link from '@material-ui/core/Link';
 // Styles
@@ -16,15 +17,21 @@ const Topbar = () => {
 	const classes = useStyle();
 	const dispatch = useDispatch();
 	const login = useSelector(state => state.user.login);
-	// const loading = useSelector(state => state.ui.loading);
 	const details = useSelector(state => state.user.details);
 
-	const getLoginLogoutButton = login => {
+	const getLoginLogoutButton = () => {
 		if (login)
 			return (
-				<Button color='inherit' onClick={() => dispatch(logoutAction())}>
-					Log out
-				</Button>
+				<div>
+					<Button color='inherit' onClick={() => dispatch(logoutAction())}>
+						Log out
+					</Button>
+					<Fab size='small' className={classes.avatar}>
+						<Link to='/' component={RouterLink} underline='none' color='inherit' variant='inherit'>
+							<Typography variant='h6'>{details.displayName}</Typography>
+						</Link>
+					</Fab>
+				</div>
 			);
 		else
 			return (
@@ -44,7 +51,7 @@ const Topbar = () => {
 						</Typography>
 					</Link>
 				</div>
-				<div>{getLoginLogoutButton(login)}</div>
+				{getLoginLogoutButton()}
 			</Toolbar>
 		</AppBar>
 	);

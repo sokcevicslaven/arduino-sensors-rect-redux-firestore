@@ -3,6 +3,7 @@ import * as app from 'firebase/app';
 // Firebase services
 import 'firebase/auth';
 import 'firebase/firestore';
+// import 'firebase/database';
 
 // Firebase project configuration
 const firebaseConfig = {
@@ -23,7 +24,7 @@ class Firebase {
 		// The Firebase Auth service interface
 		this.auth = app.auth();
 		// The Firebase Firestore service interface
-		this.db = app.firestore();
+		this.fire = app.firestore();
 	}
 
 	/**
@@ -67,7 +68,7 @@ class Firebase {
 	 * @param collection Collections
 	 * @param data Data
 	 */
-	addData = (collection, data) => this.db.collection(collection).add(data);
+	addData = (collection, data) => this.fire.collection(collection).add(data);
 
 	/**
 	 * Add a new document to this collection with the specified data
@@ -76,7 +77,7 @@ class Firebase {
 	 * @param document Document to retreive
 	 */
 	addDocumentData = (collection, document, data) => {
-		return this.db
+		return this.fire
 			.collection(collection)
 			.doc(document)
 			.set(data);
@@ -89,7 +90,7 @@ class Firebase {
 	 * @param document Document to retreive
 	 */
 	getDocumentData = (collection, document) =>
-		this.db
+		this.fire
 			.collection(collection)
 			.doc(document)
 			.get();
@@ -99,7 +100,7 @@ class Firebase {
 	 * * Return Promise<DocumentSnapshot>
 	 */
 	getByUsername = username =>
-		this.db
+		this.fire
 			.collection('users')
 			.doc(username)
 			.get();

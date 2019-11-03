@@ -55,8 +55,6 @@ export const signupAction = (user, history) => async dispatch => {
 		// Stop loading animation
 		dispatch({ type: STOP_LOADING });
 
-		// TODO Add user into database
-
 		delete user.password; // Remove password
 		await firebase.addDocumentData('users', user.username, {
 			...user,

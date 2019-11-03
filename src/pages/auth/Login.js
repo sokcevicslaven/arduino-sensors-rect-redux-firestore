@@ -1,7 +1,7 @@
 // Login page
 
 // React
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { Link as RouterLink, useHistory } from 'react-router-dom';
 
 // Redux
@@ -49,7 +49,7 @@ const Login = () => {
 	}, []);
 
 	useEffect(() => {
-		if (login) history.push('/dashboard');
+		if (login) history.push('/');
 		// eslint-disable-next-line
 	}, [login]);
 

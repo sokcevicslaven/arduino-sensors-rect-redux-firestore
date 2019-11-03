@@ -5,10 +5,13 @@ import { Provider } from 'react-redux';
 import { createStore, applyMiddleware, compose } from 'redux';
 import ReduxThunk from 'redux-thunk';
 import rootReducer from './redux/reducers';
+// MUI
+import CssBaseline from '@material-ui/core/CssBaseline';
 // Components
 import App from './containers/App';
 // Styles
-import './index.css';
+import Theme from './theme/Theme';
+// import './index.css';
 
 const store = createStore(
 	rootReducer,
@@ -20,7 +23,10 @@ const store = createStore(
 
 ReactDOM.render(
 	<Provider store={store}>
-		<App />,
+		<Theme>
+			<CssBaseline />
+			<App />
+		</Theme>
 	</Provider>,
 	document.getElementById('root')
 );
