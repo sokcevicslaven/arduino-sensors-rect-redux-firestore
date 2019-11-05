@@ -3,12 +3,12 @@ import React, { useState, useEffect } from 'react';
 // Material UI
 import Paper from '@material-ui/core/Paper';
 import CircularProgress from '@material-ui/core/CircularProgress';
-
-// Custom styles
-import useStyles from './style.js';
 import Typography from '@material-ui/core/Typography';
 
-const SensorMeter = ({ value, size, valueError }) => {
+// Custom styles
+import useStyles from './style';
+
+const SensorMeter = ({ value, size, textVariant, valueError, elevation }) => {
 	const classes = useStyles();
 	const [min, setMin] = useState(value);
 	const [max, setMax] = useState(value);
@@ -19,7 +19,7 @@ const SensorMeter = ({ value, size, valueError }) => {
 	}, [value]);
 
 	return (
-		<Paper elevation={3} className={classes.paper}>
+		<Paper elevation={elevation} className={classes.paper}>
 			<Typography variant='body1' className={classes.minmax}>
 				max: {max}
 			</Typography>
@@ -38,7 +38,7 @@ const SensorMeter = ({ value, size, valueError }) => {
 					value={value}
 					className={classes.progress}
 				/>
-				<Typography variant='h2' className={classes.text}>
+				<Typography variant={textVariant} className={classes.text}>
 					{value}
 				</Typography>
 			</div>

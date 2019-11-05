@@ -9,14 +9,16 @@ import firebase from '../firebase/firebase';
 
 // Components
 import SensorMeter from '../components/SensorMeter';
+import ChartControl from '../components/ChartControl';
 
 // MUI
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
+import useMediaQuery from '@material-ui/core/useMediaQuery';
 
 // Frappe chart
-import useChart from '../hooks/useChart';
+// import useChart from '../components/Chart/useChart';
 
 // Utility
 import { logObj } from '../lib';
@@ -127,8 +129,6 @@ const initData = [
 ];
 
 const Dev = () => {
-	const chartRef = useChart(true, '#chart');
-
 	const [progress, setProgress] = useState(0);
 
 	//	const [data, setData] = useState(initialData);
@@ -136,6 +136,8 @@ const Dev = () => {
 	const dispatch = useDispatch();
 	const loading = useSelector(state => state.ui.loading);
 	const darkTheme = useSelector(state => state.ui.darkTheme);
+
+	const minWidthSM = useMediaQuery('(min-width:600px)');
 
 	// useEffect(() => {
 	// 	chartRef.current = new Chart(charTagRef.current, {
@@ -175,7 +177,7 @@ const Dev = () => {
 			>
 				Dark teme
 			</Button>
-			<Button variant='contained' className={classes.button} onClick={() => chartRef(initData)}>
+			<Button variant='contained' className={classes.button} onClick={() => {}}>
 				Update chart
 			</Button>
 			<Button
@@ -194,18 +196,50 @@ const Dev = () => {
 			</Button>
 			<br />
 			<br />
-			<Grid container justify='space-around'>
-				<Grid item>
-					<SensorMeter value={progress} valueError={50} size={150} />
+			<Grid container justify='space-around' spacing={3} style={{ background: 'lightblue' }}>
+				<Grid
+					item
+					container
+					alignItems='center'
+					justify='center'
+					xs={12}
+					sm={3}
+					spacing={2}
+					direction='column'
+					style={{ background: 'lightgreen' }}
+				>
+					<Grid item>
+						<SensorMeter
+							value={progress}
+							valueError={50}
+							size={100}
+							textVariant='h3'
+							elevation={3}
+						/>
+					</Grid>
+					<Grid item>
+						<SensorMeter
+							value={progress}
+							valueError={50}
+							size={100}
+							textVariant='h3'
+							elevation={3}
+						/>
+					</Grid>
+					<Grid item>
+						<SensorMeter
+							value={progress}
+							valueError={50}
+							size={100}
+							textVariant='h3'
+							elevation={3}
+						/>
+					</Grid>
 				</Grid>
-				<Grid item>
-					<SensorMeter value={progress} valueError={50} size={150} />
-				</Grid>
-				<Grid item>
-					<SensorMeter value={progress} valueError={50} size={150} />
+				<Grid item xs={12} sm={9} style={{ background: 'lightgrey' }}>
+					<ChartControl elevation={3} data={initData} />
 				</Grid>
 			</Grid>
-			<div id='chart' />
 		</div>
 	);
 };

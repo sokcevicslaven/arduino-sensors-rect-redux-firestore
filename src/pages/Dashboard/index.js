@@ -11,7 +11,7 @@ import { SET_ERROR } from '../../redux/types';
 import firebase from '../../firebase/firebase';
 
 // Frappe chart
-import useChart from '../../hooks/useChart';
+// import useChart from '../../components/Chart/useChart';
 
 // MUI
 import Button from '@material-ui/core/Button';
@@ -31,8 +31,6 @@ const Dashboard = () => {
 	const childAddedListener = useRef();
 	const login = useSelector(state => state.user.login);
 	const [data, setData] = useState([]);
-
-	const setCharData = useChart(login, '#chart');
 
 	useLayoutEffect(() => {
 		if (!login) history.push('/login');
@@ -54,7 +52,7 @@ const Dashboard = () => {
 						const data = [];
 						snapshot.forEach(doc => data.push(doc.data()));
 						setData(data);
-						setCharData(data);
+						//setCharData(data);
 					},
 					error => console.log('TCL: Dashboard -> childAddedListener -> error:', error)
 				);

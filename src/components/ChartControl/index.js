@@ -1,19 +1,39 @@
 // Chart that listen for sensor data change
 
-import { useEffect, useRef, useMemo } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
+
+// Material UI
+import Paper from '@material-ui/core/Paper';
 
 // Frappe chart
 import { Chart } from 'frappe-charts/dist/frappe-charts.min.esm';
 
 // Utility
-import { formatDatetime } from '../lib';
+import { formatDatetime } from '../../lib';
 
-const dummyData = n => {
+// Custom styles
+import useStyles from './style';
+
+const initOption = {
+	title: 'Sensor data',
+	type: 'axis-mixed',
+	height: 300,
+	colors: ['light-blue', '#ffa3ef', 'purple'],
+	lineOptions: {
+		regionFill: 1 // default: 0
+	},
+	barOptions: {
+		height: 11, // default: 20
+		depth: 50 // default: 2
+	},
+	axisOptions: { xAxisMode: 'tick' }
+};
+
+const initData = (n = 10) => {
 	console.log('TCL: generateDummyData -> n', n);
 	const data = {
 		yMarkers: [{ label: 'Marker', value: 70, options: { labelPos: 'left' } }],
 		yRegions: [{ label: 'Region', start: 10, end: 50, options: { labelPos: 'right' } }],
-
 		labels: [],
 		datasets: [
 			{
@@ -43,6 +63,7 @@ const dummyData = n => {
 };
 
 const formatData = rawData => {
+	console.log('TCL: rawData', rawData);
 	const data = {
 		yMarkers: [{ label: 'Marker', value: 70, options: { labelPos: 'left' } }],
 		yRegions: [{ label: 'Region', start: 10, end: 50, options: { labelPos: 'right' } }],
@@ -78,44 +99,40 @@ const formatData = rawData => {
 	return data;
 };
 
-const useChart = (login, tagId, number = 3) => {
-	console.log('TCL: useChart -> useChart 0');
+const ChartControl = ({ elevation, data = initData, option = initOption }) => {
+	console.log('TCL: ChartControl -> ChartControl');
 
+	const classes = useStyles();
 	const chartRef = useRef();
-	const dummyDataMemo = useMemo(() => dummyData(number), [number]);
-
-	const updateData = rawData =>
-		chartRef && chartRef.current && chartRef.current.update(formatData(rawData));
+	const chartTagRef = useRef();
+	const [first, setFirst] = useState(true);
 
 	useEffect(() => {
-		console.log('TCL: useChart -> useEffect 1');
+		console.log('TCL: ChartControl -> useEffect 1');
+		// Create and init chart
+		initOption.data = (data && formatData(data)) || initData();
+		chartRef.current = new Chart(chartTagRef.current, option);
 
-		if (login) {
-			console.log('TCL: useChart -> useEffect 2');
-
-			chartRef.current = new Chart(tagId, {
-				title: 'Sensor data',
-				data: dummyDataMemo,
-				type: 'axis-mixed',
-				height: 300,
-				colors: ['light-blue', '#ffa3ef', 'purple'],
-				lineOptions: {
-					regionFill: 1 // default: 0
-				},
-				barOptions: {
-					height: 11, // default: 20
-					depth: 50 // default: 2
-				},
-				axisOptions: { xAxisMode: 'tick' }
-			});
-		}
+		setFirst(false);
 		return () => {
+			// Remove char reference so it can be GC
 			if (chartRef.current) chartRef.current = null;
 		};
 		// eslint-disable-next-line
-	}, [login]);
+	}, []);
 
-	return updateData;
+	useEffect(() => {
+		// Update chart on next data change
+		!first && data && chartRef.current && chartRef.current.update(formatData(data));
+		console.log('TCL: ChartControl -> !first', !first);
+		console.log('TCL: ChartControl -> useEffect 2');
+	}, [data]);
+
+	return (
+		<Paper elevation={elevation} className={classes.paper}>
+			<div ref={chartTagRef} />
+		</Paper>
+	);
 };
 
-export default useChart;
+export default ChartControl;

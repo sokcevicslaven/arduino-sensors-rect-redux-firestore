@@ -11,11 +11,11 @@ export default makeStyles(theme => ({
 	// },
 	paper: {
 		// margin: theme.spacing(1),
-		padding: theme.spacing(1, 3)
-		// display: 'inline-block'
+		padding: theme.spacing(1, 4),
+		display: 'inline-block'
 	},
 	minmax: {
-		marginLeft: theme.spacing(-1)
+		marginLeft: theme.spacing(-2)
 	},
 	wrapper: {
 		position: 'relative'
