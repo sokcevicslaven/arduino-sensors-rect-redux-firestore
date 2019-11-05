@@ -8,6 +8,12 @@ import { loginAction } from '../redux/actions/userActions';
 import Button from '@material-ui/core/Button';
 import { makeStyles } from '@material-ui/core/styles';
 
+// Frappe chart
+// import { Chart } from 'frappe-charts/dist/frappe-charts.min.esm';
+
+import useChart from '../hooks/useChart';
+
+// Utility
 import { logObj } from '../lib';
 
 const loginHandler = dispatch => {
@@ -51,11 +57,59 @@ const addData = async dispatch => {
 
 const setDarkTheme = (dispatch, dark) => dispatch({ type: SET_DARK_THEME, payload: dark });
 
+const data = {
+	labels: [],
+	datasets: []
+};
+
 const Dev = () => {
+	const chartRef = useChart(true, '#chart', data);
+
+	//	const [data, setData] = useState(initialData);
 	const classes = useStyles();
 	const dispatch = useDispatch();
 	const loading = useSelector(state => state.ui.loading);
 	const darkTheme = useSelector(state => state.ui.darkTheme);
+
+	// useEffect(() => {
+	// 	chartRef.current = new Chart(charTagRef.current, {
+	// 		title: 'My Awesome Chart',
+	// 		data: data,
+	// 		type: 'axis-mixed',
+	// 		height: 250,
+	// 		colors: ['#7cd6fd', '#743ee2']
+	// 	});
+	// 	return () => {
+	// 		chartRef.current = null;
+	// 	};
+	// }, []);
+
+	const updateData = () =>
+		// chartRef.current.update({
+		chartRef({
+			labels: [
+				'12am-3am',
+				'3am-6pm',
+				'6am-9am',
+				'9am-12am',
+				'12pm-3pm',
+				'3pm-6pm',
+				'6pm-9pm',
+				'14am-116am'
+			],
+			datasets: [
+				{
+					name: 'Some Data',
+					type: 'bar',
+					values: [25, 40, 20, 15, 18, 52, 17, -14]
+				},
+				{
+					name: 'Another Set',
+					type: 'line',
+					values: [25, 50, -5, 35, 8, 32, 27, 24]
+				}
+			]
+		});
 
 	return (
 		<div>
@@ -82,6 +136,10 @@ const Dev = () => {
 			>
 				Dark teme
 			</Button>
+			<Button variant='contained' className={classes.button} onClick={() => updateData()}>
+				Update chart
+			</Button>
+			<div id='chart' />
 		</div>
 	);
 };

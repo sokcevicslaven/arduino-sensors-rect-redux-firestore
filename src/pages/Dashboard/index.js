@@ -1,6 +1,6 @@
 // Dashboard page
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useLayoutEffect, useEffect, useRef } from 'react';
 import { useHistory } from 'react-router-dom';
 
 // Redux
@@ -10,59 +10,70 @@ import { SET_ERROR } from '../../redux/types';
 // Firebase
 import firebase from '../../firebase/firebase';
 
-// Chart
-import ApexCharts from 'apexcharts';
+// Frappe chart
+import useChart from '../../hooks/useChart';
 
 // MUI
 import Button from '@material-ui/core/Button';
 
 // Utiliuty
-import { logObj } from '../../lib';
+import { logObj, randomNum } from '../../lib';
 
 // Custom styles
 import useStyles from './style.js';
 
 const Dashboard = () => {
+	console.log('TCL: Dashboard -> Dashboard 0');
+
 	const classes = useStyles();
 	const history = useHistory();
 	const dispatch = useDispatch();
 	const childAddedListener = useRef();
 	const login = useSelector(state => state.user.login);
-	const loading = useSelector(state => state.user.loading);
 	const [data, setData] = useState([]);
 
-	useEffect(() => {
+	const setCharData = useChart(login, '#chart');
+
+	useLayoutEffect(() => {
 		if (!login) history.push('/login');
 		// eslint-disable-next-line
 	}, [login]);
 
 	useEffect(() => {
-		childAddedListener.current = firebase.fire
-			.collection('sensors')
-			.orderBy('date', 'desc')
-			.limit(3)
-			.onSnapshot(
-				snapshot => {
-					const data = [];
-					snapshot.forEach(doc => data.push(doc.data()));
-					setData(data);
-				},
-				error => console.log('TCL: Dashboard -> childAddedListener -> error:', error)
-			);
+		console.log('TCL: Dashboard -> useEffect 1');
+
+		if (login) {
+			console.log('TCL: Dashboard -> useEffect 2');
+
+			childAddedListener.current = firebase.fire
+				.collection('sensors')
+				.orderBy('date', 'desc')
+				.limit(3)
+				.onSnapshot(
+					snapshot => {
+						const data = [];
+						snapshot.forEach(doc => data.push(doc.data()));
+						setData(data);
+						setCharData(data);
+					},
+					error => console.log('TCL: Dashboard -> childAddedListener -> error:', error)
+				);
+		}
 
 		return () => {
-			childAddedListener.current();
+			if (childAddedListener.current) childAddedListener.current();
 		};
-	}, []);
+		// eslint-disable-next-line
+	}, [login]);
 
 	const addData = async dispatch => {
 		try {
 			await firebase.addData('sensors', {
 				arduino: 0,
-				co2: 0,
+				co2: randomNum(20),
 				date: new Date(),
-				humidity: 40,
-				temperature: 22
+				humidity: randomNum(100),
+				temperature: randomNum(50)
 			});
 		} catch (err) {
 			logObj(err);
@@ -97,6 +108,7 @@ const Dashboard = () => {
 						);
 					})}
 			</ul>
+			<div id='chart' />
 		</div>
 	);
 };

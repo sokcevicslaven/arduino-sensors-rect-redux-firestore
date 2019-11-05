@@ -46,6 +46,7 @@ const Login = () => {
 
 	useEffect(() => {
 		dispatch(clearErrorsAction());
+		// eslint-disable-next-line
 	}, []);
 
 	useEffect(() => {

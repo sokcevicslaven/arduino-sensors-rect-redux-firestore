@@ -14,8 +14,6 @@ const userReducer = (state = initialState, action) => {
 			return { ...state, darkTheme: action.payload };
 		case START_LOADING:
 			return { ...state, loading: true };
-		case START_LOADING:
-			return { ...state, loading: true };
 		case STOP_LOADING:
 			return { ...state, loading: false };
 		case SET_ERROR:

@@ -1,7 +1,7 @@
 // Sign up page
 
 // React
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect as useLayoutEffect, useMemo } from 'react';
 import { Link as RouterLink, useHistory } from 'react-router-dom';
 
 // Redux
@@ -52,8 +52,9 @@ const Signup = () => {
 		[error.code]
 	);
 
-	useEffect(() => {
+	useLayoutEffect(() => {
 		dispatch(clearErrorsAction());
+		// eslint-disable-next-line
 	}, []);
 
 	const handleSubmit = e => {
