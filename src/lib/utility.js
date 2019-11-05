@@ -5,8 +5,9 @@ export const logObj = object => console.log('TCL: object', JSON.stringify(object
 export const isEmptyObj = object => !Object.keys(object).length;
 
 // Format local datetime
-export const formatDatetime = () =>
-	new Date().toLocaleTimeString('hr-HR', {
+export const formatDatetime = date => {
+	const d = date || new Date();
+	return d.toLocaleTimeString('hr-HR', {
 		year: 'numeric',
 		month: 'short',
 		day: '2-digit',
@@ -14,6 +15,7 @@ export const formatDatetime = () =>
 		hour: '2-digit',
 		minute: '2-digit'
 	});
+};
 
 // Random number from 0 to N
 export const randomNum = N => Math.floor(Math.random() * N);

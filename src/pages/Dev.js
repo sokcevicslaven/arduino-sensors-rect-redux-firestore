@@ -1,20 +1,26 @@
-import React from 'react';
+import React, { useState } from 'react';
+
+// Redux
 import { useSelector, useDispatch } from 'react-redux';
-import firebase from '../firebase/firebase';
 import { SET_ERROR, SET_DARK_THEME } from '../redux/types';
 import { loginAction } from '../redux/actions/userActions';
 
+import firebase from '../firebase/firebase';
+
+// Components
+import SensorMeter from '../components/SensorMeter';
+
 // MUI
-import Button from '@material-ui/core/Button';
 import { makeStyles } from '@material-ui/core/styles';
+import Button from '@material-ui/core/Button';
+import Grid from '@material-ui/core/Grid';
 
 // Frappe chart
-// import { Chart } from 'frappe-charts/dist/frappe-charts.min.esm';
-
 import useChart from '../hooks/useChart';
 
 // Utility
 import { logObj } from '../lib';
+import { formatDatetime } from '../lib';
 
 const loginHandler = dispatch => {
 	dispatch(loginAction('ivan.brajkovic@icloud.com', '123456789'));
@@ -57,13 +63,73 @@ const addData = async dispatch => {
 
 const setDarkTheme = (dispatch, dark) => dispatch({ type: SET_DARK_THEME, payload: dark });
 
-const data = {
-	labels: [],
-	datasets: []
-};
+const initData = [
+	{
+		arduino: 0,
+		temperature: 18,
+		humidity: 35,
+		co2: 8
+	},
+	{
+		arduino: 0,
+		temperature: 33,
+		humidity: 80,
+		co2: 12
+	},
+	{
+		arduino: 0,
+		temperature: 20,
+		humidity: 50,
+		co2: 16
+	},
+	{
+		arduino: 0,
+		temperature: 24,
+		humidity: 30,
+		co2: 10
+	},
+	{
+		arduino: 0,
+		temperature: 28,
+		humidity: 20,
+		co2: 12
+	},
+	{
+		arduino: 0,
+		temperature: 31,
+		humidity: 60,
+		co2: 12
+	},
+	{
+		arduino: 0,
+		temperature: 18,
+		humidity: 70,
+		co2: 18
+	},
+	{
+		arduino: 0,
+		temperature: 36,
+		humidity: 50,
+		co2: 14
+	},
+	{
+		arduino: 0,
+		temperature: 30,
+		humidity: 40,
+		co2: 12
+	},
+	{
+		arduino: 0,
+		temperature: 28,
+		humidity: 40,
+		co2: 16
+	}
+];
 
 const Dev = () => {
-	const chartRef = useChart(true, '#chart', data);
+	const chartRef = useChart(true, '#chart');
+
+	const [progress, setProgress] = useState(0);
 
 	//	const [data, setData] = useState(initialData);
 	const classes = useStyles();
@@ -84,36 +150,9 @@ const Dev = () => {
 	// 	};
 	// }, []);
 
-	const updateData = () =>
-		// chartRef.current.update({
-		chartRef({
-			labels: [
-				'12am-3am',
-				'3am-6pm',
-				'6am-9am',
-				'9am-12am',
-				'12pm-3pm',
-				'3pm-6pm',
-				'6pm-9pm',
-				'14am-116am'
-			],
-			datasets: [
-				{
-					name: 'Some Data',
-					type: 'bar',
-					values: [25, 40, 20, 15, 18, 52, 17, -14]
-				},
-				{
-					name: 'Another Set',
-					type: 'line',
-					values: [25, 50, -5, 35, 8, 32, 27, 24]
-				}
-			]
-		});
-
 	return (
 		<div>
-			{(loading && <h2>Loading...</h2>) || <h2>Dev page</h2>}
+			{/* {(loading && <h2>Loading...</h2>) || <h2>Dev page</h2>} */}
 			<Button variant='contained' className={classes.button} onClick={() => loginHandler(dispatch)}>
 				Login
 			</Button>
@@ -136,9 +175,36 @@ const Dev = () => {
 			>
 				Dark teme
 			</Button>
-			<Button variant='contained' className={classes.button} onClick={() => updateData()}>
+			<Button variant='contained' className={classes.button} onClick={() => chartRef(initData)}>
 				Update chart
 			</Button>
+			<Button
+				variant='contained'
+				className={classes.button}
+				onClick={() => setProgress(state => state + 10)}
+			>
+				Progress +
+			</Button>
+			<Button
+				variant='contained'
+				className={classes.button}
+				onClick={() => setProgress(state => state - 10)}
+			>
+				Progress -
+			</Button>
+			<br />
+			<br />
+			<Grid container justify='space-around'>
+				<Grid item>
+					<SensorMeter value={progress} valueError={50} size={150} />
+				</Grid>
+				<Grid item>
+					<SensorMeter value={progress} valueError={50} size={150} />
+				</Grid>
+				<Grid item>
+					<SensorMeter value={progress} valueError={50} size={150} />
+				</Grid>
+			</Grid>
 			<div id='chart' />
 		</div>
 	);
