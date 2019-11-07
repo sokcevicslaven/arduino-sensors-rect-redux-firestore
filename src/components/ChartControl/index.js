@@ -1,6 +1,6 @@
 // Chart that listen for sensor data change
 
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 
 // Material UI
 import Paper from '@material-ui/core/Paper';
@@ -9,7 +9,7 @@ import Paper from '@material-ui/core/Paper';
 import { Chart } from 'frappe-charts/dist/frappe-charts.min.esm';
 
 // Utility
-import { formatDatetime } from '../../lib';
+// import { formatDatetime } from '../../lib';
 
 // Custom styles
 import useStyles from './style';
@@ -19,118 +19,116 @@ const initOption = {
 	type: 'axis-mixed',
 	height: 300,
 	colors: ['light-blue', '#ffa3ef', 'purple'],
-	lineOptions: {
-		regionFill: 1 // default: 0
-	},
-	barOptions: {
-		height: 11, // default: 20
-		depth: 50 // default: 2
-	},
+	lineOptions: { regionFill: 1 },
+	barOptions: { height: 11, depth: 50 },
 	axisOptions: { xAxisMode: 'tick' }
 };
 
-const initData = (n = 10) => {
-	console.log('TCL: generateDummyData -> n', n);
-	const data = {
-		yMarkers: [{ label: 'Marker', value: 70, options: { labelPos: 'left' } }],
-		yRegions: [{ label: 'Region', start: 10, end: 50, options: { labelPos: 'right' } }],
+const initData = ({ title, yMarkers, yRegions }) => {
+	console.log('TCL: generateDummyData -> title', title);
+
+	return {
+		yMarkers: yMarkers || [{ label: 'Marker', value: 70, options: { labelPos: 'left' } }],
+		yRegions: yRegions || [{ label: 'Region', start: 10, end: 50, options: { labelPos: 'right' } }],
 		labels: [],
 		datasets: [
 			{
-				name: 'CO2',
-				chartType: 'bar',
-				values: []
-			},
-			{
-				name: 'Humidity',
-				chartType: 'line',
-				values: []
-			},
-			{
-				name: 'Temperature',
+				name: title,
 				chartType: 'line',
 				values: []
 			}
 		]
 	};
-	for (let i = 0; i < n; i++) {
-		data.labels.push(formatDatetime());
-		data.datasets[0].values.push(0);
-		data.datasets[1].values.push(0);
-		data.datasets[2].values.push(0);
-	}
-	return data;
+	// for (let i = 0; i < n; i++) {
+	// 	data.labels.push(formatDatetime());
+	// 	data.datasets[0].values.push(0);
+	// data.datasets[1].values.push(0);
+	// data.datasets[2].values.push(0);
+	// }
+	// return data;
 };
 
-const formatData = rawData => {
-	console.log('TCL: rawData', rawData);
-	const data = {
-		yMarkers: [{ label: 'Marker', value: 70, options: { labelPos: 'left' } }],
-		yRegions: [{ label: 'Region', start: 10, end: 50, options: { labelPos: 'right' } }],
-
-		labels: [],
-		datasets: [
-			{
-				name: 'CO2',
-				chartType: 'bar',
-				values: []
-			},
-			{
-				name: 'Humidity',
-				chartType: 'line',
-				values: []
-			},
-			{
-				name: 'Temperature',
-				chartType: 'line',
-				values: []
-			}
-		]
-	};
-	rawData.forEach(({ arduino, temperature, humidity, co2, date }, index) => {
-		data.labels.push(
-			(date && date.seconds && formatDatetime(new Date(date.seconds * 1000))) || formatDatetime()
-		);
-		data.datasets[0].values.push(co2);
-		data.datasets[1].values.push(humidity);
-		data.datasets[2].values.push(temperature);
-	});
-	console.log('TCL: data', data);
-	return data;
-};
-
-const ChartControl = ({ elevation, data = initData, option = initOption }) => {
+const ChartControl = ({
+	title,
+	elevation,
+	label,
+	value,
+	option = initOption,
+	maxItems = 10,
+	yMarkers,
+	yRegions
+}) => {
 	console.log('TCL: ChartControl -> ChartControl');
 
+	// Styles
 	const classes = useStyles();
+
+	// Refs
+	const tagRef = useRef();
 	const chartRef = useRef();
-	const chartTagRef = useRef();
-	const [first, setFirst] = useState(true);
+	const countRef = useRef(0);
+	const firstRef = useRef(true);
+	const itemsRef = useRef(initData({ title, yMarkers, yRegions }));
 
 	useEffect(() => {
 		console.log('TCL: ChartControl -> useEffect 1');
-		// Create and init chart
-		initOption.data = (data && formatData(data)) || initData();
-		chartRef.current = new Chart(chartTagRef.current, option);
 
-		setFirst(false);
+		// Create and init chart
+		initOption.data = initData({ title, yMarkers, yRegions });
+		chartRef.current = new Chart(tagRef.current, option);
+		countRef.current = countRef.current + 1;
+		firstRef.current = false;
+
 		return () => {
-			// Remove char reference so it can be GC
-			if (chartRef.current) chartRef.current = null;
+			if (chartRef.current) {
+				// Remove char reference so it can be GC
+				chartRef.current.destroy();
+				chartRef.current = null;
+			}
 		};
 		// eslint-disable-next-line
 	}, []);
 
 	useEffect(() => {
-		// Update chart on next data change
-		!first && data && chartRef.current && chartRef.current.update(formatData(data));
-		console.log('TCL: ChartControl -> !first', !first);
 		console.log('TCL: ChartControl -> useEffect 2');
-	}, [data]);
+
+		if (!firstRef.current && label && chartRef.current) {
+			if (countRef.current <= maxItems) {
+				// Incerment items counter
+				countRef.current = countRef.current + 1;
+
+				// Add new item to chart at the end
+				chartRef.current.addDataPoint(label, [value]);
+
+				// Push item to array
+				itemsRef.current.labels.push(label);
+				itemsRef.current.datasets[0].values.push(value);
+			} else {
+				// Remove first item in array
+				itemsRef.current.labels.shift();
+				itemsRef.current.datasets[0].values.shift();
+
+				// Update item in array
+				itemsRef.current.labels.push(label);
+				itemsRef.current.datasets[0].values.push(value);
+
+				// Update chart
+				chartRef.current.update(itemsRef.current);
+			}
+		}
+
+		// else if (countRef.current === maxItems) chartRef.current.removeDataPoint(0);
+		// Update chart on next data change
+		// chartRef.current.update(data);
+	}, [label, value]);
+
+	// useEffect(() => {
+	//  first && data && chartRef.current && chartRef.current.update(data);
+	// }, [data]);
 
 	return (
 		<Paper elevation={elevation} className={classes.paper}>
-			<div ref={chartTagRef} />
+			<div ref={tagRef} />
 		</Paper>
 	);
 };

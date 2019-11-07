@@ -4,11 +4,12 @@ import React, { useState, useEffect } from 'react';
 import Paper from '@material-ui/core/Paper';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Typography from '@material-ui/core/Typography';
+import Grid from '@material-ui/core/Grid';
 
 // Custom styles
 import useStyles from './style';
 
-const SensorMeter = ({ value, size, textVariant, valueError, elevation }) => {
+const SensorMeter = ({ title, value, simbol, size, textVariant, valueError, elevation }) => {
 	const classes = useStyles();
 	const [min, setMin] = useState(value);
 	const [max, setMax] = useState(value);
@@ -19,32 +20,51 @@ const SensorMeter = ({ value, size, textVariant, valueError, elevation }) => {
 	}, [value]);
 
 	return (
-		<Paper elevation={elevation} className={classes.paper}>
-			<Typography variant='body1' className={classes.minmax}>
-				max: {max}
+		<Paper
+			// style={{ height: size * 2.4, width: size * 2.4 }}
+			style={{ height: size, width: size }}
+			elevation={elevation}
+			className={classes.paper}
+		>
+			<Typography variant='subtitle1' className={classes.textTitle}>
+				{title}
 			</Typography>
-			<div style={{ height: size, width: size }} className={classes.wrapper}>
+
+			{/* <div className={classes.wrapper}> */}
+			<div className={classes.progress}>
 				<CircularProgress
 					variant='static'
 					thickness={2}
-					style={{ top: 3, left: 3, height: size - 6, width: size - 6 }}
+					style={{ top: size * 0.01, left: size * 0.01, height: size * 0.48, width: size * 0.48 }}
 					value={100}
-					className={classes.back}
+					className={classes.progressBack}
 				/>
 				<CircularProgress
 					variant='static'
 					color={(value >= valueError && 'secondary') || 'primary'}
-					size={size}
+					size={size * 0.5}
 					value={value}
-					className={classes.progress}
-				/>
-				<Typography variant={textVariant} className={classes.text}>
-					{value}
+					className={classes.progressFront}
+				></CircularProgress>
+				<Typography
+					variant='h4'
+					color={(value >= valueError && 'secondary') || 'primary'}
+					className={classes.textValue}
+				>
+					{value + String.fromCharCode(simbol)}
 				</Typography>
 			</div>
-			<Typography variant='body1' className={classes.minmax}>
-				min: {min}
-			</Typography>
+			{/* </div> */}
+			<Grid container justify='space-around'>
+				<Grid item className={classes.minmax}>
+					<Typography variant='body1'>{max + String.fromCharCode(simbol)}</Typography>
+					<Typography variant='body2'>Max</Typography>
+				</Grid>
+				<Grid item className={classes.minmax}>
+					<Typography variant='body1'>{min + String.fromCharCode(simbol)}</Typography>
+					<Typography variant='body2'>Min</Typography>
+				</Grid>
+			</Grid>
 		</Paper>
 	);
 };

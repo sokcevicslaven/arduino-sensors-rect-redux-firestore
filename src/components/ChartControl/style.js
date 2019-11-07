@@ -7,6 +7,7 @@ const color = blueGrey[100];
 
 export default makeStyles(theme => ({
 	paper: {
-		padding: theme.spacing(1, 3)
+		padding: theme.spacing(1)
+		// width: '100%'
 	}
 }));

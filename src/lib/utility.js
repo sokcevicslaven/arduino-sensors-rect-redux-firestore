@@ -9,8 +9,19 @@ export const formatDatetime = date => {
 	const d = date || new Date();
 	return d.toLocaleTimeString('hr-HR', {
 		year: 'numeric',
-		month: 'short',
+		// month: 'short',
+		month: '2-digit',
 		day: '2-digit',
+		hour12: false,
+		hour: '2-digit',
+		minute: '2-digit'
+	});
+};
+
+// Format local time
+export const formatTime = date => {
+	const d = date || new Date();
+	return d.toLocaleTimeString('hr-HR', {
 		hour12: false,
 		hour: '2-digit',
 		minute: '2-digit'

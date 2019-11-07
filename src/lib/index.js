@@ -1,3 +1,3 @@
-import { logObj, isEmptyObj, formatDatetime, randomNum } from './utility';
+import { logObj, isEmptyObj, formatDatetime, formatTime, randomNum } from './utility';
 
-export { logObj, isEmptyObj, formatDatetime, randomNum };
+export { logObj, isEmptyObj, formatDatetime, formatTime, randomNum };

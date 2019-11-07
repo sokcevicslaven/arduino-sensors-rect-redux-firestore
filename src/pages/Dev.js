@@ -10,19 +10,23 @@ import firebase from '../firebase/firebase';
 // Components
 import SensorMeter from '../components/SensorMeter';
 import ChartControl from '../components/ChartControl';
+import formatCharData from '../components/ChartControl/formatCharData';
+import DataView from '../components/DataView';
 
 // MUI
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
+import Box from '@material-ui/core/Box';
 
 // Frappe chart
 // import useChart from '../components/Chart/useChart';
 
 // Utility
 import { logObj } from '../lib';
-import { formatDatetime } from '../lib';
+// import { formatTime } from '../lib';
+// import { formatDatetime } from '../lib';
 
 const loginHandler = dispatch => {
 	dispatch(loginAction('ivan.brajkovic@icloud.com', '123456789'));
@@ -196,50 +200,23 @@ const Dev = () => {
 			</Button>
 			<br />
 			<br />
-			<Grid container justify='space-around' spacing={3} style={{ background: 'lightblue' }}>
-				<Grid
-					item
-					container
-					alignItems='center'
-					justify='center'
-					xs={12}
-					sm={3}
-					spacing={2}
-					direction='column'
-					style={{ background: 'lightgreen' }}
-				>
-					<Grid item>
-						<SensorMeter
-							value={progress}
-							valueError={50}
-							size={100}
-							textVariant='h3'
-							elevation={3}
-						/>
-					</Grid>
-					<Grid item>
-						<SensorMeter
-							value={progress}
-							valueError={50}
-							size={100}
-							textVariant='h3'
-							elevation={3}
-						/>
-					</Grid>
-					<Grid item>
-						<SensorMeter
-							value={progress}
-							valueError={50}
-							size={100}
-							textVariant='h3'
-							elevation={3}
-						/>
-					</Grid>
-				</Grid>
-				<Grid item xs={12} sm={9} style={{ background: 'lightgrey' }}>
-					<ChartControl elevation={3} data={initData} />
-				</Grid>
-			</Grid>
+			{/* <div className={classes.grid}>
+				<SensorMeter
+					title={'Temperature'}
+					value={progress}
+					// simbol={37}
+					valueError={50}
+					size={300}
+					textVariant='h3'
+					elevation={3}
+				/>
+				<ChartControl
+					elevation={3}
+					data={formatCharData(initData)}
+					style={{ justifyItems: 'stretch' }}
+				/>
+			</div> */}
+			<DataView title={'temperature'} value={progress} valueError={50} />
 		</div>
 	);
 };
@@ -247,6 +224,13 @@ const Dev = () => {
 const useStyles = makeStyles(theme => ({
 	button: {
 		margin: theme.spacing(1)
+	},
+	grid: {
+		display: 'grid',
+		gridGap: theme.spacing(2),
+		gridTemplateColumns: '1fr 2fr'
+		// justifyItems: 'center',
+		// alignItems: 'center'
 	}
 }));
 

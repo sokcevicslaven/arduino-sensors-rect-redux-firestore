@@ -11,32 +11,45 @@ export default makeStyles(theme => ({
 	// },
 	paper: {
 		// margin: theme.spacing(1),
-		padding: theme.spacing(1, 4),
-		display: 'inline-block'
+		padding: theme.spacing(2),
+		display: 'flex',
+		flexDirection: 'column',
+		alignItems: 'center'
 	},
 	minmax: {
-		marginLeft: theme.spacing(-2)
+		//marginLeft: theme.spacing(-2),
+		// background: 'lime'
+		textAlign: 'center'
+		// padding: theme.spacing(0, 4)
 	},
 	wrapper: {
-		position: 'relative'
+		// textAlign: 'center',
+		display: 'flex',
+		justifyContent: 'center'
 	},
 	progress: {
-		position: 'absolute'
-		// margin: theme.spacing(3, 0, 2)
+		// margin: '15px 0',
+		position: 'relative',
+		margin: theme.spacing(2, 0)
 	},
-	back: {
+	progressFront: {
+		// position: 'absolute',
+		// zIndex: 1
+		// transform: 'translate(-50%, -50%)'
+	},
+	progressBack: {
 		color: color,
 		position: 'absolute'
-		// top: 3,
-		// left: 3,
-		// width: 144,
-		// height: 144
-		// margin: theme.spacing(3, 0, 2)
+		// transform: 'translate(-50%, -50%)'
+		// topheme.spacing(3, 0, 2)
 	},
-	text: {
+	textValue: {
 		position: 'absolute',
 		top: '50%',
 		left: '50%',
 		transform: 'translate(-50%, -50%)'
+	},
+	textTitle: {
+		alignSelf: 'flex-start'
 	}
 }));
