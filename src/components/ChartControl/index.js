@@ -15,7 +15,7 @@ import { Chart } from 'frappe-charts/dist/frappe-charts.min.esm';
 import useStyles from './style';
 
 const initOption = {
-	title: 'Sensor data',
+	// title: 'Sensor data',
 	type: 'axis-mixed',
 	height: 300,
 	colors: ['light-blue', '#ffa3ef', 'purple'],
@@ -49,14 +49,14 @@ const initData = ({ title, yMarkers, yRegions }) => {
 };
 
 const ChartControl = ({
-	title,
-	elevation,
+	title = '',
+	// elevation,
 	label,
 	value,
 	option = initOption,
 	maxItems = 10,
-	yMarkers,
-	yRegions
+	yMarkers = null,
+	yRegions = null
 }) => {
 	console.log('TCL: ChartControl -> ChartControl');
 
@@ -127,9 +127,9 @@ const ChartControl = ({
 	// }, [data]);
 
 	return (
-		<Paper elevation={elevation} className={classes.paper}>
-			<div ref={tagRef} />
-		</Paper>
+		//{/* <Paper elevation={elevation} className={classes.paper}> */}
+		<div ref={tagRef} />
+		//{/* </Paper> */}
 	);
 };
 

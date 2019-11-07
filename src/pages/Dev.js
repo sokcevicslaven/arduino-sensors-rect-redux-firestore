@@ -19,13 +19,15 @@ import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import Box from '@material-ui/core/Box';
+// Material UI
+import Paper from '@material-ui/core/Paper';
 
 // Frappe chart
 // import useChart from '../components/Chart/useChart';
 
 // Utility
 import { logObj } from '../lib';
-// import { formatTime } from '../lib';
+import { formatTime } from '../lib';
 // import { formatDatetime } from '../lib';
 
 const loginHandler = dispatch => {
@@ -200,23 +202,42 @@ const Dev = () => {
 			</Button>
 			<br />
 			<br />
-			{/* <div className={classes.grid}>
-				<SensorMeter
-					title={'Temperature'}
-					value={progress}
-					// simbol={37}
-					valueError={50}
-					size={300}
-					textVariant='h3'
-					elevation={3}
-				/>
-				<ChartControl
-					elevation={3}
-					data={formatCharData(initData)}
-					style={{ justifyItems: 'stretch' }}
-				/>
-			</div> */}
-			<DataView title={'temperature'} value={progress} valueError={50} />
+			{/* <Grid container justify='space-around' alignItems='center'>
+				<Grid item container xs={12} sm={3} justify='center'>
+					<SensorMeter
+						title={'Temperature'}
+						value={progress}
+						// simbol={37}
+						valueError={50}
+						size={300}
+						textVariant='h3'
+						elevation={3}
+					/>
+				</Grid>
+				<Grid item xs={12} sm={8}>
+					<ChartControl
+						title={'Temperature'}
+						label={formatTime()}
+						value={progress}
+						maxItems={5}
+						yMarkers={70}
+						yRegionsStart={10}
+						yRegionsEnd={10}
+						elevation={3}
+						yMarkers={null}
+						yRegions={null}
+					/>
+				</Grid>
+			</Grid> */}
+			<DataView
+				size={250}
+				elevation={12}
+				title={'Temperature'}
+				label={formatTime()}
+				value={progress}
+				valueError={50}
+				maxItems={5}
+			/>
 		</div>
 	);
 };
