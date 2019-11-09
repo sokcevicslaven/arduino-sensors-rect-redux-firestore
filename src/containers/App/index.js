@@ -11,7 +11,7 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Container from '@material-ui/core/Container';
 
 // Compponents
-import Topbar from '../Topbar';
+import Nav from '../Nav';
 import Routes from '../../Routes';
 
 // Styles
@@ -24,15 +24,17 @@ const App = () => {
 	useAuthStateChanged();
 
 	return (
-		<Router>
-			<Topbar />
-			<Toolbar />
-			<Container className={`${classes.pageContainer} ${classes.marginLeft}`}>
-				<Switch>
-					<Routes />
-				</Switch>
-			</Container>
-		</Router>
+		<div className={classes.root}>
+			<Router>
+				<Nav />
+				<Container component='main' className={`${classes.pageContainer} ${classes.marginLeft}`}>
+					<Toolbar />
+					<Switch>
+						<Routes />
+					</Switch>
+				</Container>
+			</Router>
+		</div>
 	);
 };
 
