@@ -62,9 +62,10 @@ const Topbar = ({ open, drawerWidth, handleDrawerOpen }) => {
 					aria-label='open drawer'
 					onClick={handleDrawerOpen}
 					edge='start'
-					className={clsx(classes.menuButton, {
-						[classes.hide]: open
-					})}
+					className={classes.menuButton}
+					//className={clsx(classes.menuButton, {
+					//	[classes.hide]: false
+					//})}
 				>
 					<MenuIcon />
 				</IconButton>

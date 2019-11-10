@@ -24,7 +24,6 @@ import useStyles from './style.js';
 
 // Get control that caused error
 const getErrorControl = code => {
-	console.log('TCL: getErrorControl');
 	let email, password, other;
 	if (code)
 		if (/email/.test(code) || /user/.test(code)) email = true;

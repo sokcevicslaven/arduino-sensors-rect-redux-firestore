@@ -19,9 +19,9 @@ export const formatDatetime = date => {
 };
 
 // Format local time
-export const formatTime = date => {
-	const d = date || new Date();
-	return d.toLocaleTimeString('hr-HR', {
+export const formatTime = seconds => {
+	const date = (seconds && new Date(seconds * 1000)) || new Date();
+	return date.toLocaleTimeString('hr-HR', {
 		hour12: false,
 		hour: '2-digit',
 		minute: '2-digit'

@@ -1,17 +1,15 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import Grid from '@material-ui/core/Grid';
+
+// Material UI
+import Paper from '@material-ui/core/Paper';
 
 // Components
 import SensorMeter from '../SensorMeter';
 import ChartControl from '../ChartControl';
-import formatCharData from '../ChartControl/formatCharData';
 
 // Custom styles
 import useStyles from './style.js';
-
-// Utility
-import { formatTime } from '../../lib';
-import { Paper } from '@material-ui/core';
 
 const DataView = ({
 	title = '',
@@ -24,12 +22,12 @@ const DataView = ({
 	elevation = 4,
 	maxItems = 10,
 	yMarkers = null,
-	yRegions = null
+	yRegions = null,
+	colors = null
 }) => {
 	const classes = useStyles();
 
 	return (
-		//{/* <div className={classes.grid}> */}
 		<Paper elevation={elevation} className={classes.paper}>
 			<Grid container>
 				<Grid item xs={12} sm={3}>
@@ -50,6 +48,7 @@ const DataView = ({
 						maxItems={maxItems}
 						yMarkers={yMarkers}
 						yRegions={yRegions}
+						colors={colors}
 					/>
 				</Grid>
 			</Grid>

@@ -7,8 +7,15 @@ import { useSelector } from 'react-redux';
 
 // Material UI
 import { ThemeProvider, createMuiTheme } from '@material-ui/core/styles';
+import cyan from '@material-ui/core/colors/cyan';
+import pink from '@material-ui/core/colors/pink';
 
-const Theme = ({ dark, children }) => {
+// const defaultTheme = createMuiTheme();
+
+const primary = cyan[500];
+const secondary = pink[400];
+
+const Theme = ({ children }) => {
 	const darkTheme = useSelector(state => state.ui.darkTheme);
 
 	const theme = createMuiTheme({
@@ -27,13 +34,21 @@ const Theme = ({ dark, children }) => {
 		// 	}
 		// },
 		palette: {
+			// primary: cyan,
+			// secondary: pink,
 			type: `${darkTheme ? 'dark' : 'light'}`
-			// type: 'dark'
 		},
 		overrides: {
 			MuiButton: {
 				text: {
 					color: 'inherit'
+				}
+			},
+			MuiListItem: {
+				gutters: {
+					'@media (min-width: 600px)': {
+						paddingLeft: '24px'
+					}
 				}
 			}
 		}

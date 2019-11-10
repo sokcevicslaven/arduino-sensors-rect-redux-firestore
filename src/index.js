@@ -11,7 +11,7 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import App from './containers/App';
 // Styles
 import Theme from './theme/Theme';
-// import './index.css';
+import './index.css';
 
 const store = createStore(
 	rootReducer,

@@ -40,5 +40,9 @@ export default makeStyles(theme => ({
 		justifyContent: 'flex-end',
 		padding: theme.spacing(0, 1),
 		...theme.mixins.toolbar
+	},
+	switchBtn: {
+		marginLeft: -16,
+		marginRight: 16
 	}
 }));

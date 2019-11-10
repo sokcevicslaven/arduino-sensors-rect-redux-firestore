@@ -18,7 +18,8 @@ const firebaseConfig = {
 
 class Firebase {
 	constructor() {
-		console.log('TCL: Firebase -> constructor -> constructor');
+    console.log('TCL: Firebase -> constructor');
+    
 		// Initialize Firebase
 		app.initializeApp(firebaseConfig);
 		// The Firebase Auth service interface

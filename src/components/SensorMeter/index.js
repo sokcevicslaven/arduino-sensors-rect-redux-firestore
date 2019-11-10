@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
 // Material UI
-import Paper from '@material-ui/core/Paper';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
@@ -9,7 +8,7 @@ import Grid from '@material-ui/core/Grid';
 // Custom styles
 import useStyles from './style';
 
-const SensorMeter = ({ title, value, simbol, size, textVariant, valueError, elevation }) => {
+const SensorMeter = ({ title, value, simbol, size, valueError }) => {
 	const classes = useStyles();
 	const [min, setMin] = useState(value);
 	const [max, setMax] = useState(value);
@@ -17,15 +16,10 @@ const SensorMeter = ({ title, value, simbol, size, textVariant, valueError, elev
 	useEffect(() => {
 		if (value < min) setMin(value);
 		else if (value > max) setMax(value);
+		// eslint-disable-next-line
 	}, [value]);
 
 	return (
-		//<Paper
-		// style={{ height: size * 2.4, width: size * 2.4 }}
-		//style={{ height: size, width: size }}
-		//elevation={elevation}
-		//className={classes.paper}
-		//>
 		<Grid container className={classes.grid}>
 			<Typography paragraph variant='subtitle1'>
 				{title}
@@ -70,7 +64,6 @@ const SensorMeter = ({ title, value, simbol, size, textVariant, valueError, elev
 				</Grid>
 			</Grid>
 		</Grid>
-		//</Paper>
 	);
 };
 
