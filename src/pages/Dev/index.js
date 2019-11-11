@@ -1,6 +1,6 @@
 // Developer page (debug only)
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 // Redux
 import { useSelector, useDispatch } from 'react-redux';
@@ -8,24 +8,29 @@ import {
 	loginAction,
 	logoutAction,
 	setErrorAction,
-	setDarkThemeAction,
-	setDevMenuAction
-} from '../redux/actions';
+	darkThemeAction,
+	devMenuAction
+} from '../../redux/actions';
 
 // Firebase
-import firebase from '../firebase/firebase';
+import firebase from '../../firebase/firebase';
 
 // Material UI
-import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 // import useMediaQuery from '@material-ui/core/useMediaQuery';
+// import purple from '@material-ui/core/colors/purple';
+// import blue from '@material-ui/core/colors/blue';
+import cyan from '@material-ui/core/colors/cyan';
+import Fade from '@material-ui/core/Fade';
 
 // Components
-import DataView from '../components/DataView';
-import ChartControl from '../components/ChartControl';
+import DataView from '../../components/DataView';
 
 // Utility
-import { logObj, formatTime } from '../lib';
+import { logObj, formatTime } from '../../lib';
+
+// Custom styles
+import useStyles from './style';
 
 const createUser = async () => {
 	try {
@@ -53,19 +58,30 @@ const addData = async dispatch => {
 	}
 };
 
-const useStyles = makeStyles(theme => ({
-	button: {
-		margin: theme.spacing(1)
-	}
-}));
+const timeout = 1000;
 
 const Dev = () => {
-	const [progress, setProgress] = useState(0);
 	const classes = useStyles();
+	const [progress, setProgress] = useState([0]);
 	const dispatch = useDispatch();
-	const devMenu = useSelector(state => state.ui.devMenu);
-	const darkTheme = useSelector(state => state.ui.darkTheme);
+	const settings = useSelector(state => state.ui.settings);
+	// const darkTheme = useSelector(state => state.ui.darkTheme);
 	// const minWidthSM = useMediaQuery('(min-width:600px)');
+
+	useEffect(() => {
+		const labels = document.querySelectorAll(
+			'.chart-container .axis, .chart-container .chart-label'
+		);
+		labels &&
+			labels.forEach(label => {
+				if (settings.darkTheme) label.classList.add('fill-white');
+				else label.classList.remove('fill-white');
+			});
+
+		// return () => {
+		// 	labels = null;
+		// };
+	}, [settings.darkTheme]);
 
 	return (
 		<div>
@@ -95,7 +111,7 @@ const Dev = () => {
 			<Button
 				variant='contained'
 				className={classes.button}
-				onClick={() => dispatch(setDarkThemeAction(!darkTheme))}
+				onClick={() => dispatch(darkThemeAction(!settings.darkTheme))}
 			>
 				Dark teme
 			</Button>
@@ -105,21 +121,21 @@ const Dev = () => {
 			<Button
 				variant='contained'
 				className={classes.button}
-				onClick={() => setProgress(state => state + 10)}
+				onClick={() => setProgress(state => [state[0] + 10])}
 			>
 				Progress +
 			</Button>
 			<Button
 				variant='contained'
 				className={classes.button}
-				onClick={() => setProgress(state => state - 10)}
+				onClick={() => setProgress(state => [state[0] - 10])}
 			>
 				Progress -
 			</Button>
 			<Button
 				variant='contained'
 				className={classes.button}
-				onClick={() => dispatch(setDevMenuAction(!devMenu))}
+				onClick={() => dispatch(devMenuAction(!settings.devMenu))}
 			>
 				Dev menu
 			</Button>
@@ -127,29 +143,58 @@ const Dev = () => {
 			<br />
 			<br />
 
-			<DataView
-				size={250}
-				elevation={12}
-				title={'Temperature'}
-				label={formatTime()}
-				value={progress}
-				valueError={50}
-				maxItems={5}
-				colors={['blue']}
-			/>
+			{/* <Fade in={true} timeout={timeout}> */}
+			<div>
+				<DataView
+					size={250}
+					elevation={12}
+					title={'Temperature'}
+					values={progress}
+					//{/* labels={formatTime([{ seconds: new Date().getTime() / 1000 }])} */}
+					labels={'test'}
+					valueError={50}
+					maxItems={10}
+					colors={[cyan[600]]}
+				/>
+			</div>
+			{/* </Fade> */}
 
-			<DataView
+			{/* <Fade in={true} timeout={timeout} style={{ transitionDelay: '250ms' }}>
+				<div>
+					<DataView
+						size={250}
+						elevation={12}
+						title={'Temperature'}
+						values={[progress]}
+						labels={formatTime([{ seconds: new Date().getTime() / 1000 }])}
+						valueError={50}
+						maxItems={10}
+						colors={[cyan[600]]}
+					/>
+				</div>
+			</Fade> */}
+
+			{/* <DataView
 				size={250}
 				elevation={12}
 				title={'Humidity'}
 				label={formatTime()}
-				value={100}
+				value={progress}
 				valueError={50}
-				maxItems={5}
-				colors={['red']}
+				maxItems={10}
+				colors={[blue[400]]}
 			/>
 
-			<ChartControl title={'CO2'} label={'label'} value={50} maxItems={5} colors={['green']} />
+			<DataView
+				size={250}
+				elevation={12}
+				title={'CO2'}
+				label={formatTime()}
+				value={progress}
+				valueError={50}
+				maxItems={10}
+				colors={[purple[400]]}
+			/> */}
 		</div>
 	);
 };

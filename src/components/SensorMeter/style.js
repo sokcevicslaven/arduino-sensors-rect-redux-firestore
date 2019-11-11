@@ -6,32 +6,39 @@ import blueGrey from '@material-ui/core/colors/blueGrey';
 const color = blueGrey[100];
 
 export default makeStyles(theme => ({
-	grid: {
+	root: {
 		height: '100%',
+		padding: theme.spacing(2),
+		display: 'flex',
 		flexDirection: 'column',
 		justifyContent: 'space-between',
-		padding: theme.spacing(2)
+		alignItems: 'center'
 	},
-	wrapper: {
-		position: 'relative'
-		// margin: theme.spacing(2, 0)
+	title: {
+		alignSelf: 'flex-start'
 	},
-	progressBack: {
+	back: {
 		color: color,
 		position: 'absolute'
 	},
-	// textTitle: {
-	//   alignSelf: 'flex-start',
-	//   marg
-	// },
+	primary: props => ({
+		color: (props.colors && props.colors[0]) || theme.palette.primary.main
+	}),
+	error: props => ({
+		color: (props.colors && props.colors[1]) || theme.palette.secondary.main
+	}),
 	center: {
 		position: 'absolute',
 		top: '50%',
 		left: '50%',
 		transform: 'translate(-50%, -50%)'
 	},
-	minMax: {
+	footer: {
+		width: '100%',
 		textAlign: 'center',
-		marginBottom: theme.spacing(4)
+		marginBottom: theme.spacing(3),
+		display: 'flex',
+		justifyContent: 'space-around',
+		alignItems: 'center'
 	}
 }));

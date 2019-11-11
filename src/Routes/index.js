@@ -9,22 +9,21 @@ import PageTransition from '../components/PageTransition';
 // import PrivateRoute from '../components/PrivateRoute';
 
 // Pages
-import Dev from '../pages/Dev';
-import Login from '../pages/auth/Login';
-import Signup from '../pages/auth/Signup';
-import Dashboard from '../pages/Dashboard';
+import { Login, Signup, Dashboard, Settings, Dev, About } from '../pages';
 
 // Routes => Compoonents
 const routes = [
-	{ name: 'Dev', path: '/dev', Component: Dev },
-	{ name: 'Dashboard', path: '/', Component: Dashboard, privateRoute: true },
 	{ name: 'Login', path: '/login', Component: Login },
-	{ name: 'Signup', path: '/signup', Component: Signup }
+	{ name: 'Signup', path: '/signup', Component: Signup },
+	{ name: 'Dashboard', path: '/', Component: Dashboard },
+	{ name: 'Settings', path: '/settings', Component: Settings },
+	{ name: 'Dev', path: '/dev', Component: Dev },
+	{ name: 'About', path: '/about', Component: About }
 ];
 
 const Routes = () => {
 	// create routes from array
-	return routes.map(({ path, name, Component, privateRoute }) => {
+	return routes.map(({ path, name, Component, privateRoute }) => (
 		// if (privateRoute)
 		// 	return (
 		// 		<PrivateRoute key={path} exact path={path}>
@@ -36,17 +35,15 @@ const Routes = () => {
 		// 	);
 		// else
 
-		return (
-			<Route key={path} exact path={path}>
-				{({ match }) => (
-					<PageTransition match={match}>
-						<Component />
-						<Copyright />
-					</PageTransition>
-				)}
-			</Route>
-		);
-	});
+		<Route key={path} exact path={path}>
+			{({ match }) => (
+				<PageTransition match={match}>
+					<Component />
+					<Copyright />
+				</PageTransition>
+			)}
+		</Route>
+	));
 };
 
 export default Routes;

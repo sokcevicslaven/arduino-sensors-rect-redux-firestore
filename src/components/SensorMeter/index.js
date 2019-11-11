@@ -1,17 +1,20 @@
+import clsx from 'clsx';
 import React, { useState, useEffect } from 'react';
 
 // Material UI
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Typography from '@material-ui/core/Typography';
-import Grid from '@material-ui/core/Grid';
+import Box from '@material-ui/core/Box';
 
 // Custom styles
 import useStyles from './style';
 
-const SensorMeter = ({ title, value, simbol, size, valueError }) => {
-	const classes = useStyles();
+const SensorMeter = ({ title, value, simbol, size, valueError, colors }) => {
+	const classes = useStyles({ colors: colors });
 	const [min, setMin] = useState(value);
 	const [max, setMax] = useState(value);
+
+	const error = value >= valueError;
 
 	useEffect(() => {
 		if (value < min) setMin(value);
@@ -20,50 +23,54 @@ const SensorMeter = ({ title, value, simbol, size, valueError }) => {
 	}, [value]);
 
 	return (
-		<Grid container className={classes.grid}>
-			<Typography paragraph variant='subtitle1'>
+		<div className={classes.root}>
+			<Typography paragraph variant='subtitle1' className={classes.title}>
 				{title}
 			</Typography>
 
-			<div className={classes.wrapper}>
-				<div className={classes.center}>
-					<CircularProgress
-						variant='static'
-						thickness={2}
-						style={{ top: size * 0.01, left: size * 0.01, height: size * 0.48, width: size * 0.48 }}
-						value={100}
-						className={classes.progressBack}
-					/>
+			<Box position='relative'>
+				<CircularProgress
+					variant='static'
+					thickness={2}
+					style={{ top: size * 0.01, left: size * 0.01, height: size * 0.48, width: size * 0.48 }}
+					value={100}
+					className={classes.back}
+				/>
 
-					<CircularProgress
-						variant='static'
-						color={(value >= valueError && 'secondary') || 'primary'}
-						size={size * 0.5}
-						value={value}
-					/>
+				<CircularProgress
+					variant='static'
+					size={size * 0.5}
+					value={value}
+					className={clsx({
+						[classes.primary]: !error,
+						[classes.error]: error
+					})}
+				/>
 
-					<Typography
-						variant='h4'
-						color={(value >= valueError && 'secondary') || 'primary'}
-						className={classes.center}
-					>
-						{value + String.fromCharCode(simbol)}
-					</Typography>
-				</div>
-			</div>
+				<Typography
+					variant='h4'
+					// color={(value >= valueError && 'secondary') || 'primary'}
+					className={clsx(classes.center, {
+						[classes.primary]: !error,
+						[classes.error]: error
+					})}
+				>
+					{value + String.fromCharCode(simbol)}
+				</Typography>
+			</Box>
 
-			<Grid container justify='space-around' className={classes.minMax}>
-				<Grid item>
+			<div className={classes.footer}>
+				<div>
 					<Typography variant='body1'>{max + String.fromCharCode(simbol)}</Typography>
 					<Typography variant='body2'>Max</Typography>
-				</Grid>
+				</div>
 
-				<Grid item>
+				<div>
 					<Typography variant='body1'>{min + String.fromCharCode(simbol)}</Typography>
 					<Typography variant='body2'>Min</Typography>
-				</Grid>
-			</Grid>
-		</Grid>
+				</div>
+			</div>
+		</div>
 	);
 };
 

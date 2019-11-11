@@ -19,13 +19,19 @@ export const formatDatetime = date => {
 };
 
 // Format local time
-export const formatTime = seconds => {
-	const date = (seconds && new Date(seconds * 1000)) || new Date();
-	return date.toLocaleTimeString('hr-HR', {
-		hour12: false,
-		hour: '2-digit',
-		minute: '2-digit'
-	});
+export const formatTime = date => {
+	const times = [];
+	date &&
+		date.forEach(item =>
+			times.push(
+				new Date(item.seconds * 1000).toLocaleTimeString('hr-HR', {
+					hour12: false,
+					hour: '2-digit',
+					minute: '2-digit'
+				})
+			)
+		);
+	return times;
 };
 
 // Random number from 0 to N

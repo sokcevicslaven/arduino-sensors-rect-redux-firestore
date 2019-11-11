@@ -4,10 +4,6 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import clsx from 'clsx';
 
-// Redux
-import { useSelector, useDispatch } from 'react-redux';
-import { setDarkThemeAction, setDevMenuAction } from '../../../redux/actions';
-
 // Material UI
 import List from '@material-ui/core/List';
 import Drawer from '@material-ui/core/Drawer';
@@ -20,7 +16,7 @@ import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import DashboardIcon from '@material-ui/icons/Dashboard';
 import SettingsIcon from '@material-ui/icons/Settings';
 import DeveloperModeIcon from '@material-ui/icons/DeveloperMode';
-import Switch from '@material-ui/core/Switch';
+import InfoIcon from '@material-ui/icons/Info';
 
 // Custom styles
 import useStyles from './style';
@@ -34,9 +30,6 @@ import useStyles from './style';
 // Sidebar
 const Sidebar = ({ open, drawerWidth, handleDrawerClose }) => {
 	const classes = useStyles({ drawerWidth: drawerWidth });
-	const dispatch = useDispatch();
-	const darkTheme = useSelector(state => state.ui.darkTheme);
-	const devMenu = useSelector(state => state.ui.devMenu);
 
 	return (
 		<Drawer
@@ -89,25 +82,11 @@ const Sidebar = ({ open, drawerWidth, handleDrawerClose }) => {
 			<Divider />
 
 			<List>
-				<ListItem>
-					{/* Dark theme */}
-					<Switch
-						color='primary'
-						className={classes.switchBtn}
-						onClick={() => dispatch(setDarkThemeAction(!darkTheme))}
-					/>
-					<ListItemText primary='Dark theme' />
-				</ListItem>
-
-				<ListItem>
-					{/* Developer menu */}
-					<Switch
-						//color='secundary'
-						checked={devMenu}
-						className={classes.switchBtn}
-						onClick={() => dispatch(setDevMenuAction(!devMenu))}
-					/>
-					<ListItemText primary='Developer menu' />
+				<ListItem button component={Link} to='/about'>
+					<ListItemIcon>
+						<InfoIcon />
+					</ListItemIcon>
+					<ListItemText primary='About' />
 				</ListItem>
 			</List>
 		</Drawer>

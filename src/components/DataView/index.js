@@ -1,21 +1,23 @@
+// Veiw data from database
+
 import React from 'react';
-import Grid from '@material-ui/core/Grid';
 
 // Material UI
 import Paper from '@material-ui/core/Paper';
+import Grid from '@material-ui/core/Grid';
 
 // Components
 import SensorMeter from '../SensorMeter';
 import ChartControl from '../ChartControl';
 
 // Custom styles
-import useStyles from './style.js';
+import useStyles from './style';
 
 const DataView = ({
 	title = '',
 	size = 300,
-	label,
-	value,
+	labels,
+	values,
 	simbol = null,
 	valueError = 50,
 	textVariant = 'h3',
@@ -34,17 +36,18 @@ const DataView = ({
 					<SensorMeter
 						size={size}
 						title={title}
-						value={value}
+						value={values[values.length - 1]}
 						simbol={simbol}
 						textVariant={textVariant}
 						valueError={valueError}
+						colors={colors}
 					/>
 				</Grid>
 				<Grid item xs={12} sm={9}>
 					<ChartControl
 						title={title}
-						label={label}
-						value={value}
+						labels={labels}
+						values={values}
 						maxItems={maxItems}
 						yMarkers={yMarkers}
 						yRegions={yRegions}

@@ -2,4 +2,9 @@
 .y.axis text,
 .x.axis text {
 	font-size: 14px;
+	/* color: '#000'; */
+}
+
+.fill-white {
+	fill: #fff !important;
 }

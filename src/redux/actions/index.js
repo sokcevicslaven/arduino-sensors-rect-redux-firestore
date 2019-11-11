@@ -3,14 +3,14 @@
 // User actions
 import { loginAction, logoutAction, signupAction } from './userActions';
 // Ui actions
-import { clearErrorsAction, setErrorAction, setDarkThemeAction, setDevMenuAction } from './uiActions';
+import { clearErrorsAction, setErrorAction, darkThemeAction, devMenuAction } from './uiActions';
 
 export {
 	loginAction,
 	logoutAction,
 	signupAction,
-  clearErrorsAction,
-  setErrorAction,
-	setDarkThemeAction,
-	setDevMenuAction
+	clearErrorsAction,
+	setErrorAction,
+	darkThemeAction,
+	devMenuAction
 };

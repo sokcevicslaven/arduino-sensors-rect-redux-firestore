@@ -6,13 +6,19 @@ import { CSSTransition } from 'react-transition-group';
 // Styles
 import useStyles from './style';
 
+const timeout = {
+	appear: 0,
+	enter: 1000,
+	exit: 300
+};
+
 const PageTransition = ({ match, children }) => {
-	const classes = useStyles();
+	const classes = useStyles({ timeout: timeout });
 
 	return (
 		<CSSTransition
 			in={match != null}
-			timeout={300}
+			timeout={timeout}
 			unmountOnExit
 			classNames={{
 				enter: classes.pageEnter,
