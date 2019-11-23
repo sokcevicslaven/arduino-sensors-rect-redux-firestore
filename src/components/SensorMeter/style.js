@@ -36,7 +36,7 @@ export default makeStyles(theme => ({
 	footer: {
 		width: '100%',
 		textAlign: 'center',
-		marginBottom: theme.spacing(3),
+		// marginBottom: theme.spacing(3),
 		display: 'flex',
 		justifyContent: 'space-around',
 		alignItems: 'center'

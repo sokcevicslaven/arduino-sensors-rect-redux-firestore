@@ -9,14 +9,19 @@ import Box from '@material-ui/core/Box';
 // Custom styles
 import useStyles from './style';
 
-const SensorMeter = ({ title, value, simbol, size, valueError, colors }) => {
-	const classes = useStyles({ colors: colors });
+const SensorMeter = ({ title, symbol, size, value, valueError, priColor, secColor }) => {
+	console.log('TCL: SensorMeter');
+
+	const classes = useStyles({ colors: [priColor, secColor] });
+
 	const [min, setMin] = useState(value);
 	const [max, setMax] = useState(value);
 
 	const error = value >= valueError;
+	const char = String.fromCharCode(symbol);
 
 	useEffect(() => {
+		console.log('TCL: SensorMeter -> useEffect');
 		if (value < min) setMin(value);
 		else if (value > max) setMax(value);
 		// eslint-disable-next-line
@@ -28,7 +33,7 @@ const SensorMeter = ({ title, value, simbol, size, valueError, colors }) => {
 				{title}
 			</Typography>
 
-			<Box position='relative'>
+			<Box position='relative' mb={2}>
 				<CircularProgress
 					variant='static'
 					thickness={2}
@@ -49,24 +54,24 @@ const SensorMeter = ({ title, value, simbol, size, valueError, colors }) => {
 
 				<Typography
 					variant='h4'
-					// color={(value >= valueError && 'secondary') || 'primary'}
+					style={{ marginLeft: (symbol && 8) || 0 }}
 					className={clsx(classes.center, {
 						[classes.primary]: !error,
 						[classes.error]: error
 					})}
 				>
-					{value + String.fromCharCode(simbol)}
+					{value + char}
 				</Typography>
 			</Box>
 
 			<div className={classes.footer}>
 				<div>
-					<Typography variant='body1'>{max + String.fromCharCode(simbol)}</Typography>
+					<Typography variant='body1'>{max + char}</Typography>
 					<Typography variant='body2'>Max</Typography>
 				</div>
 
 				<div>
-					<Typography variant='body1'>{min + String.fromCharCode(simbol)}</Typography>
+					<Typography variant='body1'>{min + char}</Typography>
 					<Typography variant='body2'>Min</Typography>
 				</div>
 			</div>

@@ -8,50 +8,55 @@ import Grid from '@material-ui/core/Grid';
 
 // Components
 import SensorMeter from '../SensorMeter';
-import ChartControl from '../ChartControl';
+import Chart from '../Highcharts';
 
 // Custom styles
 import useStyles from './style';
 
 const DataView = ({
-	title = '',
+	title = null,
 	size = 300,
-	labels,
-	values,
-	simbol = null,
-	valueError = 50,
-	textVariant = 'h3',
+	symbol = null,
+	priColor = null,
+	secColor = null,
 	elevation = 4,
+	valueError = 50,
+	device = 'Device 1',
+	data = null,
 	maxItems = 10,
-	yMarkers = null,
-	yRegions = null,
-	colors = null
+	chartBand = null,
+	chartTitle = false
 }) => {
+	console.log('TCL: DataView');
+
 	const classes = useStyles();
 
 	return (
 		<Paper elevation={elevation} className={classes.paper}>
 			<Grid container>
+				{/* Round progress metter */}
 				<Grid item xs={12} sm={3}>
 					<SensorMeter
 						size={size}
 						title={title}
-						value={values[values.length - 1]}
-						simbol={simbol}
-						textVariant={textVariant}
+						value={(data && data.y) || 0}
+						symbol={symbol}
+						priColor={priColor}
+						secColor={secColor}
 						valueError={valueError}
-						colors={colors}
 					/>
 				</Grid>
+
+				{/* Chart */}
 				<Grid item xs={12} sm={9}>
-					<ChartControl
-						title={title}
-						labels={labels}
-						values={values}
+					<Chart
+						title={(chartTitle && title) || null}
+						data={data}
+						symbol={symbol}
+						device={device}
+						band={chartBand}
+						color={priColor}
 						maxItems={maxItems}
-						yMarkers={yMarkers}
-						yRegions={yRegions}
-						colors={colors}
 					/>
 				</Grid>
 			</Grid>

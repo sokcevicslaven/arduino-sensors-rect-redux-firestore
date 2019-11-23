@@ -1,6 +1,6 @@
 // Developer page (debug only)
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useRef } from 'react';
 
 // Redux
 import { useSelector, useDispatch } from 'react-redux';
@@ -19,15 +19,14 @@ import firebase from '../../firebase/firebase';
 import Button from '@material-ui/core/Button';
 // import useMediaQuery from '@material-ui/core/useMediaQuery';
 // import purple from '@material-ui/core/colors/purple';
-// import blue from '@material-ui/core/colors/blue';
-import cyan from '@material-ui/core/colors/cyan';
-import Fade from '@material-ui/core/Fade';
+import green from '@material-ui/core/colors/green';
+import orange from '@material-ui/core/colors/orange';
 
 // Components
 import DataView from '../../components/DataView';
 
 // Utility
-import { logObj, formatTime } from '../../lib';
+import { logObj } from '../../lib';
 
 // Custom styles
 import useStyles from './style';
@@ -58,30 +57,50 @@ const addData = async dispatch => {
 	}
 };
 
-const timeout = 1000;
-
 const Dev = () => {
 	const classes = useStyles();
-	const [progress, setProgress] = useState([0]);
 	const dispatch = useDispatch();
 	const settings = useSelector(state => state.ui.settings);
-	// const darkTheme = useSelector(state => state.ui.darkTheme);
-	// const minWidthSM = useMediaQuery('(min-width:600px)');
+	// const [chart, setChart] = useState([{ y: 0, x: new Date().getTime() }]);
 
-	useEffect(() => {
-		const labels = document.querySelectorAll(
-			'.chart-container .axis, .chart-container .chart-label'
-		);
-		labels &&
-			labels.forEach(label => {
-				if (settings.darkTheme) label.classList.add('fill-white');
-				else label.classList.remove('fill-white');
-			});
+	// Debug add dummy data on interval
+	const intervalRef = useRef();
+	const [started, setStarted] = useState(false);
+	const [state, setState] = useState({ x: new Date().getTime(), y: 0 });
+	const startInterval = _ => {
+		if (started) {
+			clearInterval(intervalRef.current);
+			setStarted(false);
+		} else {
+			intervalRef.current = setInterval(() => {
+				const x = new Date().getTime();
+				const y = Math.floor(Math.random() * 50) + 1;
+				setState({ x: x, y: y });
+			}, 2000);
+			setStarted(true);
+		}
+	};
 
-		// return () => {
-		// 	labels = null;
-		// };
-	}, [settings.darkTheme]);
+	// const addItem = item => {
+	//   setChart([item]);
+	// };
+
+	// useEffect(() => {
+	//   const labels = document.querySelectorAll(
+	//     ".chart-container .axis, .chart-container .chart-label"
+	//   );
+	//   labels &&
+	//     labels.forEach(label => {
+	//       if (settings.darkTheme) label.classList.add("fill-white");
+	//       else label.classList.remove("fill-white");
+	//     });
+	// }, [settings.darkTheme]);
+
+	const tempBand = {
+		color: green[200],
+		from: 10,
+		to: 35
+	};
 
 	return (
 		<div>
@@ -115,23 +134,6 @@ const Dev = () => {
 			>
 				Dark teme
 			</Button>
-			<Button variant='contained' className={classes.button} onClick={() => {}}>
-				Update chart
-			</Button>
-			<Button
-				variant='contained'
-				className={classes.button}
-				onClick={() => setProgress(state => [state[0] + 10])}
-			>
-				Progress +
-			</Button>
-			<Button
-				variant='contained'
-				className={classes.button}
-				onClick={() => setProgress(state => [state[0] - 10])}
-			>
-				Progress -
-			</Button>
 			<Button
 				variant='contained'
 				className={classes.button}
@@ -139,62 +141,28 @@ const Dev = () => {
 			>
 				Dev menu
 			</Button>
+			<Button variant='contained' className={classes.button} onClick={startInterval}>
+				{started ? 'Stop' : 'Start'}
+			</Button>
 
 			<br />
 			<br />
 
-			{/* <Fade in={true} timeout={timeout}> */}
 			<div>
 				<DataView
-					size={250}
+					size={300}
 					elevation={12}
 					title={'Temperature'}
-					values={progress}
-					//{/* labels={formatTime([{ seconds: new Date().getTime() / 1000 }])} */}
-					labels={'test'}
-					valueError={50}
+					symbol={176}
+					data={state}
 					maxItems={10}
-					colors={[cyan[600]]}
+					valueError={30}
+					priColor={orange[400]}
+					secColor={null}
+					chartBand={tempBand}
+					showChartTitle={false}
 				/>
 			</div>
-			{/* </Fade> */}
-
-			{/* <Fade in={true} timeout={timeout} style={{ transitionDelay: '250ms' }}>
-				<div>
-					<DataView
-						size={250}
-						elevation={12}
-						title={'Temperature'}
-						values={[progress]}
-						labels={formatTime([{ seconds: new Date().getTime() / 1000 }])}
-						valueError={50}
-						maxItems={10}
-						colors={[cyan[600]]}
-					/>
-				</div>
-			</Fade> */}
-
-			{/* <DataView
-				size={250}
-				elevation={12}
-				title={'Humidity'}
-				label={formatTime()}
-				value={progress}
-				valueError={50}
-				maxItems={10}
-				colors={[blue[400]]}
-			/>
-
-			<DataView
-				size={250}
-				elevation={12}
-				title={'CO2'}
-				label={formatTime()}
-				value={progress}
-				valueError={50}
-				maxItems={10}
-				colors={[purple[400]]}
-			/> */}
 		</div>
 	);
 };

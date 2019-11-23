@@ -10,9 +10,10 @@ import { SET_ERROR } from '../../redux/types';
 // Material UI
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
-import purple from '@material-ui/core/colors/purple';
+import green from '@material-ui/core/colors/green';
 import blue from '@material-ui/core/colors/blue';
 import cyan from '@material-ui/core/colors/cyan';
+import orange from '@material-ui/core/colors/orange';
 import Fade from '@material-ui/core/Fade';
 
 // Firebase
@@ -61,18 +62,21 @@ const Dashboard = () => {
 	const [data, setData] = useState({});
 	const { arduino, temperature, humidity, co2, date } = data;
 
-	const formatTimeMemo = useMemo(() => formatTime(data.date), data.date);
+	// const formatTimeMemo = useMemo(() => formatTime(data.date), data.date);
+	// const tempDataMemo = useMemo(() => ({ x: data.date.seconds * 1000, y: data.temperature }), []);
 
-	useEffect(() => {
-		const labels = document.querySelectorAll(
-			'.chart-container .axis, .chart-container .chart-label'
-		);
-		labels &&
-			labels.forEach(label => {
-				if (settings.darkTheme) label.classList.add('fill-white');
-				else label.classList.remove('fill-white');
-			});
-	}, [settings.darkTheme]);
+	// const x = (data && data.date && data.date.seconds * 1000) || new Date().getTime();
+
+	// useEffect(() => {
+	// const labels = document.querySelectorAll(
+	// 	'.chart-container .axis, .chart-container .chart-label'
+	// );
+	// labels &&
+	// 	labels.forEach(label => {
+	// 		if (settings.darkTheme) label.classList.add('fill-white');
+	// 		else label.classList.remove('fill-white');
+	// 	});
+	// }, [settings.darkTheme]);
 
 	useEffect(() => {
 		console.log('TCL: Dashboard -> useEffect 1');
@@ -88,24 +92,18 @@ const Dashboard = () => {
 				.limit(10)
 				.onSnapshot(
 					snapshot => {
-						const data = {
-							arduino: [],
-							temperature: [],
-							humidity: [],
-							co2: [],
-							date: []
-						};
 						snapshot.docChanges().forEach(change => {
 							if (change.type === 'added') {
 								const rec = change.doc.data();
-								data.arduino.unshift(rec.arduino);
-								data.temperature.unshift(rec.temperature);
-								data.humidity.unshift(rec.humidity);
-								data.co2.unshift(rec.co2);
-								data.date.unshift(rec.date);
+								setData({
+									arduino: rec.arduino,
+									temperature: rec.temperature,
+									humidity: rec.humidity,
+									co2: rec.co2,
+									date: rec.date
+								});
 							}
 						});
-						setData(data);
 					},
 					error => console.log('TCL: Dashboard -> childAddedListener -> error:', error)
 				);
@@ -152,49 +150,64 @@ const Dashboard = () => {
 			{data.date && (
 				<Grid container direction='column' spacing={3}>
 					{/* Temperature */}
-					<Fade in={true} timeout={timeout}>
+					<Fade in={true} timeout={timeout} style={{ transitionDelay: '500ms' }}>
 						<Grid item>
 							<DataView
-								size={250}
+								size={300}
 								elevation={12}
 								title={'Temperature'}
-								labels={formatTimeMemo}
-								values={temperature || 0}
-								valueError={50}
+								symbol={176}
+								data={{ x: date.seconds * 1000, y: temperature }}
+								priColor={orange[600]}
 								maxItems={10}
-								colors={[cyan[500]]}
+								valueError={30}
+								chartBand={{
+									color: green[200],
+									from: 18,
+									to: 35
+								}}
 							/>
 						</Grid>
 					</Fade>
 
 					{/* Humidity */}
-					<Fade in={true} timeout={timeout} style={{ transitionDelay: '250ms' }}>
+					<Fade in={true} timeout={timeout} style={{ transitionDelay: '750ms' }}>
 						<Grid item>
 							<DataView
-								size={250}
+								size={300}
 								elevation={12}
 								title={'Humidity'}
-								labels={'formatTime(date)'}
-								values={humidity || 0}
-								valueError={50}
+								symbol={176}
+								data={{ x: date.seconds * 1000, y: humidity }}
+								priColor={blue[700]}
 								maxItems={10}
-								colors={[blue[300]]}
+								valueError={30}
+								chartBand={{
+									color: green[200],
+									from: 40,
+									to: 80
+								}}
 							/>
 						</Grid>
 					</Fade>
 
 					{/* CO2 */}
-					<Fade in={true} timeout={timeout} style={{ transitionDelay: '500ms' }}>
+					<Fade in={true} timeout={timeout} style={{ transitionDelay: '1000ms' }}>
 						<Grid item>
 							<DataView
-								size={250}
+								size={300}
 								elevation={12}
 								title={'CO2'}
-								labels={'formatTime(date)'}
-								values={co2 || 0}
-								valueError={50}
+								symbol={176}
+								data={{ x: date.seconds * 1000, y: co2 }}
+								priColor={cyan[600]}
 								maxItems={10}
-								colors={[purple[300]]}
+								valueError={30}
+								chartBand={{
+									color: green[200],
+									from: 8,
+									to: 16
+								}}
 							/>
 						</Grid>
 					</Fade>

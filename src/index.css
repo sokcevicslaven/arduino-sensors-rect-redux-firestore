@@ -1,10 +1,14 @@
 /* Char labels */
-.y.axis text,
+/* .y.axis text,
 .x.axis text {
-	font-size: 14px;
-	/* color: '#000'; */
-}
+	font-size: 14px; */
+/* color: '#000'; */
+/* } */
 
-.fill-white {
+/* .fill-white {
 	fill: #fff !important;
+} */
+
+text[y='269'] {
+	display: none;
 }
