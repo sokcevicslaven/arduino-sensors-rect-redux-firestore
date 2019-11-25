@@ -1,10 +1,10 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "5c3ee49fdb51ccecf54813e2ddce595c",
+    "revision": "6abd2dbfd53e4c2d4f5ec1164971b4e9",
     "url": "/arduino-sensors-react-redux-firestore/index.html"
   },
   {
-    "revision": "40911dd38aaa1e5e86d4",
+    "revision": "82b9d3f317f2b0eccfb4",
     "url": "/arduino-sensors-react-redux-firestore/static/css/main.e9d5f8b3.chunk.css"
   },
   {
@@ -12,8 +12,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/arduino-sensors-react-redux-firestore/static/js/2.792b7cc0.chunk.js"
   },
   {
-    "revision": "40911dd38aaa1e5e86d4",
-    "url": "/arduino-sensors-react-redux-firestore/static/js/main.5d13d97d.chunk.js"
+    "revision": "82b9d3f317f2b0eccfb4",
+    "url": "/arduino-sensors-react-redux-firestore/static/js/main.d608b8ac.chunk.js"
   },
   {
     "revision": "e5ebccb1245430d406de",
