@@ -30,7 +30,7 @@ export const ivanCard = {
 export const slavenCard = {
 	front: {
 		cover: 'https://unsplash.it/720/500?image=1067',
-		user: '/img/slaven.jpg',
+		user: `${process.env.PUBLIC_URL}/img/slaven.jpg`,
 		title: 'Slaven Sokčević',
 		subtitle: 'student',
 		text:

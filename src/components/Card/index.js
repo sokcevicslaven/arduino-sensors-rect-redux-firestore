@@ -15,8 +15,6 @@ import TwitterIcon from '@material-ui/icons/Twitter';
 import GitHubIcon from '@material-ui/icons/GitHub';
 
 const Card = ({ front = {}, back = {}, social = {} }) => {
-	console.log('TCL: Card -> social', social);
-
 	const classes = useStyles();
 
 	return (
