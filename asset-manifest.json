@@ -1,14 +1,14 @@
 {
   "files": {
     "main.css": "/arduino-sensors-react-redux-firestore/static/css/main.e9d5f8b3.chunk.css",
-    "main.js": "/arduino-sensors-react-redux-firestore/static/js/main.bce8568a.chunk.js",
-    "main.js.map": "/arduino-sensors-react-redux-firestore/static/js/main.bce8568a.chunk.js.map",
+    "main.js": "/arduino-sensors-react-redux-firestore/static/js/main.0c1c532b.chunk.js",
+    "main.js.map": "/arduino-sensors-react-redux-firestore/static/js/main.0c1c532b.chunk.js.map",
     "runtime-main.js": "/arduino-sensors-react-redux-firestore/static/js/runtime-main.2c5929ef.js",
     "runtime-main.js.map": "/arduino-sensors-react-redux-firestore/static/js/runtime-main.2c5929ef.js.map",
     "static/js/2.792b7cc0.chunk.js": "/arduino-sensors-react-redux-firestore/static/js/2.792b7cc0.chunk.js",
     "static/js/2.792b7cc0.chunk.js.map": "/arduino-sensors-react-redux-firestore/static/js/2.792b7cc0.chunk.js.map",
     "index.html": "/arduino-sensors-react-redux-firestore/index.html",
-    "precache-manifest.b02799f08db1e9809dd7c0d9c6d05647.js": "/arduino-sensors-react-redux-firestore/precache-manifest.b02799f08db1e9809dd7c0d9c6d05647.js",
+    "precache-manifest.18d396d38f5eede79fb74efa1f0eedc7.js": "/arduino-sensors-react-redux-firestore/precache-manifest.18d396d38f5eede79fb74efa1f0eedc7.js",
     "service-worker.js": "/arduino-sensors-react-redux-firestore/service-worker.js",
     "static/css/main.e9d5f8b3.chunk.css.map": "/arduino-sensors-react-redux-firestore/static/css/main.e9d5f8b3.chunk.css.map"
   },
@@ -16,6 +16,6 @@
     "static/js/runtime-main.2c5929ef.js",
     "static/js/2.792b7cc0.chunk.js",
     "static/css/main.e9d5f8b3.chunk.css",
-    "static/js/main.bce8568a.chunk.js"
+    "static/js/main.0c1c532b.chunk.js"
   ]
 }
