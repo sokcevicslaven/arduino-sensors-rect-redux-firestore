@@ -1,0 +1,1 @@
+{"version":3,"sources":["index.css"],"names":[],"mappings":"AAWA,cACC,YACD","file":"main.e9d5f8b3.chunk.css","sourcesContent":["/* Char labels */\n/* .y.axis text,\n.x.axis text {\n\tfont-size: 14px; */\n/* color: '#000'; */\n/* } */\n\n/* .fill-white {\n\tfill: #fff !important;\n} */\n\ntext[y='269'] {\n\tdisplay: none;\n}\n"]}
