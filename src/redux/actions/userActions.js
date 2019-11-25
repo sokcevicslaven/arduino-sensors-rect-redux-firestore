@@ -7,7 +7,7 @@ import {
 	STOP_LOADING
 	// SET_USER,
 	// LOGIN_USER,
-	// LOGOUT_USER,
+	// LOGOUT_USER
 	// SIGNUP_USER
 } from '../types';
 

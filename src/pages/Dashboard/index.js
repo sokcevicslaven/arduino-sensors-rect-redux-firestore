@@ -49,7 +49,7 @@ const addData = async dispatch => {
 const timeout = 1000;
 
 const Dashboard = () => {
-	console.log('TCL: Dashboard -> Dashboard');
+	// console.log('TCL: Dashboard -> Dashboard');
 
 	const classes = useStyles();
 	const history = useHistory();
@@ -78,11 +78,11 @@ const Dashboard = () => {
 	// }, [settings.darkTheme]);
 
 	useEffect(() => {
-		console.log('TCL: Dashboard -> useEffect 1');
+		// console.log('TCL: Dashboard -> useEffect 1');
 
 		if (!login) history.push('/login');
 		else {
-			console.log('TCL: Dashboard -> useEffect 2');
+			// console.log('TCL: Dashboard -> useEffect 2');
 
 			dataAddListener.current = firebase.fire
 
@@ -103,8 +103,8 @@ const Dashboard = () => {
 								});
 							}
 						});
-					},
-					error => console.log('TCL: Dashboard -> childAddedListener -> error:', error)
+					}
+					// error => console.log('TCL: Dashboard -> childAddedListener -> error:', error)
 				);
 		}
 

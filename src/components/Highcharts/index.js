@@ -10,8 +10,7 @@ import HighchartsReact from 'highcharts-react-official';
 import makeOptions from './options';
 
 const Chart = ({ title, data, maxItems, device, symbol, color, band }) => {
-	console.log('TCL: Chart -> data', data);
-	console.log('TCL: Chart');
+	// console.log('TCL: Chart');
 
 	const charRef = useRef();
 	// const initRef = useRef(true);
@@ -27,7 +26,7 @@ const Chart = ({ title, data, maxItems, device, symbol, color, band }) => {
 	);
 
 	useEffect(() => {
-		console.log('TCL: ChartControl -> useEffect');
+		// console.log('TCL: ChartControl -> useEffect');
 
 		const x = (data && data.x) || new Date().getTime();
 		const y = (data && data.y) || 0;

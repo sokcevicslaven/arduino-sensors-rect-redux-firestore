@@ -10,7 +10,7 @@ import Box from '@material-ui/core/Box';
 import useStyles from './style';
 
 const SensorMeter = ({ title, symbol, size, value, valueError, priColor, secColor }) => {
-	console.log('TCL: SensorMeter');
+	// console.log('TCL: SensorMeter');
 
 	const classes = useStyles({ colors: [priColor, secColor] });
 
@@ -21,7 +21,7 @@ const SensorMeter = ({ title, symbol, size, value, valueError, priColor, secColo
 	const char = String.fromCharCode(symbol);
 
 	useEffect(() => {
-		console.log('TCL: SensorMeter -> useEffect');
+		// console.log('TCL: SensorMeter -> useEffect');
 		if (value < min) setMin(value);
 		else if (value > max) setMax(value);
 		// eslint-disable-next-line

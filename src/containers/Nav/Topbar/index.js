@@ -40,7 +40,7 @@ const Topbar = ({ open, drawerWidth, handleDrawerOpen }) => {
 						Log out
 					</Button> */}
 					<Tooltip title='Logout' placement='bottom'>
-						<IconButton color='inherit' onClick={() => () => dispatch(logoutAction())}>
+						<IconButton color='inherit' onClick={() => dispatch(logoutAction())}>
 							<ExitToAppIcon />
 						</IconButton>
 					</Tooltip>
