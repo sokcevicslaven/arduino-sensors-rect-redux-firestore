@@ -1,21 +1,21 @@
 {
   "files": {
     "main.css": "/arduino-sensors-react-redux-firestore/static/css/main.e9d5f8b3.chunk.css",
-    "main.js": "/arduino-sensors-react-redux-firestore/static/js/main.203a4580.chunk.js",
-    "main.js.map": "/arduino-sensors-react-redux-firestore/static/js/main.203a4580.chunk.js.map",
+    "main.js": "/arduino-sensors-react-redux-firestore/static/js/main.0ccc02eb.chunk.js",
+    "main.js.map": "/arduino-sensors-react-redux-firestore/static/js/main.0ccc02eb.chunk.js.map",
     "runtime-main.js": "/arduino-sensors-react-redux-firestore/static/js/runtime-main.2c5929ef.js",
     "runtime-main.js.map": "/arduino-sensors-react-redux-firestore/static/js/runtime-main.2c5929ef.js.map",
-    "static/js/2.792b7cc0.chunk.js": "/arduino-sensors-react-redux-firestore/static/js/2.792b7cc0.chunk.js",
-    "static/js/2.792b7cc0.chunk.js.map": "/arduino-sensors-react-redux-firestore/static/js/2.792b7cc0.chunk.js.map",
+    "static/js/2.3b0c8005.chunk.js": "/arduino-sensors-react-redux-firestore/static/js/2.3b0c8005.chunk.js",
+    "static/js/2.3b0c8005.chunk.js.map": "/arduino-sensors-react-redux-firestore/static/js/2.3b0c8005.chunk.js.map",
     "index.html": "/arduino-sensors-react-redux-firestore/index.html",
-    "precache-manifest.a9c02a08b0de56673997e8a06a71e2c5.js": "/arduino-sensors-react-redux-firestore/precache-manifest.a9c02a08b0de56673997e8a06a71e2c5.js",
+    "precache-manifest.5c7a91ea7208d13dc4ed97e4f305d408.js": "/arduino-sensors-react-redux-firestore/precache-manifest.5c7a91ea7208d13dc4ed97e4f305d408.js",
     "service-worker.js": "/arduino-sensors-react-redux-firestore/service-worker.js",
     "static/css/main.e9d5f8b3.chunk.css.map": "/arduino-sensors-react-redux-firestore/static/css/main.e9d5f8b3.chunk.css.map"
   },
   "entrypoints": [
     "static/js/runtime-main.2c5929ef.js",
-    "static/js/2.792b7cc0.chunk.js",
+    "static/js/2.3b0c8005.chunk.js",
     "static/css/main.e9d5f8b3.chunk.css",
-    "static/js/main.203a4580.chunk.js"
+    "static/js/main.0ccc02eb.chunk.js"
   ]
 }

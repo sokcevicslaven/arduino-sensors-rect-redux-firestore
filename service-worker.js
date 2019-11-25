@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
 
 importScripts(
-  "/arduino-sensors-react-redux-firestore/precache-manifest.a9c02a08b0de56673997e8a06a71e2c5.js"
+  "/arduino-sensors-react-redux-firestore/precache-manifest.5c7a91ea7208d13dc4ed97e4f305d408.js"
 );
 
 self.addEventListener('message', (event) => {
