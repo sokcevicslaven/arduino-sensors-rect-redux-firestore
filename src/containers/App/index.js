@@ -1,7 +1,7 @@
 // Main application
 
 import React from 'react';
-import { BrowserRouter as Router, Switch } from 'react-router-dom';
+import { BrowserRouter as Router, Switch, browserHistory } from 'react-router-dom';
 
 // Hooks
 import { useAuthStateChanged } from '../../hooks';
@@ -25,7 +25,7 @@ const App = () => {
 
 	return (
 		<div className={classes.root}>
-			<Router basename={process.env.PUBLIC_URL}>
+			<Router history={browserHistory} basename={process.env.PUBLIC_URL}>
 				<Nav />
 				<Container component='main' className={`${classes.pageContainer} ${classes.marginLeft}`}>
 					<Toolbar />
