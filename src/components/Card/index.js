@@ -17,6 +17,8 @@ import GitHubIcon from '@material-ui/icons/GitHub';
 const Card = ({ front = {}, back = {}, social = {} }) => {
 	const classes = useStyles();
 
+	console.log('TCL: Card ->  process.env.PUBLIC_URL', process.env.PUBLIC_URL);
+
 	return (
 		<div className={classes.container}>
 			<div className={classes.card}>
