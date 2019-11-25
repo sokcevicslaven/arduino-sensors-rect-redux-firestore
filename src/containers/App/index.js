@@ -25,7 +25,7 @@ const App = () => {
 
 	return (
 		<div className={classes.root}>
-			<Router>
+			<Router basename={process.env.PUBLIC_URL}>
 				<Nav />
 				<Container component='main' className={`${classes.pageContainer} ${classes.marginLeft}`}>
 					<Toolbar />

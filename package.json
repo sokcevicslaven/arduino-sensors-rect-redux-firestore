@@ -1,5 +1,5 @@
 {
-	"homepage": "http://ivbrajkovic.github.io/arduino-sensors",
+	"homepage": "http://ivbrajkovic.github.io/arduino-sensors-react-redux-firestore",
 	"name": "arduino-sensors-react-redux-firestore",
 	"version": "0.1.0",
 	"private": true,
