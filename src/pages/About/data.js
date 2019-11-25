@@ -4,7 +4,7 @@ import React from 'react';
 export const ivanCard = {
 	front: {
 		cover: 'https://picsum.photos/720/500?image=1044',
-		user: '/img/ivan.jpg',
+		user: `${process.env.PUBLIC_URL}/img/ivan.jpg`,
 		title: 'Ivan Brajković',
 		subtitle: 'dev. net.spec.',
 		text:
@@ -45,7 +45,7 @@ export const slavenCard = {
 export const aleksandarCard = {
 	front: {
 		cover: 'https://picsum.photos/720/500?image=1056',
-		user: '/img/aleksandar.jpg',
+		user: `${process.env.PUBLIC_URL}/img/aleksandar.jpg`,
 		title: 'Aleksandar rakas',
 		subtitle: 'teh. student',
 		text:
