@@ -16,7 +16,7 @@ import './index.css';
 const store = createStore(
 	rootReducer,
 	compose(
-		applyMiddleware(ReduxThunk), // Async middleware
+		applyMiddleware(ReduxThunk) // Async middleware
 		window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__() // Redux devtool
 	)
 );
