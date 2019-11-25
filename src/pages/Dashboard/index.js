@@ -1,6 +1,6 @@
 // Dashboard page
 
-import React, { useState, useMemo, useEffect, useRef } from 'react';
+import React, { useState, /* useMemo, */ useEffect, useRef } from 'react';
 import { useHistory } from 'react-router-dom';
 
 // Redux
@@ -23,7 +23,7 @@ import firebase from '../../firebase/firebase';
 import DataView from '../../components/DataView';
 
 // Utiliuty
-import { logObj, randomNum, formatTime } from '../../lib';
+import { logObj, randomNum /* formatTime */ } from '../../lib';
 
 // Custom styles
 import useStyles from './style';
@@ -49,7 +49,7 @@ const addData = async dispatch => {
 const timeout = 1000;
 
 const Dashboard = () => {
-	console.log('TCL: Dashboard -> Dashboard 0');
+	console.log('TCL: Dashboard -> Dashboard');
 
 	const classes = useStyles();
 	const history = useHistory();
@@ -58,7 +58,6 @@ const Dashboard = () => {
 	const login = useSelector(state => state.user.login);
 	const settings = useSelector(state => state.ui.settings);
 
-	const [enter, setEnter] = useState(true);
 	const [data, setData] = useState({});
 	const { arduino, temperature, humidity, co2, date } = data;
 

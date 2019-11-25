@@ -1,4 +1,5 @@
 {
+	"homepage": "http://ivbrajkovic.github.io/arduino-sensors",
 	"name": "arduino-sensors-react-redux-firestore",
 	"version": "0.1.0",
 	"private": true,
@@ -9,6 +10,7 @@
 		"firebase": "^7.2.2",
 		"highcharts": "^7.2.1",
 		"highcharts-react-official": "^2.2.2",
+		"jss-plugin-extend": "^10.0.0",
 		"react": "^16.11.0",
 		"react-dom": "^16.11.0",
 		"react-redux": "^7.1.1",
@@ -18,6 +20,8 @@
 		"redux-thunk": "^2.3.0"
 	},
 	"scripts": {
+		"predeploy": "npm run build",
+		"deploy": "gh-pages -d build",
 		"start": "react-scripts start",
 		"build": "react-scripts build",
 		"test": "react-scripts test",
@@ -41,6 +45,7 @@
 	},
 	"proxy": "https://europe-west1-arduino-sensors-754e5.cloudfunctions.net/api",
 	"devDependencies": {
+		"gh-pages": "^2.1.1",
 		"webpack-bundle-analyzer": "^3.6.0"
 	}
 }

@@ -16,7 +16,7 @@ const Chart = ({ title, data, maxItems, device, symbol, color, band }) => {
 	const charRef = useRef();
 	// const initRef = useRef(true);
 
-	const [state, setState] = useState(
+	const [state] = useState(
 		makeOptions({
 			title: title,
 			device: device,
@@ -38,7 +38,7 @@ const Chart = ({ title, data, maxItems, device, symbol, color, band }) => {
 			? serie.addPoint([x, y], true, true)
 			: serie.addPoint([x, y]);
 		// else serie.setData(data);
-	}, [data]);
+	}, [data, maxItems]);
 
 	return <HighchartsReact highcharts={Highcharts} options={state} ref={charRef} />;
 };

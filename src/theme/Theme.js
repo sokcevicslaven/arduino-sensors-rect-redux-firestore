@@ -6,7 +6,17 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 
 // Material UI
-import { ThemeProvider, createMuiTheme } from '@material-ui/core/styles';
+// import { create } from 'jss';
+// import extend from 'jss-plugin-extend';
+import {
+	ThemeProvider,
+	createMuiTheme /* StylesProvider, jssPreset */
+} from '@material-ui/core/styles';
+
+// const jss = create({
+// 	plugins: [...jssPreset().plugins, extend()]
+// });
+
 // import cyan from '@material-ui/core/colors/cyan';
 // import pink from '@material-ui/core/colors/pink';
 
@@ -55,7 +65,11 @@ const Theme = ({ children }) => {
 	});
 
 	// theme.palette.type = `${false ? 'dark' : 'light'}`;
-	return <ThemeProvider theme={theme}>{children}</ThemeProvider>;
+	return (
+		// <StylesProvider jss={jss}>
+		<ThemeProvider theme={theme}>{children}</ThemeProvider>
+		// </StylesProvider>
+	);
 };
 
 export default Theme;
