@@ -7,6 +7,7 @@ import useStyles from './style';
 // import { mergeClasses } from '@material-ui/styles';
 
 // Material UI
+import clsx from 'clsx';
 import IconButton from '@material-ui/core/IconButton';
 import AddIcon from '@material-ui/icons/Add';
 import FacebookIcon from '@material-ui/icons/Facebook';
@@ -24,15 +25,16 @@ const Card = ({ front = {}, back = {}, social = {} }) => {
 			<div className={classes.card}>
 				{/* Front face*/}
 				<div className={classes.front}>
-					<div className={classes.header}>
-						<div className={classes.cover}>
-							<img src={front.cover} alt='Cover' />
-						</div>
-						<div className={classes.user}>
-							<img src={front.user} alt='User' />
-						</div>
+					{/* <div className={classes.header}> */}
+					<div className={classes.cover}>
+						<img src={front.cover} alt='Cover' />
 					</div>
-					<div className={classes.content}>
+					{/* <div className={classes.user}> */}
+					<div className={clsx(classes.user, classes.effect_3d)}>
+						<img src={front.user} alt='User' />
+					</div>
+					{/* </div> */}
+					<div className={clsx(classes.content, classes.effect_3d)}>
 						<p className={classes.title}>{front.title}</p>
 						<p className={classes.subtitle}>{front.subtitle}</p>
 						<p>
@@ -50,7 +52,7 @@ const Card = ({ front = {}, back = {}, social = {} }) => {
 				<div className={classes.back}>
 					<div className={classes.backHeader}>{back.header}</div>
 					<div className={classes.divider} />
-					<div className={classes.content}>
+					<div className={clsx(classes.content, classes.effect_3d)}>
 						<div>
 							<p className={classes.backTitle}>{back.title}</p>
 							<p>{back.text}</p>

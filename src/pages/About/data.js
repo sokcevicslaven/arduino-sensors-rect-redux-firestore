@@ -45,7 +45,8 @@ export const slavenCard = {
 export const aleksandarCard = {
 	front: {
 		cover: 'https://picsum.photos/720/500?image=1056',
-		user: `${process.env.PUBLIC_URL}/img/aleksandar.jpg`,
+		// user: `${process.env.PUBLIC_URL}/img/aleksandar.jpg`,
+		user: '/img/aleksandar.jpg',
 		title: 'Aleksandar rakas',
 		subtitle: 'teh. student',
 		text:

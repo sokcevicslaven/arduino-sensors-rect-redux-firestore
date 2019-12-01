@@ -1,6 +1,7 @@
 // Dashboard - custom style
 
 import { makeStyles } from '@material-ui/core/styles';
+import { relative } from 'path';
 
 export default makeStyles(theme => {
 	// Colors
@@ -9,6 +10,10 @@ export default makeStyles(theme => {
 
 	// Card face
 	const face = {
+		// position: 'relative',
+		// transform: 'rotateY(180deg)',
+		transformStyle: 'preserve-3d',
+
 		height: '100%',
 		display: 'flex',
 		flexDirection: 'column',
@@ -52,6 +57,13 @@ export default makeStyles(theme => {
 				['0px 8px 10px 1px rgba(0,0,0,0.14)'],
 				['0px 3px 14px 2px rgba(0,0,0,0.12)']
 			]
+		},
+
+		effect_3d: {
+			transform: 'translateZ(60px) scale(0.94)',
+			// outline: '1px solid transparent',
+			perspective: 'inherit',
+			zIndex: 2
 		},
 
 		front: {
