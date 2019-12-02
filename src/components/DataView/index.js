@@ -48,7 +48,7 @@ const DataView = ({
 				</Grid>
 
 				{/* Chart */}
-				<Grid item xs={12} sm={9}>
+				<Grid item xs={12} sm={9} /* style={{ height: 200 }} */>
 					<Chart
 						title={(chartTitle && title) || null}
 						data={data}

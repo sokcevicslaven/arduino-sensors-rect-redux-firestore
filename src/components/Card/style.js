@@ -1,12 +1,18 @@
-// Dashboard - custom style
+// Rotating card styles
 
 import { makeStyles } from '@material-ui/core/styles';
-import { relative } from 'path';
+// import { relative } from 'path';
 
 export default makeStyles(theme => {
 	// Colors
 	const textSecondary = theme.palette.text.secondary;
 	const divider = 'rgba(0, 0, 0, 0.12)';
+
+	const hover = {
+		zIndex: 5,
+		visibility: 'visible',
+		transform: 'rotateY(180deg)'
+	};
 
 	// Card face
 	const face = {
@@ -43,13 +49,17 @@ export default makeStyles(theme => {
 			}
 		},
 
+		hover: {
+			...hover
+		},
+
 		card: {
 			height: '100%',
 			position: 'relative',
 			textAlign: 'center',
 			borderRadius: 4,
 
-			transition: 'transform .5s',
+			transition: 'transform .7s cubic-bezier(0.4, 0.2, 0.2, 1);',
 			transformStyle: 'preserve-3d',
 
 			boxShadow: [
@@ -71,7 +81,7 @@ export default makeStyles(theme => {
 		},
 
 		cover: {
-			height: 105,
+			minHeight: 105,
 			overflow: 'hidden',
 			borderRadius: '4px 4px 0 0',
 			'& img': {

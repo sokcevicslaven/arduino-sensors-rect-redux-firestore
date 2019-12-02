@@ -29,11 +29,11 @@ const SensorMeter = ({ title, symbol, size, value, valueError, priColor, secColo
 
 	return (
 		<div className={classes.root}>
-			<Typography paragraph variant='subtitle1' className={classes.title}>
+			<Typography variant='subtitle1' className={classes.title}>
 				{title}
 			</Typography>
 
-			<Box position='relative' mb={2}>
+			<div className={classes.container}>
 				<CircularProgress
 					variant='static'
 					thickness={2}
@@ -62,7 +62,7 @@ const SensorMeter = ({ title, symbol, size, value, valueError, priColor, secColo
 				>
 					{value + char}
 				</Typography>
-			</Box>
+			</div>
 
 			<div className={classes.footer}>
 				<div>

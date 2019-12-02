@@ -6,8 +6,8 @@ const makeOptions = props => {
 	const color = props.color || Highcharts.getOptions().colors[0];
 	return {
 		chart: {
-			height: '30%',
-			margin: 50,
+			height: 280,
+			margin: [30, 20, 50, 50],
 			backgroundColor: 'transparent',
 			style: {
 				fontFamily: 'Roboto'

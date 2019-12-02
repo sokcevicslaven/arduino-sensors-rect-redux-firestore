@@ -16,9 +16,13 @@ import TwitterIcon from '@material-ui/icons/Twitter';
 import GitHubIcon from '@material-ui/icons/GitHub';
 
 const Card = ({ front = {}, back = {}, social = {} }) => {
+	//console.log('TCL: Card ->  process.env.PUBLIC_URL', process.env.PUBLIC_URL);
 	const classes = useStyles();
 
-	console.log('TCL: Card ->  process.env.PUBLIC_URL', process.env.PUBLIC_URL);
+	const toggleHover = target => {
+		alert(target.firstChild.classList.toggle);
+		target.firstChild.classList.toggle('hover');
+	};
 
 	return (
 		<div className={classes.container}>

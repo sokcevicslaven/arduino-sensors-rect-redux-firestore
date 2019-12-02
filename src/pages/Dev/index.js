@@ -17,7 +17,7 @@ import firebase from '../../firebase/firebase';
 
 // Material UI
 import Button from '@material-ui/core/Button';
-// import useMediaQuery from '@material-ui/core/useMediaQuery';
+import useMediaQuery from '@material-ui/core/useMediaQuery';
 // import purple from '@material-ui/core/colors/purple';
 import green from '@material-ui/core/colors/green';
 import orange from '@material-ui/core/colors/orange';
@@ -62,6 +62,7 @@ const Dev = () => {
 	const dispatch = useDispatch();
 	const settings = useSelector(state => state.ui.settings);
 	// const [chart, setChart] = useState([{ y: 0, x: new Date().getTime() }]);
+	const widthMaxXS = useMediaQuery('(max-width:599.99px)');
 
 	// Debug add dummy data on interval
 	const intervalRef = useRef();
@@ -148,9 +149,10 @@ const Dev = () => {
 			<br />
 			<br />
 
+			{/* <div style={{ maxWidth: '80%', margin: '0 auto' }}> */}
 			<div>
 				<DataView
-					size={300}
+					size={widthMaxXS ? 250 : 300}
 					elevation={12}
 					title={'Temperature'}
 					symbol={176}
