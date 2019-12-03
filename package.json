@@ -1,6 +1,7 @@
 {
-	"homepage": "http://ivbrajkovic.github.io/arduino-sensors-react-redux-firestore",
+	"homepage": "/",
 	"name": "arduino-sensors-react-redux-firestore",
+	"author": "Ivan Brajković",
 	"version": "0.1.0",
 	"private": true,
 	"dependencies": {
