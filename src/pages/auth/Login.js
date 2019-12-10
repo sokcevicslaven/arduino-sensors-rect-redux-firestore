@@ -10,6 +10,7 @@ import { loginAction, clearErrorsAction } from '../../redux/actions';
 
 // Components
 import ButtonProgress from '../../components/ButtonProgress';
+import PasswordField from '../../components/PasswordField';
 
 // Material UI
 import Link from '@material-ui/core/Link';
@@ -96,14 +97,14 @@ const Login = () => {
 						helperText={emailError && error.message}
 					/>
 
-					<TextField
+					<PasswordField
 						variant='outlined'
 						margin='normal'
 						required
 						fullWidth
 						name='password'
 						label='Password'
-						type='password'
+						// type='password'
 						id='password'
 						autoComplete='current-password'
 						//value={state.password}

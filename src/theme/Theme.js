@@ -63,6 +63,7 @@ const Theme = ({ children }) => {
 			}
 		}
 	});
+	console.log('TCL: Theme -> theme', theme);
 
 	// theme.palette.type = `${false ? 'dark' : 'light'}`;
 	return (

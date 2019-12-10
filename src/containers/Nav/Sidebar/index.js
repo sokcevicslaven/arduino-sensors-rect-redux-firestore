@@ -27,6 +27,8 @@ import useStyles from './style';
 // 	{ path: '/control', name: 'Control', icon: faSlidersH }
 // ];
 
+import NavButton from '../../../components/NavButton';
+
 // Sidebar
 const Sidebar = ({ open, drawerWidth, handleDrawerClose }) => {
 	const classes = useStyles({ drawerWidth: drawerWidth });
@@ -57,37 +59,11 @@ const Sidebar = ({ open, drawerWidth, handleDrawerClose }) => {
 
 			{/* Button links */}
 			<List>
-				<ListItem button component={Link} to='/'>
-					<ListItemIcon>
-						<DashboardIcon />
-					</ListItemIcon>
-					<ListItemText primary='Dashboard' />
-				</ListItem>
-
-				<ListItem button component={Link} to='/dev'>
-					<ListItemIcon>
-						<DeveloperModeIcon />
-					</ListItemIcon>
-					<ListItemText primary='Developer' />
-				</ListItem>
-
-				<ListItem button component={Link} to='/settings'>
-					<ListItemIcon>
-						<SettingsIcon />
-					</ListItemIcon>
-					<ListItemText primary='Settings' />
-				</ListItem>
-			</List>
-
-			<Divider />
-
-			<List>
-				<ListItem button component={Link} to='/about'>
-					<ListItemIcon>
-						<InfoIcon />
-					</ListItemIcon>
-					<ListItemText primary='About' />
-				</ListItem>
+				<NavButton inner={DashboardIcon} primary='Dashboard' to='/' />
+				<NavButton inner={DeveloperModeIcon} primary='Developer' to='/dev' />
+				<NavButton inner={SettingsIcon} primary='Settings' to='/settings' />
+				<Divider />
+				<NavButton inner={InfoIcon} primary='About' to='/about' />
 			</List>
 		</Drawer>
 	);

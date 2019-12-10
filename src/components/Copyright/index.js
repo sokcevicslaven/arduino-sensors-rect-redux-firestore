@@ -9,7 +9,7 @@ import Typography from '@material-ui/core/Typography';
 
 const Copyright = () => {
 	return (
-		<Box mt={8}>
+		<Box mt={8} mb={3}>
 			<Typography variant='body2' color='textSecondary' align='center'>
 				{'Copyright © '}
 				<Link color='inherit' to='https://material-ui.com/'>

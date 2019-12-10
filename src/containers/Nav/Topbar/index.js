@@ -62,6 +62,8 @@ const Topbar = ({ open, drawerWidth, handleDrawerOpen }) => {
 	return (
 		<AppBar
 			position='fixed'
+			// color='default'
+			color='primary'
 			className={clsx(classes.appBar, {
 				[classes.appBarShift]: open
 			})}

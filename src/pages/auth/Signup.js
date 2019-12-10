@@ -10,6 +10,7 @@ import { signupAction, clearErrorsAction } from '../../redux/actions';
 
 // Components
 import ButtonProgress from '../../components/ButtonProgress';
+import PasswordField from '../../components/PasswordField';
 
 // Material UI
 import Grid from '@material-ui/core/Grid';
@@ -182,14 +183,14 @@ const Signup = () => {
 					/>
 
 					{/* password */}
-					<TextField
+					<PasswordField
 						margin='normal'
 						variant='outlined'
 						required
 						fullWidth
 						name='password'
 						label='Password'
-						type='password'
+						// type='password'
 						id='password'
 						autoComplete='current-password'
 						error={!!fromErrors.password || passwordError}
@@ -197,14 +198,14 @@ const Signup = () => {
 					/>
 
 					{/* confirm password */}
-					<TextField
+					<PasswordField
 						margin='normal'
 						variant='outlined'
 						required
 						fullWidth
 						name='confirmPassword'
 						label='Confirm Password'
-						type='password'
+						// type='password'
 						id='confirmPassword'
 						error={!!fromErrors.confirmPassword}
 						helperText={fromErrors.confirmPassword}

@@ -7,7 +7,8 @@ import { BrowserRouter as Router, Switch } from 'react-router-dom';
 import { useAuthStateChanged } from '../../hooks';
 
 // Material UI
-import Toolbar from '@material-ui/core/Toolbar';
+// import clsx from 'clsx';
+// import Toolbar from '@material-ui/core/Toolbar';
 import Container from '@material-ui/core/Container';
 
 // Compponents
@@ -24,18 +25,17 @@ const App = () => {
 	useAuthStateChanged();
 
 	return (
-		<div className={classes.root}>
-			{/* </div><Router basename={process.env.PUBLIC_URL}> */}
-			<Router>
+		<Router>
+			<div className={classes.root}>
 				<Nav />
-				<Container component='main' className={`${classes.pageContainer} ${classes.marginLeft}`}>
-					<Toolbar />
+				<Container component='main' className={classes.pageContainer}>
+					<div className={classes.toolbarMargin} />
 					<Switch>
 						<Routes />
 					</Switch>
 				</Container>
-			</Router>
-		</div>
+			</div>
+		</Router>
 	);
 };
 
