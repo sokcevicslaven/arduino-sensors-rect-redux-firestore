@@ -46,7 +46,19 @@ const Theme = ({ children }) => {
 		palette: {
 			// primary: cyan,
 			// secondary: pink,
-			type: `${darkTheme ? 'dark' : 'light'}`
+			type: `${darkTheme ? 'dark' : 'light'}`,
+			primary: {
+				// light: '#ff6333',
+				main: '#2d5d7c'
+				// dark: '#b22a00',
+				// contrastText: '#fff'
+			},
+			secondary: {
+				// light: '#ff6333',
+				main: '#d45e5a'
+				// dark: '#b22a00',
+				// contrastText: '#fff'
+			}
 		},
 		overrides: {
 			MuiButton: {
