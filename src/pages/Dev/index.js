@@ -67,7 +67,7 @@ const Dev = () => {
 	const widthMaxXS = useMediaQuery('(max-width:599.99px)');
 
 	// Redirect to loggin
-	const render = useRedirect();
+	const login = useRedirect();
 
 	// Debug add dummy data on interval
 	const intervalRef = useRef();
@@ -110,7 +110,7 @@ const Dev = () => {
 
 	return (
 		<>
-			{render && (
+			{login && (
 				<div>
 					<Button
 						variant='contained'

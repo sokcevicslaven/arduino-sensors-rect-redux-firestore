@@ -54,7 +54,7 @@ const Dashboard = () => {
 	const classes = useStyles();
 	const dispatch = useDispatch();
 	const dataAddListener = useRef();
-	const login = useSelector(state => state.user.login);
+	// const login = useSelector(state => state.user.login);
 	const settings = useSelector(state => state.ui.settings);
 
 	// Firestore data
@@ -62,7 +62,7 @@ const Dashboard = () => {
 	const { arduino, temperature, humidity, co2, date } = data;
 
 	// Redirect to loggin
-	const render = useRedirect();
+	const login = useRedirect();
 
 	useEffect(() => {
 		if (login) {
@@ -97,105 +97,101 @@ const Dashboard = () => {
 
 	return (
 		<>
-			{render && (
-				<div>
-					{date && settings.devMenu && (
-						<div className={classes.dev}>
-							<div className={classes.overlay} />
-							<Grid container>
-								<Grid item>
-									<Button
-										variant='contained'
-										className={classes.button}
-										onClick={() => addData(dispatch)}
-									>
-										Add data
-									</Button>
-								</Grid>
-								<Grid item>
-									<ul>
-										<li>arduino: {arduino}</li>
-										<li>temperature: {temperature}</li>
-										<li>humidity: {humidity}</li>
-										<li>co2: {co2}</li>
-										<li>
-											date:{' '}
-											{(date && date.seconds && new Date(date.seconds * 1000).toLocaleString()) ||
-												'no date'}
-										</li>
-									</ul>
-								</Grid>
-							</Grid>
-						</div>
-					)}
-
-					{data.date && (
-						<Grid container direction='column' spacing={3}>
-							{/* Temperature */}
-							<Fade in={true} timeout={timeout} style={{ transitionDelay: '500ms' }}>
-								<Grid item>
-									<DataView
-										size={300}
-										elevation={12}
-										title={'Temperature'}
-										symbol={176}
-										data={{ x: date.seconds * 1000, y: temperature }}
-										priColor={orange[600]}
-										maxItems={10}
-										valueError={30}
-										chartBand={{
-											color: green[200],
-											from: 18,
-											to: 35
-										}}
-									/>
-								</Grid>
-							</Fade>
-
-							{/* Humidity */}
-							<Fade in={true} timeout={timeout} style={{ transitionDelay: '750ms' }}>
-								<Grid item>
-									<DataView
-										size={300}
-										elevation={12}
-										title={'Humidity'}
-										symbol={176}
-										data={{ x: date.seconds * 1000, y: humidity }}
-										priColor={blue[700]}
-										maxItems={10}
-										valueError={30}
-										chartBand={{
-											color: green[200],
-											from: 40,
-											to: 80
-										}}
-									/>
-								</Grid>
-							</Fade>
-
-							{/* CO2 */}
-							<Fade in={true} timeout={timeout} style={{ transitionDelay: '1000ms' }}>
-								<Grid item>
-									<DataView
-										size={300}
-										elevation={12}
-										title={'CO2'}
-										symbol={176}
-										data={{ x: date.seconds * 1000, y: co2 }}
-										priColor={cyan[600]}
-										maxItems={10}
-										valueError={30}
-										chartBand={{
-											color: green[200],
-											from: 8,
-											to: 16
-										}}
-									/>
-								</Grid>
-							</Fade>
+			{date && settings.devMenu && (
+				<div className={classes.dev}>
+					<div className={classes.overlay} />
+					<Grid container>
+						<Grid item>
+							<Button
+								variant='contained'
+								className={classes.button}
+								onClick={() => addData(dispatch)}
+							>
+								Add data
+							</Button>
 						</Grid>
-					)}
+						<Grid item>
+							<ul>
+								<li>arduino: {arduino}</li>
+								<li>temperature: {temperature}</li>
+								<li>humidity: {humidity}</li>
+								<li>co2: {co2}</li>
+								<li>
+									date:{' '}
+									{(date && date.seconds && new Date(date.seconds * 1000).toLocaleString()) ||
+										'no date'}
+								</li>
+							</ul>
+						</Grid>
+					</Grid>
 				</div>
+			)}
+
+			{date && (
+				<Grid container direction='column' spacing={3}>
+					{/* Temperature */}
+					<Fade in={true} timeout={timeout} style={{ transitionDelay: '500ms' }}>
+						<Grid item>
+							<DataView
+								size={300}
+								elevation={12}
+								title={'Temperature'}
+								symbol={176}
+								data={{ x: date.seconds * 1000, y: temperature }}
+								priColor={orange[600]}
+								maxItems={10}
+								valueError={30}
+								chartBand={{
+									color: green[200],
+									from: 18,
+									to: 35
+								}}
+							/>
+						</Grid>
+					</Fade>
+
+					{/* Humidity */}
+					<Fade in={true} timeout={timeout} style={{ transitionDelay: '750ms' }}>
+						<Grid item>
+							<DataView
+								size={300}
+								elevation={12}
+								title={'Humidity'}
+								symbol={176}
+								data={{ x: date.seconds * 1000, y: humidity }}
+								priColor={blue[700]}
+								maxItems={10}
+								valueError={30}
+								chartBand={{
+									color: green[200],
+									from: 40,
+									to: 80
+								}}
+							/>
+						</Grid>
+					</Fade>
+
+					{/* CO2 */}
+					<Fade in={true} timeout={timeout} style={{ transitionDelay: '1000ms' }}>
+						<Grid item>
+							<DataView
+								size={300}
+								elevation={12}
+								title={'CO2'}
+								symbol={176}
+								data={{ x: date.seconds * 1000, y: co2 }}
+								priColor={cyan[600]}
+								maxItems={10}
+								valueError={30}
+								chartBand={{
+									color: green[200],
+									from: 8,
+									to: 16
+								}}
+							/>
+						</Grid>
+					</Fade>
+				</Grid>
 			)}
 		</>
 	);

@@ -37,11 +37,11 @@ const Settings = () => {
 	const settings = useSelector(state => state.ui.settings);
 
 	// Redirect to loggin
-	const render = useRedirect();
+	const login = useRedirect();
 
 	return (
 		<>
-			{render && (
+			{login && (
 				<Paper elevation={12} className={classes.root}>
 					<List subheader={<ListSubheader>Settings</ListSubheader>}>
 						<ListItem>

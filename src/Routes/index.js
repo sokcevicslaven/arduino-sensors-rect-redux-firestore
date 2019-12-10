@@ -9,7 +9,7 @@ import PageTransition from '../components/PageTransition';
 // import PrivateRoute from '../components/PrivateRoute';
 
 // Pages
-import { Login, Signup, Dashboard, Settings, Dev, About } from '../pages';
+import { Login, Signup, Dashboard, Settings, Dev, History, About } from '../pages';
 
 // Routes => Compoonents
 const routes = [
@@ -18,6 +18,7 @@ const routes = [
 	{ name: 'Dashboard', path: '/', Component: Dashboard },
 	{ name: 'Settings', path: '/settings', Component: Settings },
 	{ name: 'Dev', path: '/dev', Component: Dev },
+	{ name: 'History', path: '/history', Component: History },
 	{ name: 'About', path: '/about', Component: About }
 ];
 
