@@ -58,7 +58,12 @@ const Chart = ({ title, data, maxItems, device, symbol, color, band }) => {
 			//options.xAxis.labels.style = { color: color };
 			options.xAxis.labels.style = { color: color };
 			options.yAxis.labels.style = { color: color };
-			options.yAxis.plotBands.style = { color: color };
+			options.yAxis.plotBands[0].label.style = { color: color };
+
+			console.log(
+				'TCL: Chart -> options.yAxis.plotBands.label',
+				options.yAxis.plotBands[0].label.style
+			);
 
 			// console.log('TCL: Chart -> options.xAxis.labels.style', options.xAxis.labels);
 			// options.xAxis[0].labels.style.color = color;
