@@ -1,7 +1,8 @@
 // Footer copyright
 
 import React from 'react';
-import { Link } from 'react-router-dom';
+// import { Link } from 'react-router-dom';
+import Link from '@material-ui/core/Link';
 
 // Material UI
 import Box from '@material-ui/core/Box';
@@ -12,7 +13,7 @@ const Copyright = () => {
 		<Box mt={8} mb={3}>
 			<Typography variant='body2' color='textSecondary' align='center'>
 				{'Copyright © '}
-				<Link color='inherit' to='https://material-ui.com/'>
+				<Link color='primary' href='https://github.com/ivbrajkovic' target='_blank'>
 					Arduino Sensors
 				</Link>{' '}
 				{new Date().getFullYear()}

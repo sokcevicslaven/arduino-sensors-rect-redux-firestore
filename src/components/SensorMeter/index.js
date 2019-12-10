@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 // Material UI
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Typography from '@material-ui/core/Typography';
-import Box from '@material-ui/core/Box';
+// import Box from '@material-ui/core/Box';
 
 // Custom styles
 import useStyles from './style';

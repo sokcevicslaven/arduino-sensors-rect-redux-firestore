@@ -1,3 +1,4 @@
+import useRedirect from './useRedirect';
 import useAuthStateChanged from './useAuthStateChanged';
 
-export { useAuthStateChanged };
+export { useRedirect, useAuthStateChanged };

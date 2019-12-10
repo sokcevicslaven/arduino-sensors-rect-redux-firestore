@@ -18,12 +18,14 @@ import firebase from '../../firebase/firebase';
 // Material UI
 import Button from '@material-ui/core/Button';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
-// import purple from '@material-ui/core/colors/purple';
 import green from '@material-ui/core/colors/green';
 import orange from '@material-ui/core/colors/orange';
 
 // Components
 import DataView from '../../components/DataView';
+
+// Hooks
+import { useRedirect } from '../../hooks';
 
 // Utility
 import { logObj } from '../../lib';
@@ -63,6 +65,9 @@ const Dev = () => {
 	const settings = useSelector(state => state.ui.settings);
 	// const [chart, setChart] = useState([{ y: 0, x: new Date().getTime() }]);
 	const widthMaxXS = useMediaQuery('(max-width:599.99px)');
+
+	// Redirect to loggin
+	const render = useRedirect();
 
 	// Debug add dummy data on interval
 	const intervalRef = useRef();
@@ -104,68 +109,72 @@ const Dev = () => {
 	};
 
 	return (
-		<div>
-			<Button
-				variant='contained'
-				className={classes.button}
-				onClick={() => dispatch(loginAction('ivan.brajkovic@icloud.com', '123456789'))}
-			>
-				Login
-			</Button>
-			<Button
-				variant='contained'
-				className={classes.button}
-				onClick={() => dispatch(logoutAction())}
-			>
-				Logout
-			</Button>
-			<Button variant='contained' className={classes.button} onClick={getCurrenUserHandler}>
-				Get user
-			</Button>
-			<Button variant='contained' className={classes.button} onClick={createUser}>
-				New user
-			</Button>
-			<Button variant='contained' className={classes.button} onClick={() => addData(dispatch)}>
-				Add data
-			</Button>
-			<Button
-				variant='contained'
-				className={classes.button}
-				onClick={() => dispatch(darkThemeAction(!settings.darkTheme))}
-			>
-				Dark teme
-			</Button>
-			<Button
-				variant='contained'
-				className={classes.button}
-				onClick={() => dispatch(devMenuAction(!settings.devMenu))}
-			>
-				Dev menu
-			</Button>
-			<Button variant='contained' className={classes.button} onClick={startInterval}>
-				{started ? 'Stop' : 'Start'}
-			</Button>
+		<>
+			{render && (
+				<div>
+					<Button
+						variant='contained'
+						className={classes.button}
+						onClick={() => dispatch(loginAction('ivan.brajkovic@icloud.com', '123456789'))}
+					>
+						Login
+					</Button>
+					<Button
+						variant='contained'
+						className={classes.button}
+						onClick={() => dispatch(logoutAction())}
+					>
+						Logout
+					</Button>
+					<Button variant='contained' className={classes.button} onClick={getCurrenUserHandler}>
+						Get user
+					</Button>
+					<Button variant='contained' className={classes.button} onClick={createUser}>
+						New user
+					</Button>
+					<Button variant='contained' className={classes.button} onClick={() => addData(dispatch)}>
+						Add data
+					</Button>
+					<Button
+						variant='contained'
+						className={classes.button}
+						onClick={() => dispatch(darkThemeAction(!settings.darkTheme))}
+					>
+						Dark teme
+					</Button>
+					<Button
+						variant='contained'
+						className={classes.button}
+						onClick={() => dispatch(devMenuAction(!settings.devMenu))}
+					>
+						Dev menu
+					</Button>
+					<Button variant='contained' className={classes.button} onClick={startInterval}>
+						{started ? 'Stop' : 'Start'}
+					</Button>
 
-			<br />
-			<br />
+					<br />
+					<br />
 
-			{/* <div style={{ maxWidth: '80%', margin: '0 auto' }}> */}
-			<div>
-				<DataView
-					size={widthMaxXS ? 250 : 300}
-					elevation={12}
-					title={'Temperature'}
-					symbol={176}
-					data={state}
-					maxItems={10}
-					valueError={30}
-					priColor={orange[400]}
-					secColor={null}
-					chartBand={tempBand}
-					showChartTitle={false}
-				/>
-			</div>
-		</div>
+					{/* <div style={{ maxWidth: '80%', margin: '0 auto' }}> */}
+					<div>
+						<DataView
+							size={widthMaxXS ? 250 : 300}
+							elevation={12}
+							title={'Temperature'}
+							symbol={176}
+							data={state}
+							maxItems={10}
+							valueError={30}
+							priColor={orange[400]}
+							secColor={null}
+							chartBand={tempBand}
+							showChartTitle={false}
+						/>
+					</div>
+				</div>
+			)}
+		</>
 	);
 };
 

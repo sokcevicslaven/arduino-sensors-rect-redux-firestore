@@ -8,21 +8,21 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 
-const ListItemButton = (color, text, Inner, to) => (
-	<ListItem button component={Link} to={to}>
+const ListItemButton = (/* color,*/ selected, text, Icon, to) => (
+	<ListItem button component={Link} to={to} selected={selected}>
 		<ListItemIcon>
-			<Inner color={color || 'primary'} />
+			<Icon /* color={color || 'primary'} */ />
 		</ListItemIcon>
 		<ListItemText primary={text} />
 	</ListItem>
 );
 
-const NavButton = ({ color, primary, inner: Inner, ...props }) => (
+const NavButton = ({ /* color, */ primary, icon: Icon, ...props }) => (
 	<Switch>
 		<Route exact path={props.to}>
-			{ListItemButton(color, primary, Inner, props.to)}
+			{ListItemButton(/*color, */ true, primary, Icon, props.to)}
 		</Route>
-		<Route path='/'>{ListItemButton('action', primary, Inner, props.to)}</Route>
+		<Route path='/'>{ListItemButton(/* 'action', */ false, primary, Icon, props.to)}</Route>
 	</Switch>
 );
 
