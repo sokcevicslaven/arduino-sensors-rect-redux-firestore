@@ -48,7 +48,7 @@ const makeOptions = props => {
 				}
 			},
 			plotBands: [
-				{
+				(props.band && {
 					color: Highcharts.Color(props.band && props.band.color)
 						.setOpacity(0.2)
 						.get('rgba'),
@@ -61,7 +61,8 @@ const makeOptions = props => {
 						y: -10,
 						x: -10
 					}
-				}
+				}) ||
+					{}
 			]
 		},
 

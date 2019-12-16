@@ -14,6 +14,7 @@ import FacebookIcon from '@material-ui/icons/Facebook';
 import LinkedInIcon from '@material-ui/icons/LinkedIn';
 import TwitterIcon from '@material-ui/icons/Twitter';
 import GitHubIcon from '@material-ui/icons/GitHub';
+import Paper from '@material-ui/core/Paper';
 
 const Card = ({ front = {}, back = {}, social = {} }) => {
 	//console.log('TCL: Card ->  process.env.PUBLIC_URL', process.env.PUBLIC_URL);
@@ -26,7 +27,7 @@ const Card = ({ front = {}, back = {}, social = {} }) => {
 
 	return (
 		<div className={classes.container}>
-			<div className={classes.card}>
+			<Paper elevation={12} className={classes.card}>
 				{/* Front face*/}
 				<div className={classes.front}>
 					{/* <div className={classes.header}> */}
@@ -92,7 +93,7 @@ const Card = ({ front = {}, back = {}, social = {} }) => {
 						</IconButton>
 					</div>
 				</div>
-			</div>
+			</Paper>
 		</div>
 	);
 };

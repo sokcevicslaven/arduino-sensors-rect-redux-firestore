@@ -50,7 +50,8 @@ const Login = () => {
 	}, []);
 
 	useEffect(() => {
-		if (login) history.push('/');
+		// if (login) history.push('/');
+		if (login) history.goBack();
 		// eslint-disable-next-line
 	}, [login]);
 

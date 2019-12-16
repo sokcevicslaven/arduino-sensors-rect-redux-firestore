@@ -42,7 +42,7 @@ const Chart = ({ title, data, maxItems, device, symbol, color, band }) => {
 		// else serie.setData(data);
 	}, [data, maxItems]);
 
-  // Change chart labels color when app theme is changed
+	// Change chart labels color when app theme is changed
 	const darkTheme = useSelector(state => state.ui.settings.darkTheme);
 	useEffect(() => {
 		const color = darkTheme ? '#ffffff' : '#666666';

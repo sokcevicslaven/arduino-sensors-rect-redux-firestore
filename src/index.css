@@ -9,6 +9,7 @@
 	fill: #fff !important;
 } */
 
-text[y='275'] {
+text[y='275'],
+text[y='395'] {
 	display: none;
 }
