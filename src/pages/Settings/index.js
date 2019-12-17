@@ -65,14 +65,14 @@ const Settings = () => {
 		const name = e.target.name;
 		const value = e.target.value;
 		const number = value ? Number(value) : '';
-		(number || number == '') && setInterval({ ...interval, [name]: number });
+		(number || number === '') && setInterval({ ...interval, [name]: number });
 	};
 
 	// On blur event handler
 	const handleBlur = e => {
 		const name = e.target.name;
 		const value = e.target.value;
-		value == '' && setInterval({ ...interval, [name]: 0 });
+		value === '' && setInterval({ ...interval, [name]: 0 });
 	};
 
 	if (login)
