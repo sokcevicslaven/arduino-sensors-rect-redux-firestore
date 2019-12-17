@@ -1,17 +1,14 @@
 // History page
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 
 // Redux
 import { useSelector } from 'react-redux';
 
 // Material UI
+import Fade from '@material-ui/core/Fade';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
-import blue from '@material-ui/core/colors/blue';
-import cyan from '@material-ui/core/colors/cyan';
-import orange from '@material-ui/core/colors/orange';
-import Fade from '@material-ui/core/Fade';
 import TextField from '@material-ui/core/TextField';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 
@@ -31,12 +28,9 @@ import { useRedirect } from '../../hooks';
 // Custom styles
 import useStyles from './style';
 
-// Animation timeout
-const timeout = 1000;
-
 // Get data from firebase
 const getData = (date, cb) => {
-	// console.log('TCL: getData -> date', date);
+	console.log('TCL: getData -> getData()');
 
 	const dateFrom = new Date(date.from);
 	const dateTo = new Date(date.to);
@@ -56,8 +50,6 @@ const getData = (date, cb) => {
 		.orderBy('date', 'asc')
 		.get()
 		.then(snapshot => {
-			console.log('TCL: getData -> snapshot', snapshot);
-
 			snapshot.forEach(doc => {
 				const data = doc.data();
 				const date = data.date.seconds * 1000;
@@ -71,14 +63,32 @@ const getData = (date, cb) => {
 		});
 };
 
+// Set chart subtitle
+const getSubtitle = date => {
+	console.log('TCL: getSubtitle()');
+	return `from ${new Date(date.from).toLocaleDateString()} to ${new Date(
+		date.to
+	).toLocaleDateString()}`;
+};
+
+// Animation timeout
+const timeout = 1000;
+
+// Chart options
+const options = makeOptions();
+
 const History = () => {
-	const classes = useStyles();
+	console.log('TCL: History -> History()');
+
 	// Redirect to loggin
 	const login = useRedirect();
+	const classes = useStyles();
 	const maxXS = useMediaQuery('(max-width:599.99px)');
 
+	// Refs
+	const chartRef = useRef();
+
 	// States
-	const [options, setOptions] = useState();
 	const [date, setDate] = useState({
 		from: new Date().toISOString().substring(0, 10),
 		to: new Date().toISOString().substring(0, 10)
@@ -86,6 +96,8 @@ const History = () => {
 
 	// Handle date changes
 	const handleChange = e => {
+		console.log('TCL: History -> handleChange()');
+
 		const name = e.target.name;
 		const value = e.target.value;
 		setDate({
@@ -95,36 +107,35 @@ const History = () => {
 	};
 
 	useEffect(() => {
-		console.log('TCL: History -> useEffect');
+		console.log('TCL: History -> useEffect 1');
+
 		if (login) {
+			console.log('TCL: History -> useEffect 2');
+
 			getData(date, data => {
-				setOptions(
-					makeOptions({
-						subtitle: `from ${new Date(date.from).toLocaleDateString()} to ${new Date(
-							date.to
-						).toLocaleDateString()}`,
-						colors: [orange[600], blue[700], cyan[600]],
-						series: data
-					})
-				);
+				chartRef.current.chart.subtitle.update({ text: getSubtitle(date) }, false);
+				chartRef.current.chart.series[0].setData(data[0], false);
+				chartRef.current.chart.series[1].setData(data[1], false);
+				chartRef.current.chart.series[2].setData(data[2], false);
+				chartRef.current.chart.redraw();
 			});
 		}
 	}, [login, date]);
 
-	// // Change chart labels color when app theme is changed
-	// const darkTheme = useSelector(state => state.ui.settings.darkTheme);
-	// useEffect(() => {
-	// 	const color = darkTheme ? '#ffffff' : '#666666';
-	// 	setOptions(state => {
-	// 		if (state) {
-	// 			const options = { ...state };
-	// 			options.xAxis.labels && (options.xAxis.labels.style = { color: color });
-	// 			options.yAxis.labels && (options.yAxis.labels.style = { color: color });
-	// 			// options.yAxis.plotBands[0].label.style = { color: color };
-	// 			return options;
-	// 		} else return null;
-	// 	});
-	// }, [darkTheme]);
+	// Change chart labels color when app theme is changed
+	const darkTheme = useSelector(state => state.ui.settings.darkTheme);
+	useEffect(() => {
+		if (login) {
+			const titleColor = darkTheme ? '#ffffff' : '#666666';
+			const color = darkTheme ? '#dedede' : '#333333';
+			chartRef.current.chart.title.update({ style: { color: titleColor } }, false);
+			chartRef.current.chart.subtitle.update({ style: { color: color } }, false);
+			chartRef.current.chart.xAxis[0].update({ labels: { style: { color: color } } }, false);
+			chartRef.current.chart.yAxis[0].update({ labels: { style: { color: color } } }, false);
+			chartRef.current.chart.legend.update({ itemStyle: { color: color } }, false);
+			chartRef.current.chart.redraw();
+		}
+	}, [login, darkTheme]);
 
 	if (!login) return null;
 	else
@@ -169,7 +180,8 @@ const History = () => {
 							</Grid>
 						</Grid>
 						<Grid item xs={12}>
-							{options && <HighchartsReact highcharts={Highcharts} options={options} />}
+							{/* {options && <HighchartsReact highcharts={Highcharts} options={options} />} */}
+							<HighchartsReact ref={chartRef} highcharts={Highcharts} options={options} />
 						</Grid>
 					</Grid>
 				</Paper>

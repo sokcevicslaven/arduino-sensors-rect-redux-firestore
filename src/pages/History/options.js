@@ -1,12 +1,16 @@
 // Make chart options
 
-import Highcharts from 'highcharts';
+// Material UI
+import blue from '@material-ui/core/colors/blue';
+import cyan from '@material-ui/core/colors/cyan';
+import orange from '@material-ui/core/colors/orange';
 
 const makeOptions = props => {
+	console.log('TCL: makeOptions()');
+
 	return {
 		chart: {
-			// height: 280,
-			// margin: [30, 20, 50, 50],
+			type: 'spline',
 			backgroundColor: 'transparent',
 			style: {
 				fontFamily: 'Roboto'
@@ -23,15 +27,20 @@ const makeOptions = props => {
 		},
 
 		subtitle: {
-			text: props.subtitle
+			text: null
 		},
 
-		colors: props.colors,
+		colors: [orange[600], blue[700], cyan[600]],
 
 		legend: {
 			// enabled: false
 			margin: 24
 		},
+
+		// rangeSelector: {
+		// 	enabled: true,
+		// 	selected: 1
+		// },
 
 		xAxis: {
 			type: 'datetime',
@@ -59,15 +68,18 @@ const makeOptions = props => {
 		series: [
 			{
 				name: 'Temperature',
-				data: props.series[0]
+				// data: props.series[0]
+				data: []
 			},
 			{
 				name: 'Humidity',
-				data: props.series[1]
+				// data: props.series[1]
+				data: []
 			},
 			{
 				name: 'CO2',
-				data: props.series[2]
+				// data: props.series[2]
+				data: []
 			}
 		]
 	};
