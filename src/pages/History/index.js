@@ -106,22 +106,6 @@ const History = () => {
 		});
 	};
 
-	useEffect(() => {
-		console.log('TCL: History -> useEffect 1');
-
-		if (login) {
-			console.log('TCL: History -> useEffect 2');
-
-			getData(date, data => {
-				chartRef.current.chart.subtitle.update({ text: getSubtitle(date) }, false);
-				chartRef.current.chart.series[0].setData(data[0], false);
-				chartRef.current.chart.series[1].setData(data[1], false);
-				chartRef.current.chart.series[2].setData(data[2], false);
-				chartRef.current.chart.redraw();
-			});
-		}
-	}, [login, date]);
-
 	// Change chart labels color when app theme is changed
 	const darkTheme = useSelector(state => state.ui.settings.darkTheme);
 	useEffect(() => {
@@ -136,6 +120,19 @@ const History = () => {
 			chartRef.current.chart.redraw();
 		}
 	}, [login, darkTheme]);
+
+	// Get data from firestore
+	useEffect(() => {
+		if (login) {
+			getData(date, data => {
+				chartRef.current.chart.subtitle.update({ text: getSubtitle(date) }, false);
+				chartRef.current.chart.series[0].setData(data[0], false);
+				chartRef.current.chart.series[1].setData(data[1], false);
+				chartRef.current.chart.series[2].setData(data[2], false);
+				chartRef.current.chart.redraw();
+			});
+		}
+	}, [login, date]);
 
 	if (!login) return null;
 	else

@@ -7,7 +7,7 @@ const makeOptions = props => {
 	return {
 		chart: {
 			height: 280,
-			margin: [30, 20, 50, 50],
+			margin: [30, 20, 60, 50],
 			backgroundColor: 'transparent',
 			style: {
 				fontFamily: 'Roboto'
@@ -30,7 +30,7 @@ const makeOptions = props => {
 			type: 'datetime',
 			tickWidth: 0,
 			labels: {
-				format: '{value: %H:%M:%S}',
+				format: '{value: %e.%b %H:%M}',
 				align: 'right',
 				rotation: -45
 			},

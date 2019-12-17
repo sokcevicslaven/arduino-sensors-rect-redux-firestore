@@ -27,6 +27,7 @@ const DataView = ({
 	chartBand = null,
 	chartTitle = false
 }) => {
+	console.log('TCL: data', data);
 	// console.log('TCL: DataView');
 
 	const classes = useStyles();

@@ -48,6 +48,7 @@ const addData = async dispatch => {
 	}
 };
 
+const size = 320;
 const timeout = 1000;
 
 const Dashboard = () => {
@@ -74,14 +75,16 @@ const Dashboard = () => {
 					snapshot => {
 						snapshot.docChanges().forEach(change => {
 							if (change.type === 'added') {
-								const rec = change.doc.data();
+								const data = change.doc.data();
 								setData({
-									arduino: rec.arduino,
-									temperature: rec.temperature,
-									humidity: rec.humidity,
-									co2: rec.co2,
-									date: rec.date
+									arduino: data.arduino,
+									temperature: data.temperature,
+									humidity: data.humidity,
+									co2: data.co2,
+									date: data.date.seconds * 1000
 								});
+								// firebase.
+								// console.log('TCL: Dashboard -> rec.date', rec.date);
 							}
 						});
 					}
@@ -133,11 +136,11 @@ const Dashboard = () => {
 					<Fade in={true} timeout={timeout} style={{ transitionDelay: '500ms' }}>
 						<Grid item>
 							<DataView
-								size={300}
+								size={size}
 								elevation={12}
 								title={'Temperature'}
 								symbol={176}
-								data={{ x: date.seconds * 1000, y: temperature }}
+								data={{ x: date, y: temperature }}
 								priColor={orange[600]}
 								maxItems={10}
 								valueError={30}
@@ -154,11 +157,11 @@ const Dashboard = () => {
 					<Fade in={true} timeout={timeout} style={{ transitionDelay: '750ms' }}>
 						<Grid item>
 							<DataView
-								size={300}
+								size={size}
 								elevation={12}
 								title={'Humidity'}
 								symbol={176}
-								data={{ x: date.seconds * 1000, y: humidity }}
+								data={{ x: date, y: humidity }}
 								priColor={blue[700]}
 								maxItems={10}
 								valueError={30}
@@ -175,11 +178,11 @@ const Dashboard = () => {
 					<Fade in={true} timeout={timeout} style={{ transitionDelay: '1000ms' }}>
 						<Grid item>
 							<DataView
-								size={300}
+								size={size}
 								elevation={12}
 								title={'CO2'}
 								symbol={176}
-								data={{ x: date.seconds * 1000, y: co2 }}
+								data={{ x: date, y: co2 }}
 								priColor={cyan[600]}
 								maxItems={10}
 								valueError={30}
