@@ -34,7 +34,10 @@ const makeOptions = props => {
 
 		legend: {
 			// enabled: false
-			margin: 24
+			margin: 24,
+			itemStyle: {
+				fontWeight: 'normal'
+			}
 		},
 
 		// rangeSelector: {

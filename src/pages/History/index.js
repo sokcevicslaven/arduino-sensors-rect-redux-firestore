@@ -132,7 +132,7 @@ const History = () => {
 			chartRef.current.chart.subtitle.update({ style: { color: color } }, false);
 			chartRef.current.chart.xAxis[0].update({ labels: { style: { color: color } } }, false);
 			chartRef.current.chart.yAxis[0].update({ labels: { style: { color: color } } }, false);
-			chartRef.current.chart.legend.update({ itemStyle: { color: color } }, false);
+			chartRef.current.chart.legend.update({ itemStyle: { color: titleColor } }, false);
 			chartRef.current.chart.redraw();
 		}
 	}, [login, darkTheme]);
