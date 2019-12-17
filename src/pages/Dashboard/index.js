@@ -52,21 +52,23 @@ const size = 320;
 const timeout = 1000;
 
 const Dashboard = () => {
-	const classes = useStyles();
-	const dispatch = useDispatch();
-	const dataAddListener = useRef();
-	// const login = useSelector(state => state.user.login);
-	const settings = useSelector(state => state.ui.settings);
-
-	// Firestore data
-	const [data, setData] = useState({});
-	const { arduino, temperature, humidity, co2, date } = data;
+	console.log('TCL: Dashboard -> Dashboard');
 
 	// Redirect to loggin
 	const login = useRedirect();
 
+	const classes = useStyles();
+	const dispatch = useDispatch();
+	const dataAddListener = useRef();
+	const settings = useSelector(state => state.ui.settings);
+
+	// Firestore data
+	const [data, setData] = useState({});
+
 	useEffect(() => {
+		console.log('TCL: Dashboard -> useEffect 1');
 		if (login) {
+			console.log('TCL: Dashboard -> useEffect 2');
 			dataAddListener.current = firebase.fire
 				.collection('sensors')
 				.orderBy('date', 'desc')
@@ -76,15 +78,15 @@ const Dashboard = () => {
 						snapshot.docChanges().forEach(change => {
 							if (change.type === 'added') {
 								const data = change.doc.data();
+								const date = data.date.seconds * 1000;
+
 								setData({
+									date: date,
 									arduino: data.arduino,
-									temperature: data.temperature,
-									humidity: data.humidity,
-									co2: data.co2,
-									date: data.date.seconds * 1000
+									temperature: { x: date, y: data.temperature },
+									humidity: { x: date, y: data.humidity },
+									co2: { x: date, y: data.co2 }
 								});
-								// firebase.
-								// console.log('TCL: Dashboard -> rec.date', rec.date);
 							}
 						});
 					}
@@ -100,7 +102,7 @@ const Dashboard = () => {
 
 	return (
 		<>
-			{date && settings.devMenu && (
+			{settings.devMenu && data && (
 				<div className={classes.dev}>
 					<div className={classes.overlay} />
 					<Grid container>
@@ -115,14 +117,13 @@ const Dashboard = () => {
 						</Grid>
 						<Grid item>
 							<ul>
-								<li>arduino: {arduino}</li>
-								<li>temperature: {temperature}</li>
-								<li>humidity: {humidity}</li>
-								<li>co2: {co2}</li>
+								<li>arduino: arduino 0</li>
+								<li>temperature: {data.temperature && data.temperature.y}</li>
+								<li>humidity: {data.humidity && data.humidity.y}</li>
+								<li>co2: {data.co2 && data.co2.y}</li>
 								<li>
-									date:{' '}
-									{(date && date.seconds && new Date(date.seconds * 1000).toLocaleString()) ||
-										'no date'}
+									date:
+									{(data.date && new Date(data.date).toLocaleString()) || 'no date'}
 								</li>
 							</ul>
 						</Grid>
@@ -130,7 +131,7 @@ const Dashboard = () => {
 				</div>
 			)}
 
-			{date && (
+			{data.temperature && (
 				<Grid container direction='column' spacing={3}>
 					{/* Temperature */}
 					<Fade in={true} timeout={timeout} style={{ transitionDelay: '500ms' }}>
@@ -140,7 +141,7 @@ const Dashboard = () => {
 								elevation={12}
 								title={'Temperature'}
 								symbol={176}
-								data={{ x: date, y: temperature }}
+								data={data.temperature}
 								priColor={orange[600]}
 								maxItems={10}
 								valueError={30}
@@ -161,7 +162,7 @@ const Dashboard = () => {
 								elevation={12}
 								title={'Humidity'}
 								symbol={176}
-								data={{ x: date, y: humidity }}
+								data={data.humidity}
 								priColor={blue[700]}
 								maxItems={10}
 								valueError={30}
@@ -182,7 +183,7 @@ const Dashboard = () => {
 								elevation={12}
 								title={'CO2'}
 								symbol={176}
-								data={{ x: date, y: co2 }}
+								data={data.co2}
 								priColor={cyan[600]}
 								maxItems={10}
 								valueError={30}
