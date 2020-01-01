@@ -188,6 +188,7 @@ export default makeStyles(theme => {
 		},
 
 		test: {
+			transform: 'translateZ(60px) scale(0.94)',
 			perspective: 'inherit',
 			zIndex: 2
 		}
