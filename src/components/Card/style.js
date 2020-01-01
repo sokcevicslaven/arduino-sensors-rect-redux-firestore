@@ -138,10 +138,11 @@ export default makeStyles(theme => {
 			position: 'absolute',
 			top: 0,
 			left: 0,
-			transform: 'rotateY( 180deg ) translateZ(0px)',
+			// transform: 'rotateY( 180deg )',
+			transform: 'rotateY( 180deg ) translateZ(1px)'
 			// outline: '1px solid transparent',
-			perspective: 'inherit',
-			zIndex: 2
+			// perspective: 'inherit',
+			// zIndex: 2
 		},
 
 		backHeader: {
