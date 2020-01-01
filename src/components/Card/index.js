@@ -55,7 +55,7 @@ const Card = ({ front = {}, back = {}, social = {} }) => {
 
 				{/* Back face*/}
 				<div className={classes.back}>
-					<div className={clsx(classes.backHeader, classes.effect_3d)}>{back.header}</div>
+					<div className={clsx(classes.backHeader, classes.effect_3d1)}>{back.header}</div>
 					<div className={classes.divider} />
 					<div className={clsx(classes.content, classes.effect_3d)}>
 						<div>

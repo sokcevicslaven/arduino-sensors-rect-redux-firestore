@@ -130,7 +130,8 @@ export default makeStyles(theme => {
 			padding: '10px 0',
 			display: 'flex',
 			justifyContent: 'center',
-			alignItems: 'center'
+			alignItems: 'center',
+			zIndex: 999
 		},
 
 		back: {
@@ -138,8 +139,7 @@ export default makeStyles(theme => {
 			position: 'absolute',
 			top: 0,
 			left: 0,
-			transform: 'rotateY( 180deg )',
-			zIndex: 999
+			transform: 'rotateY( 180deg )'
 		},
 
 		backHeader: {
