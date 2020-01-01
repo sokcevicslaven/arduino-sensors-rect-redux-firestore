@@ -138,7 +138,7 @@ export default makeStyles(theme => {
 			position: 'absolute',
 			top: 0,
 			left: 0,
-			transform: 'rotateY( 180deg ) translateZ(1px)',
+			transform: 'rotateY( 180deg ) translateZ(0px)',
 			// outline: '1px solid transparent',
 			perspective: 'inherit',
 			zIndex: 2
