@@ -139,7 +139,7 @@ export default makeStyles(theme => {
 			top: 0,
 			left: 0,
 			transform: 'rotateY( 180deg )',
-			zIndex: 3
+			zIndex: 999
 		},
 
 		backHeader: {
