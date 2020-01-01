@@ -130,8 +130,7 @@ export default makeStyles(theme => {
 			padding: '10px 0',
 			display: 'flex',
 			justifyContent: 'center',
-			alignItems: 'center',
-			zIndex: 999
+			alignItems: 'center'
 		},
 
 		back: {
@@ -186,6 +185,10 @@ export default makeStyles(theme => {
 					color: textSecondary
 				}
 			}
+		},
+
+		test: {
+			zIndex: 0
 		}
 	};
 });

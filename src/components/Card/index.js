@@ -78,7 +78,7 @@ const Card = ({ front = {}, back = {}, social = {} }) => {
 						</div>
 					</div>
 					<div className={classes.divider} />
-					<div className={classes.footer}>
+					<div className={clsx(classes.footer, test)}>
 						<IconButton href={social.github} color='primary'>
 							<GitHubIcon />
 						</IconButton>
