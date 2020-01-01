@@ -188,7 +188,8 @@ export default makeStyles(theme => {
 		},
 
 		test: {
-			zIndex: 0
+			perspective: 'inherit',
+			zIndex: 2
 		}
 	};
 });
