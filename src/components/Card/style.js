@@ -59,8 +59,8 @@ export default makeStyles(theme => {
 			textAlign: 'center',
 			// borderRadius: 4,
 
-			transition: 'transform .7s cubic-bezier(0.4, 0.2, 0.2, 1);'
-			//transformStyle: 'preserve-3d'
+			transition: 'transform .7s cubic-bezier(0.4, 0.2, 0.2, 1);',
+			transformStyle: 'preserve-3d'
 
 			// boxShadow: [
 			// 	['0px 5px 5px -3px rgba(0,0,0,0.2)'],
@@ -138,7 +138,10 @@ export default makeStyles(theme => {
 			position: 'absolute',
 			top: 0,
 			left: 0,
-			transform: 'rotateY( 180deg )'
+			transform: 'rotateY( 180deg ) translateZ(1px)',
+			// outline: '1px solid transparent',
+			perspective: 'inherit',
+			zIndex: 2
 		},
 
 		backHeader: {
@@ -185,12 +188,6 @@ export default makeStyles(theme => {
 					color: textSecondary
 				}
 			}
-		},
-
-		test: {
-			//transform: 'translateZ(60px) scale(0.94)',
-			perspective: 'inherit',
-			zIndex: -999
 		}
 	};
 });
