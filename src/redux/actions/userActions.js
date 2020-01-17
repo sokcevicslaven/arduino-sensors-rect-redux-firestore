@@ -4,8 +4,7 @@ import firebase from '../../firebase/firebase';
 import {
 	SET_ERROR,
 	START_LOADING,
-	STOP_LOADING,
-	UPDATE_USER
+	STOP_LOADING
 	// SET_USER,
 	// LOGIN_USER,
 	// LOGOUT_USER

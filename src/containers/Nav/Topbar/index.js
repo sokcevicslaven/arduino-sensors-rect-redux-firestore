@@ -29,7 +29,6 @@ const Topbar = ({ open, drawerWidth, handleDrawerOpen }) => {
 	const classes = useStyle({ drawerWidth: drawerWidth });
 	const dispatch = useDispatch();
 	const login = useSelector(state => state.user.login);
-	const details = useSelector(state => state.user.details);
 	const displayName = useSelector(state => state.user.details.displayName);
 	const darkTheme = useSelector(state => state.ui.settings.darkTheme);
 

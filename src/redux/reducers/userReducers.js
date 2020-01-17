@@ -1,6 +1,6 @@
 // User reducers
 
-import { SET_USER, SET_LOGIN, CLEAR_LOGIN, LOGIN_USER, LOGOUT_USER, UPDATE_USER } from '../types';
+import { SET_USER, SET_LOGIN, CLEAR_LOGIN, LOGIN_USER, LOGOUT_USER } from '../types';
 
 const initialState = {
 	login: false,
@@ -17,10 +17,6 @@ const userReducer = (state = initialState, action) => {
 			return { ...state, login: false };
 		case LOGIN_USER:
 			return { login: true, details: action.payload };
-		case UPDATE_USER:
-			const details = { ...state.details };
-			details.displayName = action.payload;
-			return { ...state, details: details };
 		case LOGOUT_USER:
 			return initialState;
 		default:
