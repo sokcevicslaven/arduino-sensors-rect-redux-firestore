@@ -12,7 +12,7 @@
     Access-Control-Allow-Origin = "*"
 
 [[headers]]
-Define which paths this specific [[headers]] block will cover.
-for = “/api/*”
-[headers.values]
-Access-Control-Allow-Origin = “**”
+  # Define which paths this specific [[headers]] block will cover.
+  for = “/api/*”
+    [headers.values]
+    Access-Control-Allow-Origin = “**”
