@@ -40,6 +40,8 @@ export const signupAction = (user, history) => async dispatch => {
 		// const doc = await firebase.getByUsername(user.username);
 		// if (doc.exists) throw { code: 'username', message: 'Username already taken.' };
 		const res = await fetch(`/username/${user.username}`);
+		console.log('TCL: res', res);
+
 		const json = await res.json();
 		// eslint-disable-next-line
 		if (json.success) throw { code: 'username', message: 'Username already taken.' };
