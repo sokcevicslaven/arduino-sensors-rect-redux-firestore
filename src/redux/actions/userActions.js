@@ -11,6 +11,8 @@ import {
 	// SIGNUP_USER
 } from '../types';
 
+const proxy = 'https://europe-west1-arduino-sensors-754e5.cloudfunctions.net/api';
+
 // Login user and update store
 export const loginAction = (email, password) => dispatch => {
 	// Set UI loading
@@ -39,7 +41,8 @@ export const signupAction = (user, history) => async dispatch => {
 		// Check if username is already taken
 		// const doc = await firebase.getByUsername(user.username);
 		// if (doc.exists) throw { code: 'username', message: 'Username already taken.' };
-		const res = await fetch(`/username/${user.username}`);
+		// const res = await fetch(`/username/${user.username}`);
+		const res = await fetch(`${proxy}/username/${user.username}`);
 		console.log('TCL: res', res);
 
 		const json = await res.json();

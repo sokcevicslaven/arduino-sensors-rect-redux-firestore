@@ -43,7 +43,6 @@
 			"last 1 safari version"
 		]
 	},
-	"proxy": "https://europe-west1-arduino-sensors-754e5.cloudfunctions.net/api",
 	"devDependencies": {
 		"gh-pages": "^2.1.1",
 		"webpack-bundle-analyzer": "^3.6.0"
