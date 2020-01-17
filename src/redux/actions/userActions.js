@@ -4,7 +4,8 @@ import firebase from '../../firebase/firebase';
 import {
 	SET_ERROR,
 	START_LOADING,
-	STOP_LOADING
+	STOP_LOADING,
+	UPDATE_USER
 	// SET_USER,
 	// LOGIN_USER,
 	// LOGOUT_USER
@@ -49,9 +50,30 @@ export const signupAction = (user, history) => async dispatch => {
 		// Create new user
 		const userCredential = await firebase.signup(user.email, user.password);
 
-		// Update user profile
+		// Get user initials
 		const initials = user.firstName[0] + user.lastName[0];
-		userCredential.user.updateProfile({ displayName: initials });
+
+		try {
+			await userCredential.user.updateProfile({ displayName: initials });
+		} catch (error) {
+			console.log('TCL: signupAction -> updateProfile', error);
+		}
+
+		// Update successful.
+		// dispatch({ type: UPDATE_USER, payload: initials });
+
+		// Update user profile
+		// userCredential.user
+		// 	.updateProfile({ displayName: initials })
+		// 	.then(function() {
+		// 		// Update successful.
+		// 		dispatch({ type: UPDATE_USER, payload: initials });
+		// 	})
+		// 	.catch(function(error) {
+		// 		// An error happened.
+		// 		console.log('TCL: signupAction -> updateProfile', error);
+		// 		dispatch({ type: SET_ERROR, payload: error });
+		// 	});
 
 		// Stop loading animation
 		dispatch({ type: STOP_LOADING });

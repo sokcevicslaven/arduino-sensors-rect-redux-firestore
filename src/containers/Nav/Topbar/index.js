@@ -30,6 +30,7 @@ const Topbar = ({ open, drawerWidth, handleDrawerOpen }) => {
 	const dispatch = useDispatch();
 	const login = useSelector(state => state.user.login);
 	const details = useSelector(state => state.user.details);
+	const displayName = useSelector(state => state.user.details.displayName);
 	const darkTheme = useSelector(state => state.ui.settings.darkTheme);
 
 	const createLinks = login => (
@@ -47,7 +48,7 @@ const Topbar = ({ open, drawerWidth, handleDrawerOpen }) => {
 
 					<Fab size='small' className={classes.avatar}>
 						<Link to='/' component={RouterLink} underline='none' color='inherit' variant='inherit'>
-							<Typography variant='h6'>{details.displayName}</Typography>
+							<Typography variant='h6'>{displayName}</Typography>
 						</Link>
 					</Fab>
 				</div>

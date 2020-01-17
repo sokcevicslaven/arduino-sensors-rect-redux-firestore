@@ -18,7 +18,7 @@ const initialState = {
 	error: {}
 };
 
-const userReducer = (state = initialState, action) => {
+const uiReducer = (state = initialState, action) => {
 	switch (action.type) {
 		// case SET_DARK_THEME:on.payload };
 		case SET_DARK_THEME:
@@ -38,4 +38,4 @@ const userReducer = (state = initialState, action) => {
 	}
 };
 
-export default userReducer;
+export default uiReducer;
