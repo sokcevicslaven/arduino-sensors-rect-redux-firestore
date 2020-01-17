@@ -11,6 +11,8 @@ import {
 	// SIGNUP_USER
 } from '../types';
 
+const proxy = 'https://europe-west1-arduino-sensors-754e5.cloudfunctions.net/api';
+
 // Login user and update store
 export const loginAction = (email, password) => dispatch => {
 	// Set UI loading
@@ -37,21 +39,24 @@ export const signupAction = (user, history) => async dispatch => {
 		dispatch({ type: START_LOADING });
 
 		// Check if username is already taken
-		const res = await fetch(`/username/${user.username}`);
-		// console.log('TCL: res', res);
+		// const doc = await firebase.getByUsername(user.username);
+		// if (doc.exists) throw { code: 'username', message: 'Username already taken.' };
+		// const res = await fetch(`/username/${user.username}`);
+		const res = await fetch(`${proxy}/username/${user.username}`);
+		console.log('TCL: res', res);
 
 		const json = await res.json();
-		// console.log('TCL: json', json);
+		console.log('TCL: json', json);
 		// eslint-disable-next-line
 		if (json.success) throw { code: 'username', message: 'Username already taken.' };
 
 		// Create new user
 		const userCredential = await firebase.signup(user.email, user.password);
-		// console.log('TCL: userCredential', userCredential);
+		console.log('TCL: userCredential', userCredential);
 
 		// Update user profile
 		const initials = user.firstName[0] + user.lastName[0];
-		// console.log('TCL: initials', initials);
+		console.log('TCL: initials', initials);
 		userCredential.user.updateProfile({ displayName: initials });
 
 		// Stop loading animation
