@@ -34,6 +34,8 @@ export const logoutAction = () => dispatch => {
 
 // Signup new user and update store
 export const signupAction = (user, history) => async dispatch => {
+	console.log('TCL: signupAction', 1);
+
 	try {
 		// Start loading animation
 		dispatch({ type: START_LOADING });
