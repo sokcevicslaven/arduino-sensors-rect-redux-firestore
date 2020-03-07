@@ -107,6 +107,40 @@ class Firebase {
 			.collection('users')
 			.doc(username)
 			.get();
+
+	getHistoryChart = (date, cb) => {
+		console.log('getHistoryChart -> date', date);
+
+		const dateFrom = new Date(date.from);
+		const dateTo = new Date(date.to);
+		dateTo.setDate(dateTo.getDate() + 1);
+
+		// Check for valid range
+		if (dateFrom > new Date() || dateTo < dateFrom) return;
+
+		const temperature = [];
+		const humidity = [];
+		const co2 = [];
+
+		this.fire
+			.collection('sensors')
+			.where('date', '>', dateFrom)
+			.where('date', '<', dateTo)
+			.orderBy('date', 'asc')
+			.get()
+			.then(snapshot => {
+				snapshot.forEach(doc => {
+					const data = doc.data();
+					const date = data.date.seconds * 1000;
+					temperature.push([date, data.temperature]);
+					humidity.push([date, data.humidity]);
+					co2.push([date, data.co2]);
+				});
+
+				// Call callback fnc
+				cb([temperature, humidity, co2]);
+			});
+	};
 }
 
 export default new Firebase();

@@ -28,41 +28,6 @@ import { useRedirect } from '../../hooks';
 // Custom styles
 import useStyles from './style';
 
-// Get data from firebase
-const getData = (date, cb) => {
-	console.log('TCL: getData -> getData()');
-
-	const dateFrom = new Date(date.from);
-	const dateTo = new Date(date.to);
-	dateTo.setDate(dateTo.getDate() + 1);
-
-	// Check for valid range
-	if (dateFrom > new Date() || dateTo < dateFrom) return;
-
-	const temperature = [];
-	const humidity = [];
-	const co2 = [];
-
-	firebase.fire
-		.collection('sensors')
-		.where('date', '>', dateFrom)
-		.where('date', '<', dateTo)
-		.orderBy('date', 'asc')
-		.get()
-		.then(snapshot => {
-			snapshot.forEach(doc => {
-				const data = doc.data();
-				const date = data.date.seconds * 1000;
-				temperature.push([date, data.temperature]);
-				humidity.push([date, data.humidity]);
-				co2.push([date, data.co2]);
-			});
-
-			// Call callback fnc
-			cb([temperature, humidity, co2]);
-		});
-};
-
 // Set chart subtitle
 const getSubtitle = date => {
 	console.log('TCL: getSubtitle()');
@@ -124,7 +89,8 @@ const History = () => {
 	// Get data from firestore
 	useEffect(() => {
 		if (login) {
-			getData(date, data => {
+			// getData(date, data => {
+			firebase.getHistoryChart(date, data => {
 				chartRef.current.chart.subtitle.update({ text: getSubtitle(date) }, false);
 				chartRef.current.chart.series[0].setData(data[0], false);
 				chartRef.current.chart.series[1].setData(data[1], false);

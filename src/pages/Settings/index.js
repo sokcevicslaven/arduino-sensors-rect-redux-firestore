@@ -1,10 +1,14 @@
 // Navigation topbar
 
-import React, { useState } from 'react';
+import React, { useState, useReducer } from 'react';
 
 // Redux
 import { useSelector, useDispatch } from 'react-redux';
 import { darkThemeAction, devMenuAction } from '../../redux/actions';
+
+// Local reducer
+import { initialState, settingsReducer } from './reducer';
+import { SET_LED, SET_FAN, SET_INTERVAL } from './types.js';
 
 // Material UI
 import { makeStyles } from '@material-ui/core/styles';
@@ -18,6 +22,7 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import ListSubheader from '@material-ui/core/ListSubheader';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
+import VerticalAlignBottomIcon from '@material-ui/icons/VerticalAlignBottom';
 
 // Material UI icons
 import ToysIcon from '@material-ui/icons/Toys';
@@ -29,6 +34,7 @@ import Brightness4Icon from '@material-ui/icons/Brightness4';
 import Brightness7Icon from '@material-ui/icons/Brightness7';
 import ScatterPlotIcon from '@material-ui/icons/ScatterPlot';
 import WbIncandescentIcon from '@material-ui/icons/WbIncandescent';
+import VerticalAlignTopIcon from '@material-ui/icons/VerticalAlignTop';
 
 // Hooks
 import { useRedirect } from '../../hooks';
@@ -52,6 +58,12 @@ const Settings = () => {
 	// Redirect to loggin
 	const login = useRedirect();
 
+	// Led state
+	// const [ledState, setLedState] = useState(false);
+
+	// Reducer
+	const [state, dispatchSettings] = useReducer(settingsReducer, initialState);
+
 	// States
 	const [interval, setInterval] = useState({
 		allSensors: 60,
@@ -61,24 +73,26 @@ const Settings = () => {
 	});
 
 	// On change event handler
-	const handleChange = e => {
+	const handleIntervalChange = e => {
 		const name = e.target.name;
 		const value = e.target.value;
-		const number = value ? Number(value) : '';
-		(number || number === '') && setInterval({ ...interval, [name]: number });
+		// const number = value ? Number(value) : '';
+		// (number || number === '') && setInterval({ ...interval, [name]: number });
+		dispatchSettings({ type: SET_INTERVAL, payload: { name: name, value: value } });
 	};
 
 	// On blur event handler
 	const handleBlur = e => {
-		const name = e.target.name;
-		const value = e.target.value;
-		value === '' && setInterval({ ...interval, [name]: 0 });
+		// const name = e.target.name;
+		// const value = e.target.value;
+		// value === '' && setInterval({ ...interval, [name]: 0 });
 	};
 
 	if (login)
 		return (
 			<Paper elevation={12} className={classes.root}>
 				<List subheader={<ListSubheader>Settings</ListSubheader>}>
+					{/* Datk tehem switch */}
 					<ListItem>
 						<ListItemIcon>
 							{(settings.darkTheme && <Brightness4Icon />) || <Brightness7Icon />}
@@ -92,6 +106,8 @@ const Settings = () => {
 							/>
 						</ListItemSecondaryAction>
 					</ListItem>
+
+					{/* Dev menu switch */}
 					<ListItem>
 						<ListItemIcon>
 							<BuildIcon />
@@ -108,7 +124,27 @@ const Settings = () => {
 				</List>
 
 				<Divider />
+
+				{/* Hardware constrols */}
 				<List subheader={<ListSubheader>Control</ListSubheader>}>
+					{/* Update interval */}
+					<ListItem>
+						<ListItemIcon>
+							<UpdateIcon />
+						</ListItemIcon>
+						<ListItemText primary='Update' />
+						<ListItemSecondaryAction>
+							<TextField
+								name='readInterval'
+								style={{ maxWidth: 50 }}
+								//value={state.sensors.temperature.interval}
+								//onChange={handleIntervalChange}
+								//onBlur={handleBlur}
+							/>
+						</ListItemSecondaryAction>
+					</ListItem>
+
+					{/* Led switch */}
 					<ListItem>
 						<ListItemIcon>
 							<WbIncandescentIcon />
@@ -117,11 +153,14 @@ const Settings = () => {
 						<ListItemSecondaryAction>
 							<Switch
 								edge='end'
-								// onChange={() => dispatch(devMenuAction(!settings.devMenu))}
+								onChange={e => dispatchSettings({ type: SET_LED, payload: e.target.checked })}
 								// checked={settings.devMenu}
+								checked={state.led}
 							/>
 						</ListItemSecondaryAction>
 					</ListItem>
+
+					{/* Fan switch */}
 					<ListItem>
 						<ListItemIcon>
 							<ToysIcon />
@@ -130,74 +169,174 @@ const Settings = () => {
 						<ListItemSecondaryAction>
 							<Switch
 								edge='end'
-								// onChange={() => dispatch(devMenuAction(!settings.devMenu))}
-								// checked={settings.devMenu}
+								onChange={e => dispatchSettings({ type: SET_FAN, payload: e.target.checked })}
+								checked={state.fan}
 							/>
 						</ListItemSecondaryAction>
 					</ListItem>
 				</List>
 
 				<Divider />
-				<List subheader={<ListSubheader>Read intervals</ListSubheader>}>
+
+				{/* Sensor controls */}
+				<List subheader={<ListSubheader>Sensors</ListSubheader>}>
+					{/* Temperature settings */}
 					<ListItem>
-						<ListItemIcon>
-							<UpdateIcon />
-						</ListItemIcon>
-						<ListItemText primary='All sensors' />
-						<ListItemSecondaryAction>
-							<TextField
-								name='allSensors'
-								style={{ maxWidth: 50 }}
-								value={interval.allSensors}
-								onChange={handleChange}
-								onBlur={handleBlur}
-							/>
-						</ListItemSecondaryAction>
-					</ListItem>
-					<ListItem style={{ paddingLeft: 50 }}>
 						<ListItemIcon>
 							<WbSunnyIcon />
 						</ListItemIcon>
 						<ListItemText primary='Temperature' />
+					</ListItem>
+
+					{/* Upper limit */}
+					<ListItem style={{ paddingLeft: 50 }}>
+						<ListItemIcon>
+							<VerticalAlignTopIcon />
+						</ListItemIcon>
+						<ListItemText primary='Upper limit' />
 						<ListItemSecondaryAction>
 							<TextField
-								disabled
 								name='temperature'
 								style={{ maxWidth: 50 }}
-								value={interval.temperature}
-								onChange={handleChange}
+								value={state.sensors.temperature.interval}
+								onChange={handleIntervalChange}
 								onBlur={handleBlur}
 							/>
 						</ListItemSecondaryAction>
 					</ListItem>
+
+					{/* Lower limit */}
 					<ListItem style={{ paddingLeft: 50 }}>
+						<ListItemIcon>
+							<VerticalAlignBottomIcon />
+						</ListItemIcon>
+						<ListItemText primary='Lower limit' />
+						<ListItemSecondaryAction>
+							<TextField
+								name='temperature'
+								style={{ maxWidth: 50 }}
+								value={state.sensors.temperature.interval}
+								onChange={handleIntervalChange}
+								onBlur={handleBlur}
+							/>
+						</ListItemSecondaryAction>
+					</ListItem>
+
+					{/* Humidity settings */}
+					<ListItem>
+						<ListItemIcon>
+							<OpacityIcon />
+						</ListItemIcon>
+						<ListItemText primary='Humidity' />
+					</ListItem>
+
+					{/* Upper limit */}
+					<ListItem style={{ paddingLeft: 50 }}>
+						<ListItemIcon>
+							<VerticalAlignTopIcon />
+						</ListItemIcon>
+						<ListItemText primary='Upper limit' />
+						<ListItemSecondaryAction>
+							<TextField
+								name='temperature'
+								style={{ maxWidth: 50 }}
+								value={state.sensors.temperature.interval}
+								onChange={handleIntervalChange}
+								onBlur={handleBlur}
+							/>
+						</ListItemSecondaryAction>
+					</ListItem>
+
+					{/* Lower limit */}
+					<ListItem style={{ paddingLeft: 50 }}>
+						<ListItemIcon>
+							<VerticalAlignBottomIcon />
+						</ListItemIcon>
+						<ListItemText primary='Lower limit' />
+						<ListItemSecondaryAction>
+							<TextField
+								name='temperature'
+								style={{ maxWidth: 50 }}
+								value={state.sensors.temperature.interval}
+								onChange={handleIntervalChange}
+								onBlur={handleBlur}
+							/>
+						</ListItemSecondaryAction>
+					</ListItem>
+
+					{/* Humidity settings */}
+					<ListItem>
+						<ListItemIcon>
+							<ScatterPlotIcon />
+						</ListItemIcon>
+						<ListItemText primary='CO2' />
+					</ListItem>
+
+					{/* Upper limit */}
+					<ListItem style={{ paddingLeft: 50 }}>
+						<ListItemIcon>
+							<VerticalAlignTopIcon />
+						</ListItemIcon>
+						<ListItemText primary='Upper limit' />
+						<ListItemSecondaryAction>
+							<TextField
+								name='temperature'
+								style={{ maxWidth: 50 }}
+								value={state.sensors.temperature.interval}
+								onChange={handleIntervalChange}
+								onBlur={handleBlur}
+							/>
+						</ListItemSecondaryAction>
+					</ListItem>
+
+					{/* Lower limit */}
+					<ListItem style={{ paddingLeft: 50 }}>
+						<ListItemIcon>
+							<VerticalAlignBottomIcon />
+						</ListItemIcon>
+						<ListItemText primary='Lower limit' />
+						<ListItemSecondaryAction>
+							<TextField
+								name='temperature'
+								style={{ maxWidth: 50 }}
+								value={state.sensors.temperature.interval}
+								onChange={handleIntervalChange}
+								onBlur={handleBlur}
+							/>
+						</ListItemSecondaryAction>
+					</ListItem>
+
+					<Divider />
+
+					{/* Humidity settings */}
+					<ListItem>
 						<ListItemIcon>
 							<OpacityIcon />
 						</ListItemIcon>
 						<ListItemText primary='Humidity' />
 						<ListItemSecondaryAction>
 							<TextField
-								disabled
+								//disabled
 								name='humidity'
 								style={{ maxWidth: 50 }}
-								value={interval.humidity}
-								onChange={handleChange}
+								value={state.sensors.humidity.interval}
+								onChange={handleIntervalChange}
 								onBlur={handleBlur}
 							/>
 						</ListItemSecondaryAction>
 					</ListItem>
-					<ListItem style={{ paddingLeft: 50 }}>
+					<ListItem>
 						<ListItemIcon>
 							<ScatterPlotIcon />
 						</ListItemIcon>
 						<ListItemText primary='CO2' />
 						<ListItemSecondaryAction>
 							<TextField
-								disabled
+								//disabled
 								name='co2'
 								style={{ maxWidth: 50 }}
-								value={interval.co2}
-								onChange={handleChange}
+								value={state.sensors.co2.interval}
+								onChange={handleIntervalChange}
 								onBlur={handleBlur}
 							/>
 						</ListItemSecondaryAction>
