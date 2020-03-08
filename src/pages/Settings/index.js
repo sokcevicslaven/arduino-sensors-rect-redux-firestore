@@ -1,6 +1,6 @@
 // Navigation topbar
 
-import React, { useState, useReducer } from 'react';
+import React, { useReducer, useEffect } from 'react';
 
 // Redux
 import { useSelector, useDispatch } from 'react-redux';
@@ -8,21 +8,19 @@ import { darkThemeAction, devMenuAction } from '../../redux/actions';
 
 // Local reducer
 import { initialState, settingsReducer } from './reducer';
-import { SET_LED, SET_FAN, SET_INTERVAL } from './types.js';
+import { SET_STATE, SET_CONTROL } from './types.js';
 
 // Material UI
-import { makeStyles } from '@material-ui/core/styles';
 import List from '@material-ui/core/List';
 import Paper from '@material-ui/core/Paper';
 import Switch from '@material-ui/core/Switch';
 import Divider from '@material-ui/core/Divider';
 import ListItem from '@material-ui/core/ListItem';
-import TextField from '@material-ui/core/TextField';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import ListSubheader from '@material-ui/core/ListSubheader';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
-import VerticalAlignBottomIcon from '@material-ui/icons/VerticalAlignBottom';
+import Button from '@material-ui/core/Button';
 
 // Material UI icons
 import ToysIcon from '@material-ui/icons/Toys';
@@ -34,317 +32,203 @@ import Brightness4Icon from '@material-ui/icons/Brightness4';
 import Brightness7Icon from '@material-ui/icons/Brightness7';
 import ScatterPlotIcon from '@material-ui/icons/ScatterPlot';
 import WbIncandescentIcon from '@material-ui/icons/WbIncandescent';
-import VerticalAlignTopIcon from '@material-ui/icons/VerticalAlignTop';
 
 // Hooks
 import { useRedirect } from '../../hooks';
 
-// Styles
-const useStyles = makeStyles(theme => ({
-	root: {
-		marginLeft: 'auto',
-		marginRight: 'auto',
-		width: '100%',
-		maxWidth: 360,
-		backgroundColor: theme.palette.background.paper
-	}
-}));
+// Custom component
+import SensorListItem from './sensor';
 
+// Custom styles
+import useStyles from './style';
+
+// Firebase
+import firebase from '../../firebase/firebase';
+
+// Control switch change
+const controlSwitchChangeHandler = (e, dispatch) => {
+	const name = e.target.name;
+	const checked = e.target.checked;
+
+	dispatch({
+		type: SET_CONTROL,
+		payload: { name: name, value: checked }
+	});
+
+	firebase
+		.updateDocumentData('settings', 'arduino0', { [name]: checked })
+		.then(console.log('Settings successfully updated!'))
+		.catch(error => console.error('Error updating settings: ', error));
+};
+
+// Button click handler
+const uploadSensorSetings = state => {
+	firebase
+		.addDocumentData('settings', 'arduino0', state)
+		.then(console.log('Settings successfully written!'))
+		.catch(error => console.error('Error writing settings: ', error));
+};
+
+// Settings component
 const Settings = () => {
+	// Redirect to loggin
+	const loggedIn = useRedirect();
+
+	// Styles
 	const classes = useStyles();
+
+	// Redux
 	const dispatch = useDispatch();
 	const settings = useSelector(state => state.ui.settings);
-
-	// Redirect to loggin
-	const login = useRedirect();
-
-	// Led state
-	// const [ledState, setLedState] = useState(false);
 
 	// Reducer
 	const [state, dispatchSettings] = useReducer(settingsReducer, initialState);
 
-	// States
-	const [interval, setInterval] = useState({
-		allSensors: 60,
-		temperature: 60,
-		humidity: 60,
-		co2: 60
-	});
+	// Lading effect
+	useEffect(() => {
+		loggedIn &&
+			firebase
+				.getDocumentData('settings', 'arduino0')
+				.then(doc => {
+					if (!doc.exists) {
+						console.log('No such document!');
+						return;
+					}
+					const data = doc.data();
+					// console.log('Settings -> data', data);
+					dispatchSettings({ type: SET_STATE, payload: data });
+				})
+				.catch(error => {
+					console.log('Error getting document:', error);
+				});
+	}, [loggedIn]);
 
-	// On change event handler
-	const handleIntervalChange = e => {
-		const name = e.target.name;
-		const value = e.target.value;
-		// const number = value ? Number(value) : '';
-		// (number || number === '') && setInterval({ ...interval, [name]: number });
-		dispatchSettings({ type: SET_INTERVAL, payload: { name: name, value: value } });
-	};
+	// Do not render if not logged in
+	if (!loggedIn) return null;
 
-	// On blur event handler
-	const handleBlur = e => {
-		// const name = e.target.name;
-		// const value = e.target.value;
-		// value === '' && setInterval({ ...interval, [name]: 0 });
-	};
+	return (
+		<Paper elevation={12} className={classes.root}>
+			{/* Settings */}
+			<List subheader={<ListSubheader>Settings</ListSubheader>}>
+				{/* Datk tehem switch */}
+				<ListItem>
+					<ListItemIcon>
+						{(settings.darkTheme && <Brightness4Icon />) || <Brightness7Icon />}
+					</ListItemIcon>
+					<ListItemText primary='Dark theme' />
+					<ListItemSecondaryAction>
+						<Switch
+							edge='end'
+							onChange={() => dispatch(darkThemeAction(!settings.darkTheme))}
+							checked={settings.darkTheme}
+						/>
+					</ListItemSecondaryAction>
+				</ListItem>
 
-	if (login)
-		return (
-			<Paper elevation={12} className={classes.root}>
-				<List subheader={<ListSubheader>Settings</ListSubheader>}>
-					{/* Datk tehem switch */}
-					<ListItem>
-						<ListItemIcon>
-							{(settings.darkTheme && <Brightness4Icon />) || <Brightness7Icon />}
-						</ListItemIcon>
-						<ListItemText primary='Dark theme' />
-						<ListItemSecondaryAction>
-							<Switch
-								edge='end'
-								onChange={() => dispatch(darkThemeAction(!settings.darkTheme))}
-								checked={settings.darkTheme}
-							/>
-						</ListItemSecondaryAction>
-					</ListItem>
+				{/* Dev menu switch */}
+				<ListItem>
+					<ListItemIcon>
+						<BuildIcon />
+					</ListItemIcon>
+					<ListItemText primary='Developer menu' />
+					<ListItemSecondaryAction>
+						<Switch
+							edge='end'
+							onChange={() => dispatch(devMenuAction(!settings.devMenu))}
+							checked={settings.devMenu}
+						/>
+					</ListItemSecondaryAction>
+				</ListItem>
+			</List>
 
-					{/* Dev menu switch */}
-					<ListItem>
-						<ListItemIcon>
-							<BuildIcon />
-						</ListItemIcon>
-						<ListItemText primary='Developer menu' />
-						<ListItemSecondaryAction>
-							<Switch
-								edge='end'
-								onChange={() => dispatch(devMenuAction(!settings.devMenu))}
-								checked={settings.devMenu}
-							/>
-						</ListItemSecondaryAction>
-					</ListItem>
-				</List>
+			<Divider />
 
-				<Divider />
+			{/* Control */}
+			<List subheader={<ListSubheader>Control</ListSubheader>}>
+				{/* Led switch */}
+				<ListItem>
+					<ListItemIcon>
+						<WbIncandescentIcon />
+					</ListItemIcon>
+					<ListItemText primary='Led switch' />
+					<ListItemSecondaryAction>
+						<Switch
+							edge='end'
+							name='led'
+							checked={state.led}
+							onChange={e => controlSwitchChangeHandler(e, dispatchSettings)}
+						/>
+					</ListItemSecondaryAction>
+				</ListItem>
 
-				{/* Hardware constrols */}
-				<List subheader={<ListSubheader>Control</ListSubheader>}>
-					{/* Update interval */}
-					<ListItem>
-						<ListItemIcon>
-							<UpdateIcon />
-						</ListItemIcon>
-						<ListItemText primary='Update' />
-						<ListItemSecondaryAction>
-							<TextField
-								name='readInterval'
-								style={{ maxWidth: 50 }}
-								//value={state.sensors.temperature.interval}
-								//onChange={handleIntervalChange}
-								//onBlur={handleBlur}
-							/>
-						</ListItemSecondaryAction>
-					</ListItem>
+				{/* Fan switch */}
+				<ListItem>
+					<ListItemIcon>
+						<ToysIcon />
+					</ListItemIcon>
+					<ListItemText primary='Fan switch' />
+					<ListItemSecondaryAction>
+						<Switch
+							edge='end'
+							name='fan'
+							checked={state.fan}
+							onChange={e => controlSwitchChangeHandler(e, dispatchSettings)}
+						/>
+					</ListItemSecondaryAction>
+				</ListItem>
+			</List>
 
-					{/* Led switch */}
-					<ListItem>
-						<ListItemIcon>
-							<WbIncandescentIcon />
-						</ListItemIcon>
-						<ListItemText primary='Led switch' />
-						<ListItemSecondaryAction>
-							<Switch
-								edge='end'
-								onChange={e => dispatchSettings({ type: SET_LED, payload: e.target.checked })}
-								// checked={settings.devMenu}
-								checked={state.led}
-							/>
-						</ListItemSecondaryAction>
-					</ListItem>
+			<Divider />
 
-					{/* Fan switch */}
-					<ListItem>
-						<ListItemIcon>
-							<ToysIcon />
-						</ListItemIcon>
-						<ListItemText primary='Fan switch' />
-						<ListItemSecondaryAction>
-							<Switch
-								edge='end'
-								onChange={e => dispatchSettings({ type: SET_FAN, payload: e.target.checked })}
-								checked={state.fan}
-							/>
-						</ListItemSecondaryAction>
-					</ListItem>
-				</List>
+			{/* Sensors */}
+			<List subheader={<ListSubheader>Sensors</ListSubheader>}>
+				{/* Update interval */}
 
-				<Divider />
+				<SensorListItem
+					Icon={UpdateIcon}
+					primary='updateInterval'
+					value={state.updateInterval}
+					dispatch={dispatchSettings}
+				/>
 
-				{/* Sensor controls */}
-				<List subheader={<ListSubheader>Sensors</ListSubheader>}>
-					{/* Temperature settings */}
-					<ListItem>
-						<ListItemIcon>
-							<WbSunnyIcon />
-						</ListItemIcon>
-						<ListItemText primary='Temperature' />
-					</ListItem>
+				{/* Temperature sensor settings */}
+				<SensorListItem
+					hasChildren
+					Icon={WbSunnyIcon}
+					primary='Temperature'
+					upperLimit={state.temperature.max}
+					lowerLimit={state.temperature.min}
+					dispatch={dispatchSettings}
+				/>
 
-					{/* Upper limit */}
-					<ListItem style={{ paddingLeft: 50 }}>
-						<ListItemIcon>
-							<VerticalAlignTopIcon />
-						</ListItemIcon>
-						<ListItemText primary='Upper limit' />
-						<ListItemSecondaryAction>
-							<TextField
-								name='temperature'
-								style={{ maxWidth: 50 }}
-								value={state.sensors.temperature.interval}
-								onChange={handleIntervalChange}
-								onBlur={handleBlur}
-							/>
-						</ListItemSecondaryAction>
-					</ListItem>
+				{/* Humidity sensor settings */}
+				<SensorListItem
+					hasChildren
+					Icon={OpacityIcon}
+					primary='Humidity'
+					upperLimit={state.humidity.max}
+					lowerLimit={state.humidity.min}
+					dispatch={dispatchSettings}
+				/>
 
-					{/* Lower limit */}
-					<ListItem style={{ paddingLeft: 50 }}>
-						<ListItemIcon>
-							<VerticalAlignBottomIcon />
-						</ListItemIcon>
-						<ListItemText primary='Lower limit' />
-						<ListItemSecondaryAction>
-							<TextField
-								name='temperature'
-								style={{ maxWidth: 50 }}
-								value={state.sensors.temperature.interval}
-								onChange={handleIntervalChange}
-								onBlur={handleBlur}
-							/>
-						</ListItemSecondaryAction>
-					</ListItem>
+				{/* CO2 sensor settings */}
+				<SensorListItem
+					hasChildren
+					Icon={ScatterPlotIcon}
+					primary='CO2'
+					upperLimit={state.co2.max}
+					lowerLimit={state.co2.min}
+					dispatch={dispatchSettings}
+				/>
 
-					{/* Humidity settings */}
-					<ListItem>
-						<ListItemIcon>
-							<OpacityIcon />
-						</ListItemIcon>
-						<ListItemText primary='Humidity' />
-					</ListItem>
-
-					{/* Upper limit */}
-					<ListItem style={{ paddingLeft: 50 }}>
-						<ListItemIcon>
-							<VerticalAlignTopIcon />
-						</ListItemIcon>
-						<ListItemText primary='Upper limit' />
-						<ListItemSecondaryAction>
-							<TextField
-								name='temperature'
-								style={{ maxWidth: 50 }}
-								value={state.sensors.temperature.interval}
-								onChange={handleIntervalChange}
-								onBlur={handleBlur}
-							/>
-						</ListItemSecondaryAction>
-					</ListItem>
-
-					{/* Lower limit */}
-					<ListItem style={{ paddingLeft: 50 }}>
-						<ListItemIcon>
-							<VerticalAlignBottomIcon />
-						</ListItemIcon>
-						<ListItemText primary='Lower limit' />
-						<ListItemSecondaryAction>
-							<TextField
-								name='temperature'
-								style={{ maxWidth: 50 }}
-								value={state.sensors.temperature.interval}
-								onChange={handleIntervalChange}
-								onBlur={handleBlur}
-							/>
-						</ListItemSecondaryAction>
-					</ListItem>
-
-					{/* Humidity settings */}
-					<ListItem>
-						<ListItemIcon>
-							<ScatterPlotIcon />
-						</ListItemIcon>
-						<ListItemText primary='CO2' />
-					</ListItem>
-
-					{/* Upper limit */}
-					<ListItem style={{ paddingLeft: 50 }}>
-						<ListItemIcon>
-							<VerticalAlignTopIcon />
-						</ListItemIcon>
-						<ListItemText primary='Upper limit' />
-						<ListItemSecondaryAction>
-							<TextField
-								name='temperature'
-								style={{ maxWidth: 50 }}
-								value={state.sensors.temperature.interval}
-								onChange={handleIntervalChange}
-								onBlur={handleBlur}
-							/>
-						</ListItemSecondaryAction>
-					</ListItem>
-
-					{/* Lower limit */}
-					<ListItem style={{ paddingLeft: 50 }}>
-						<ListItemIcon>
-							<VerticalAlignBottomIcon />
-						</ListItemIcon>
-						<ListItemText primary='Lower limit' />
-						<ListItemSecondaryAction>
-							<TextField
-								name='temperature'
-								style={{ maxWidth: 50 }}
-								value={state.sensors.temperature.interval}
-								onChange={handleIntervalChange}
-								onBlur={handleBlur}
-							/>
-						</ListItemSecondaryAction>
-					</ListItem>
-
-					<Divider />
-
-					{/* Humidity settings */}
-					<ListItem>
-						<ListItemIcon>
-							<OpacityIcon />
-						</ListItemIcon>
-						<ListItemText primary='Humidity' />
-						<ListItemSecondaryAction>
-							<TextField
-								//disabled
-								name='humidity'
-								style={{ maxWidth: 50 }}
-								value={state.sensors.humidity.interval}
-								onChange={handleIntervalChange}
-								onBlur={handleBlur}
-							/>
-						</ListItemSecondaryAction>
-					</ListItem>
-					<ListItem>
-						<ListItemIcon>
-							<ScatterPlotIcon />
-						</ListItemIcon>
-						<ListItemText primary='CO2' />
-						<ListItemSecondaryAction>
-							<TextField
-								//disabled
-								name='co2'
-								style={{ maxWidth: 50 }}
-								value={state.sensors.co2.interval}
-								onChange={handleIntervalChange}
-								onBlur={handleBlur}
-							/>
-						</ListItemSecondaryAction>
-					</ListItem>
-				</List>
-			</Paper>
-		);
-	else return null;
+				<ListItem className={classes.buttonContainer}>
+					<Button variant='contained' color='primary' onClick={() => uploadSensorSetings(state)}>
+						Save
+					</Button>
+				</ListItem>
+			</List>
+		</Paper>
+	);
 };
 
 export default Settings;

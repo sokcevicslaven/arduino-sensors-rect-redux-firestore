@@ -50,55 +50,81 @@ const addData = async dispatch => {
 
 const size = 320;
 const timeout = 1000;
+const defaultLimits = {
+	max: 0,
+	min: 0
+};
 
 const Dashboard = () => {
 	console.log('TCL: Dashboard -> Dashboard');
 
 	// Redirect to loggin
-	const login = useRedirect();
+	const loggedIn = useRedirect();
 
 	const classes = useStyles();
 	const dispatch = useDispatch();
 	const dataAddListener = useRef();
 	const settings = useSelector(state => state.ui.settings);
 
-	// Firestore data
+	// Chart data
 	const [data, setData] = useState({});
+
+	// Sensors limits
+	const [limits, setLimits] = useState({});
 
 	useEffect(() => {
 		console.log('TCL: Dashboard -> useEffect 1');
-		if (login) {
-			console.log('TCL: Dashboard -> useEffect 2');
-			dataAddListener.current = firebase.fire
-				.collection('sensors')
-				.orderBy('date', 'desc')
-				.limit(10)
-				.onSnapshot(
-					snapshot => {
-						snapshot.docChanges().forEach(change => {
-							if (change.type === 'added') {
-								const data = change.doc.data();
-								const date = data.date.seconds * 1000;
 
-								setData({
-									date: date,
-									arduino: data.arduino,
-									temperature: { x: date, y: data.temperature },
-									humidity: { x: date, y: data.humidity },
-									co2: { x: date, y: data.co2 }
-								});
-							}
-						});
-					}
-					// error => console.log('TCL: Dashboard -> childAddedListener -> error:', error)
-				);
-		}
+		if (!loggedIn) return;
+		console.log('TCL: Dashboard -> useEffect 2');
+
+		firebase
+			.getDocumentData('settings', 'arduino0')
+			.then(doc => {
+				if (!doc.exists) {
+					console.log('No such document!');
+					return;
+				}
+				const data = doc.data();
+				setLimits({
+					temperature: data.temperature,
+					humidity: data.humidity,
+					co2: data.co2
+				});
+			})
+			.catch(error => {
+				console.log('Error getting document:', error);
+			});
+
+		dataAddListener.current = firebase.fire
+			.collection('sensors')
+			.orderBy('date', 'desc')
+			.limit(10)
+			.onSnapshot(
+				snapshot => {
+					snapshot.docChanges().forEach(change => {
+						if (change.type === 'added') {
+							const data = change.doc.data();
+							const date = data.date.seconds * 1000;
+
+							setData({
+								date: date,
+								arduino: data.arduino,
+								temperature: { x: date, y: data.temperature },
+								humidity: { x: date, y: data.humidity },
+								co2: { x: date, y: data.co2 }
+							});
+						}
+					});
+				}
+				// error => console.log('TCL: Dashboard -> childAddedListener -> error:', error)
+			);
 
 		return () => {
 			if (dataAddListener.current) dataAddListener.current();
 		};
 		// eslint-disable-next-line
-	}, [login]);
+	}, [loggedIn]);
 
 	return (
 		<>
@@ -144,7 +170,7 @@ const Dashboard = () => {
 								data={data.temperature}
 								priColor={orange[600]}
 								maxItems={10}
-								valueError={30}
+								limits={limits.temperature || defaultLimits}
 								chartBand={{
 									color: green[200],
 									from: 18,
@@ -161,11 +187,11 @@ const Dashboard = () => {
 								size={size}
 								elevation={12}
 								title={'Humidity'}
-								symbol={176}
+								//symbol={176}
 								data={data.humidity}
 								priColor={blue[700]}
 								maxItems={10}
-								valueError={30}
+								limits={limits.humidity || defaultLimits}
 								chartBand={{
 									color: green[200],
 									from: 40,
@@ -182,11 +208,11 @@ const Dashboard = () => {
 								size={size}
 								elevation={12}
 								title={'CO2'}
-								symbol={176}
+								//symbol={11823}
 								data={data.co2}
 								priColor={cyan[600]}
 								maxItems={10}
-								valueError={30}
+								limits={limits.co2 || defaultLimits}
 								chartBand={{
 									color: green[200],
 									from: 8,

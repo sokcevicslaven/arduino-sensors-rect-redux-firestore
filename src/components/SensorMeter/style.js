@@ -17,7 +17,15 @@ export default makeStyles(theme => ({
 	},
 
 	title: {
+		alignSelf: 'flex-start'
+		// [theme.breakpoints.up('sm')]: {
+		// 	marginBottom: theme.spacing(2)
+		// }
+	},
+
+	subtitle: {
 		alignSelf: 'flex-start',
+		opacity: 0.75,
 		[theme.breakpoints.up('sm')]: {
 			marginBottom: theme.spacing(2)
 		}

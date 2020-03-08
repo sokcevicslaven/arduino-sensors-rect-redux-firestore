@@ -4,12 +4,16 @@ import React, { useState, useEffect } from 'react';
 // Material UI
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Typography from '@material-ui/core/Typography';
-// import Box from '@material-ui/core/Box';
 
 // Custom styles
 import useStyles from './style';
 
-const SensorMeter = ({ title, symbol, size, value, valueError, priColor, secColor }) => {
+// const defaultLimits = {
+// 	max: 0,
+// 	min: 0
+// };
+
+const SensorMeter = ({ title, symbol, size, value, limits, priColor, secColor }) => {
 	// console.log('TCL: SensorMeter');
 
 	const classes = useStyles({ colors: [priColor, secColor] });
@@ -17,8 +21,8 @@ const SensorMeter = ({ title, symbol, size, value, valueError, priColor, secColo
 	const [min, setMin] = useState(value);
 	const [max, setMax] = useState(value);
 
-	const error = value >= valueError;
-	const char = String.fromCharCode(symbol);
+	const error = value < limits.min || value > limits.max;
+	const charSymbol = String.fromCharCode(symbol);
 
 	useEffect(() => {
 		// console.log('TCL: SensorMeter -> useEffect');
@@ -31,6 +35,9 @@ const SensorMeter = ({ title, symbol, size, value, valueError, priColor, secColo
 		<div className={classes.root}>
 			<Typography variant='subtitle1' className={classes.title}>
 				{title}
+			</Typography>
+			<Typography variant='caption' className={classes.subtitle}>
+				{`upper: ${limits.max}${charSymbol}, lower: ${limits.min}${charSymbol}`}
 			</Typography>
 
 			<div className={classes.container}>
@@ -60,18 +67,18 @@ const SensorMeter = ({ title, symbol, size, value, valueError, priColor, secColo
 						[classes.error]: error
 					})}
 				>
-					{value + char}
+					{value + charSymbol}
 				</Typography>
 			</div>
 
 			<div className={classes.footer}>
 				<div>
-					<Typography variant='body1'>{max + char}</Typography>
+					<Typography variant='body1'>{max + charSymbol}</Typography>
 					<Typography variant='body2'>Max</Typography>
 				</div>
 
 				<div>
-					<Typography variant='body1'>{min + char}</Typography>
+					<Typography variant='body1'>{min + charSymbol}</Typography>
 					<Typography variant='body2'>Min</Typography>
 				</div>
 			</div>

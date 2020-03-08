@@ -1,6 +1,6 @@
 // Developer page (debug only)
 
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 
 // Redux
 import { useSelector, useDispatch } from 'react-redux';
@@ -32,6 +32,11 @@ import { logObj } from '../../lib';
 
 // Custom styles
 import useStyles from './style';
+
+const defaultLimits = {
+	max: 0,
+	min: 0
+};
 
 const createUser = async () => {
 	try {
@@ -67,7 +72,7 @@ const Dev = () => {
 	const widthMaxXS = useMediaQuery('(max-width:599.99px)');
 
 	// Redirect to loggin
-	const login = useRedirect();
+	const loggedIn = useRedirect();
 
 	// Debug add dummy data on interval
 	const intervalRef = useRef();
@@ -102,6 +107,40 @@ const Dev = () => {
 	//     });
 	// }, [settings.darkTheme]);
 
+	// Sensors limits
+	const [limits, setLimits] = useState({});
+
+	// Loading effect
+	useEffect(() => {
+		loggedIn &&
+			firebase
+				.getDocumentData('settings', 'arduino0')
+				.then(doc => {
+					if (!doc.exists) {
+						console.log('No such document!');
+						return;
+					}
+					const data = doc.data();
+					setLimits({
+						temperature: data.temperature,
+						humidity: data.humidity,
+						co2: data.co2
+					});
+				})
+				.catch(error => {
+					console.log('Error getting document:', error);
+				});
+	}, [loggedIn]);
+
+	// Compose title
+	const composeTitle = title => {
+		console.log('Dev -> limits', limits);
+		const sensor = title.toLowerCase();
+		if (limits[sensor])
+			return `${title} (upper: ${limits[sensor].max}, lower: ${limits[sensor].min})`;
+		else return title;
+	};
+
 	const tempBand = {
 		color: green[200],
 		from: 10,
@@ -110,7 +149,7 @@ const Dev = () => {
 
 	return (
 		<>
-			{login && (
+			{loggedIn && (
 				<div>
 					<Button
 						variant='contained'
@@ -161,11 +200,12 @@ const Dev = () => {
 						<DataView
 							size={widthMaxXS ? 250 : 300}
 							elevation={12}
+							//title={composeTitle('Temperature')}
 							title={'Temperature'}
 							symbol={176}
 							data={state}
 							maxItems={10}
-							valueError={30}
+							limits={limits.temperature || defaultLimits}
 							priColor={orange[400]}
 							secColor={null}
 							chartBand={tempBand}

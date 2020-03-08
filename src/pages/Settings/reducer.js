@@ -1,54 +1,62 @@
 // Setings reducer
 
-import { SET_LED, SET_FAN, SET_INTERVAL } from './types.js';
+import { SET_STATE, SET_CONTROL, SET_SENSOR_SETTINGS } from './types.js';
 
 const initialState = {
 	led: false,
 	fan: false,
-	sensors: {
-		temperature: {
-			interval: 60,
-			min: 20,
-			max: 40
-		},
-		humidity: {
-			interval: 50,
-			min: 20,
-			max: 40
-		},
-		co2: {
-			interval: 40,
-			min: 20,
-			max: 40
-		}
+	updateInterval: 0,
+	temperature: {
+		max: 0,
+		min: 0
+	},
+	humidity: {
+		max: 0,
+		min: 0
+	},
+	co2: {
+		max: 0,
+		min: 0
 	}
 };
 
-const settingsReducer = (state = initialState, action) => {
+const settingsReducer = (state, action) => {
+	let value;
+
 	switch (action.type) {
-		case SET_LED:
-			// console.log('alert -> action.payload', action.payload);
-			return { ...state, led: action.payload };
+		case SET_STATE:
+			const newState = action.payload;
+			return newState;
 
-		case SET_FAN:
-			return { ...state, fan: action.payload };
+		case SET_CONTROL:
+			return {
+				...state,
+				[action.payload.name]: action.payload.value
+			};
 
-		case SET_INTERVAL:
+		case SET_SENSOR_SETTINGS:
+			value = Number(action.payload.value);
+			// if (!value) return state;
+
+			// value = action.payload.value;
+			// if (!isDigit.test(value)) return state;
+
+			const sensor = action.payload.sensor;
 			const name = action.payload.name;
-			const value = Number(action.payload.value);
 
-			if (value)
+			if (sensor)
 				return {
 					...state,
-					sensors: {
-						...state.sensors,
-						[name]: {
-							...state.sensors[name],
-							interval: value
-						}
+					[sensor]: {
+						...state[sensor],
+						[name]: value
 					}
 				};
-			else return state;
+			else
+				return {
+					...state,
+					[name]: value
+				};
 
 		default:
 			return state;

@@ -55,7 +55,7 @@ const makeOptions = props => {
 					from: (props.band && props.band.from) || 0,
 					to: (props.band && props.band.to) || 0,
 					label: {
-						text: (props.band && props.band.text) || 'region',
+						text: (props.band && props.band.text) || 'limits region',
 						align: 'right',
 						verticalAlign: 'top',
 						y: -10,

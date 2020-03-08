@@ -20,13 +20,14 @@ const DataView = ({
 	priColor = null,
 	secColor = null,
 	elevation = 4,
-	valueError = 50,
+	limits,
 	device = 'Device 1',
 	data = null,
 	maxItems = 10,
 	chartBand = null,
 	chartTitle = false
 }) => {
+	console.log('DataView -> limits', limits);
 	console.log('TCL: data', data);
 	// console.log('TCL: DataView');
 
@@ -44,7 +45,7 @@ const DataView = ({
 						symbol={symbol}
 						priColor={priColor}
 						secColor={secColor}
-						valueError={valueError}
+						limits={limits}
 					/>
 				</Grid>
 

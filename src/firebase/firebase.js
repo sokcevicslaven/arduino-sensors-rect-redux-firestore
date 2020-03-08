@@ -77,13 +77,28 @@ class Firebase {
 	 * Add a new document to this collection with the specified data
 	 * * Return Promise<void>
 	 * @param collection Document collections
-	 * @param document Document to retreive
+	 * @param document Document to add/set data
+	 * @param data Data
 	 */
 	addDocumentData = (collection, document, data) => {
 		return this.fire
 			.collection(collection)
 			.doc(document)
 			.set(data);
+	};
+
+	/**
+	 * Update document to this collection with the specified data
+	 * * Return Promise<void>
+	 * @param collection Document collections
+	 * @param document Document to retreive
+	 * @param data Data
+	 */
+	updateDocumentData = (collection, document, data) => {
+		return this.fire
+			.collection(collection)
+			.doc(document)
+			.update(data);
 	};
 
 	/**
