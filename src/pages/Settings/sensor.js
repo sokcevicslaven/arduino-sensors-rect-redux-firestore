@@ -91,10 +91,10 @@ const SensorListItem = ({
 						<ListItemText primary='Upper limit' />
 						<ListItemSecondaryAction>
 							<TextField
-								type='number'
+								type='Number'
 								name='max'
 								className={classes.textField}
-								value={upperLimit.toString()}
+								value={upperLimit}
 								onChange={changeHandler}
 								onBlur={blurHandler}
 								onKeyPress={textKeyPress}
@@ -110,10 +110,10 @@ const SensorListItem = ({
 						<ListItemText primary='Lower limit' />
 						<ListItemSecondaryAction>
 							<TextField
-								type='number'
+								type='Number'
 								name='min'
 								className={classes.textField}
-								value={lowerLimit.toString()}
+								value={lowerLimit}
 								onChange={changeHandler}
 								onBlur={blurHandler}
 								onKeyPress={textKeyPress}
