@@ -68,10 +68,10 @@ const SensorListItem = ({
 					<>
 						<ListItemSecondaryAction>
 							<TextField
-								type='number'
+								type='Number'
 								name='updateInterval'
 								className={classes.textField}
-								value={value.toString()}
+								value={value}
 								onChange={changeHandler}
 								onBlur={blurHandler}
 								onKeyPress={textKeyPress}
