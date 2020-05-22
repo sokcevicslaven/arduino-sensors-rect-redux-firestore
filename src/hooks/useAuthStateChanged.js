@@ -7,7 +7,7 @@ import firebase from '../firebase/firebase';
 
 // Redux
 import { useDispatch } from 'react-redux';
-import { LOGIN_USER, LOGOUT_USER } from '../redux/types';
+import { setLoginUserAction, setLogoutUserAction } from '../store/actions';
 
 const useAuthStateChanged = () => {
 	const dispatch = useDispatch();
@@ -16,9 +16,9 @@ const useAuthStateChanged = () => {
 	// Change store user state on user login or logout
 	useEffect(() => {
 		// Listen for authorization state change
-		authStateChangeListener.current = firebase.auth.onAuthStateChanged(user => {
-			if (user) dispatch({ type: LOGIN_USER, payload: user });
-			else dispatch({ type: LOGOUT_USER });
+		authStateChangeListener.current = firebase.auth.onAuthStateChanged((user) => {
+			if (user) dispatch(setLoginUserAction(user));
+			else dispatch(setLogoutUserAction());
 		});
 		return () => {
 			// Remove listener

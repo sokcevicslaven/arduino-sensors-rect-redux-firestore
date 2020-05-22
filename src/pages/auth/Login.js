@@ -1,16 +1,12 @@
-// Login page
+/**
+ * Login page
+ */
 
-// React
-import React, { useEffect, useMemo } from 'react';
-import { Link as RouterLink, useHistory } from 'react-router-dom';
-
-// Redux
-import { useDispatch, useSelector } from 'react-redux';
-import { loginAction, clearErrorsAction } from '../../redux/actions';
-
-// Components
-import ButtonProgress from '../../components/ButtonProgress';
-import PasswordField from '../../components/PasswordField';
+// React / Redux
+import React, { useMemo } from 'react';
+import { Link as RouterLink } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { firebaseLoginAction } from '../../store/actions';
 
 // Material UI
 import Link from '@material-ui/core/Link';
@@ -20,53 +16,38 @@ import Container from '@material-ui/core/Container';
 import Typography from '@material-ui/core/Typography';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 
+// Components
+import ButtonProgress from '../../components/ButtonProgress';
+import PasswordField from '../../components/PasswordField';
+
+// Hooks
+import { useRedirect } from '../../hooks';
+
+// Error helpers
+import { useErrorSelector, formatErrors } from './helper';
+
 // Custom styles
 import useStyles from './style.js';
 
-// Get control that caused error
-const getErrorControl = code => {
-	let email, password, other;
-	if (code)
-		if (/email/.test(code) || /user/.test(code)) email = true;
-		else if (/password/.test(code)) password = true;
-		else other = true;
-	return [email, password, other];
-};
-
 const Login = () => {
+	// console.log('Login -> page');
+
+	// If loggedin, redirect to home page
+	useRedirect();
+
 	const classes = useStyles();
-	const history = useHistory();
 	const dispatch = useDispatch();
-	const login = useSelector(state => state.user.login);
-	const loading = useSelector(state => state.ui.loading);
-	const error = useSelector(state => state.ui.error);
-	const [emailError, passwordError, otherError] = useMemo(() => getErrorControl(error.code), [
-		error.code
-	]);
 
-	useEffect(() => {
-		dispatch(clearErrorsAction());
-		// eslint-disable-next-line
-	}, []);
+	// Custom error selector and memoized errors fnc
+	const error = useErrorSelector();
+	const errors = useMemo(() => formatErrors(error), [error]);
 
-	useEffect(() => {
-		// if (login) history.push('/');
-		if (login) history.goBack();
-		// eslint-disable-next-line
-	}, [login]);
-
-	// const handleChange = (id, value) => {
-	// 	setState(state => ({ ...state, [id]: value }));
-	// };
-
-	const handleSubmit = e => {
+	const handleSubmit = (e) => {
 		e.preventDefault();
-
 		// Get form reference
-		const form = e.target;
-
+		const { email, password } = e.target.form;
 		// Dispatch login action
-		dispatch(loginAction(form.email.value, form.password.value));
+		dispatch(firebaseLoginAction(email.value, password.value));
 	};
 
 	return (
@@ -94,8 +75,8 @@ const Login = () => {
 						autoFocus
 						//value={state.email}
 						//{/* onChange={e => handleChange(e.target.id, e.target.value)} */}
-						error={emailError}
-						helperText={emailError && error.message}
+						error={!!errors.email}
+						helperText={errors.email}
 					/>
 
 					<PasswordField
@@ -110,17 +91,19 @@ const Login = () => {
 						autoComplete='current-password'
 						//value={state.password}
 						//{/* onChange={e => handleChange(e.target.id, e.target.value)} */}
-						error={passwordError}
-						helperText={passwordError && error.message}
+						error={!!errors.password}
+						helperText={errors.password}
 					/>
 
 					{/* error message */}
-					<Typography variant='h6' align='center' color='secondary'>
-						{otherError && error.message}
-					</Typography>
+					{errors.other && (
+						<Typography variant='h6' align='center' color='secondary'>
+							{errors.other}
+						</Typography>
+					)}
 
 					{/* Submit button with progress */}
-					<ButtonProgress loading={loading}>Log In</ButtonProgress>
+					<ButtonProgress>Log In</ButtonProgress>
 
 					{/* Info text */}
 					<div className={classes.info}>

@@ -1,16 +1,10 @@
 // Sign up page
 
-// React
-import React, { useState, useEffect as useLayoutEffect, useMemo } from 'react';
-import { Link as RouterLink, useHistory } from 'react-router-dom';
-
-// Redux
-import { useDispatch, useSelector } from 'react-redux';
-import { signupAction, clearErrorsAction } from '../../redux/actions';
-
-// Components
-import ButtonProgress from '../../components/ButtonProgress';
-import PasswordField from '../../components/PasswordField';
+// React / Redux
+import React, { useMemo } from 'react';
+import { Link as RouterLink } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { signupAction } from '../../store/actions';
 
 // Material UI
 import Grid from '@material-ui/core/Grid';
@@ -22,87 +16,50 @@ import TextField from '@material-ui/core/TextField';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 
+// Components
+import ButtonProgress from '../../components/ButtonProgress';
+import PasswordField from '../../components/PasswordField';
+
+// Hooks
+import { useRedirect } from '../../hooks';
+
+// Error helpers
+import { useErrorSelector, formatErrors } from './helper';
+
 // Custom styles
 import useStyles from './style.js';
 
-// Utility
-import { isEmptyObj } from '../../lib';
-
-// Get control that caused error
-const getErrorControl = code => {
-	console.log('TCL: getErrorControl');
-	let username, email, password, other;
-	if (code)
-		if (/username/.test(code)) username = true;
-		else if (/email/.test(code)) email = true;
-		else if (/password/.test(code)) password = true;
-		else other = true;
-	return [username, email, password, other];
-};
-
 const Signup = () => {
+	// console.log('Signup -> Signup page');
+
+	// If loggedin, redirect to home page
+	useRedirect();
+
+	// Custom styles
 	const classes = useStyles();
-	const history = useHistory();
-	const dispatch = useDispatch();
-	const error = useSelector(state => state.ui.error);
-	const loading = useSelector(state => state.ui.loading);
 	const widthMaxXS = useMediaQuery('(max-width:599.99px)');
-	const [fromErrors, setFormErrors] = useState({});
-	const [usernameError, emailError, passwordError, otherError] = useMemo(
-		() => getErrorControl(error.code),
-		[error.code]
-	);
 
-	useLayoutEffect(() => {
-		dispatch(clearErrorsAction());
-		// eslint-disable-next-line
-	}, []);
+	// const history = useHistory();
+	const dispatch = useDispatch();
 
-	const handleSubmit = e => {
+	// Custom error selector and memoized errors fnc
+	const error = useErrorSelector();
+	const errors = useMemo(() => formatErrors(error), [error]);
+
+	const handleSubmit = (e) => {
 		e.preventDefault();
-
 		// Form input fields
 		const form = e.target;
-		const firstName = form.firstName.value;
-		const lastName = form.lastName.value;
-		const username = form.username.value;
-		const email = form.email.value;
-		const password = form.password.value;
-		const confirmPassword = form.confirmPassword.value;
-
-		// Error messages
-		const required = 'Field is required';
-		const mismatch = 'Password mismatch';
-
-		// Check if all field are provided
-		const errors = {};
-		!firstName && (errors.firstName = required);
-		!lastName && (errors.lastName = required);
-		!username && (errors.username = required);
-		!email && (errors.email = required);
-		!password && (errors.password = required);
-		!confirmPassword && (errors.confirmPassword = required);
-		if (password !== confirmPassword) {
-			errors.password = mismatch;
-			errors.confirmPassword = mismatch;
-		}
-
-		// Check if there are errors
-		if (!isEmptyObj(errors)) return setFormErrors(errors);
-		else setFormErrors({});
-
 		// If all field are provided, procceed with signup
 		dispatch(
-			signupAction(
-				{
-					firstName,
-					lastName,
-					username,
-					email,
-					password
-				},
-				history
-			)
+			signupAction({
+				name: form.name.value,
+				lastname: form.lastname.value,
+				username: form.username.value,
+				email: form.email.value,
+				password: form.password.value,
+				confirmPassword: form.confirmPassword.value,
+			})
 		);
 	};
 
@@ -127,13 +84,13 @@ const Signup = () => {
 								margin='normal'
 								required
 								fullWidth
-								name='firstName'
+								name='name'
 								label='First Name'
-								id='firstName'
+								id='name'
 								autoComplete='fname'
 								autoFocus
-								error={!!fromErrors.firstName}
-								helperText={fromErrors.firstName}
+								error={!!errors.name}
+								helperText={errors.name}
 							/>
 						</Grid>
 
@@ -144,12 +101,12 @@ const Signup = () => {
 								variant='outlined'
 								required
 								fullWidth
-								id='lastName'
+								id='lastname'
 								label='Last Name'
-								name='lastName'
+								name='lastname'
 								autoComplete='lname'
-								error={!!fromErrors.lastName}
-								helperText={fromErrors.lastName}
+								error={!!errors.lastname}
+								helperText={errors.lastname}
 							/>
 						</Grid>
 					</Grid>
@@ -164,8 +121,8 @@ const Signup = () => {
 						name='username'
 						label='Username'
 						autoComplete='username'
-						error={!!fromErrors.username || usernameError}
-						helperText={fromErrors.username || (usernameError && error.message)}
+						error={!!errors.username}
+						helperText={errors.username}
 					/>
 
 					{/* email address */}
@@ -178,8 +135,8 @@ const Signup = () => {
 						label='Email Address'
 						name='email'
 						autoComplete='email'
-						error={!!fromErrors.email || emailError}
-						helperText={fromErrors.email || (emailError && error.message)}
+						error={!!errors.email}
+						helperText={errors.email}
 					/>
 
 					{/* password */}
@@ -193,8 +150,8 @@ const Signup = () => {
 						// type='password'
 						id='password'
 						autoComplete='current-password'
-						error={!!fromErrors.password || passwordError}
-						helperText={fromErrors.password || (passwordError && error.message)}
+						error={!!errors.password}
+						helperText={errors.password}
 					/>
 
 					{/* confirm password */}
@@ -207,17 +164,19 @@ const Signup = () => {
 						label='Confirm Password'
 						// type='password'
 						id='confirmPassword'
-						error={!!fromErrors.confirmPassword}
-						helperText={fromErrors.confirmPassword}
+						error={!!errors.confirmPassword}
+						helperText={errors.confirmPassword}
 					/>
 
 					{/* error message */}
-					<Typography variant='h6' align='center' color='secondary'>
-						{otherError && error.message}
-					</Typography>
+					{errors.other && (
+						<Typography variant='h6' align='center' color='secondary'>
+							{errors.other}
+						</Typography>
+					)}
 
 					{/* Submit button with progress */}
-					<ButtonProgress loading={loading}>Sign up</ButtonProgress>
+					<ButtonProgress>Sign up</ButtonProgress>
 
 					{/* Info text */}
 					<div className={classes.info}>

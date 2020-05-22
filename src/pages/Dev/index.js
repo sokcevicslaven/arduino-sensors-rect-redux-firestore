@@ -1,84 +1,61 @@
-// Developer page (debug only)
+/**
+ * Developer page (debug only)
+ */
 
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef } from 'react';
 
 // Redux
 import { useSelector, useDispatch } from 'react-redux';
 import {
-	loginAction,
-	logoutAction,
+	firebaseLoginAction,
+	firebaseLogoutAction,
 	setErrorAction,
-	darkThemeAction,
-	devMenuAction
-} from '../../redux/actions';
-
-// Firebase
-import firebase from '../../firebase/firebase';
+	clearErrorsAction,
+	setDarkThemeAction,
+	setDevMenuAction,
+	setShowAllErrors,
+} from '../../store/actions';
 
 // Material UI
+import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
-import useMediaQuery from '@material-ui/core/useMediaQuery';
 import green from '@material-ui/core/colors/green';
+import TextField from '@material-ui/core/TextField';
 import orange from '@material-ui/core/colors/orange';
+import useMediaQuery from '@material-ui/core/useMediaQuery';
 
 // Components
 import DataView from '../../components/DataView';
 
-// Hooks
-import { useRedirect } from '../../hooks';
-
 // Utility
-import { logObj } from '../../lib';
+import { isNumber, trimLeadingZeros } from '../../helper';
 
 // Custom styles
 import useStyles from './style';
 
-const defaultLimits = {
-	max: 0,
-	min: 0
-};
-
-const createUser = async () => {
-	try {
-		await firebase.signin('IB', 'ivan1.brajkovic@icloud.com', '123456789');
-		getCurrenUserHandler();
-	} catch (err) {
-		console.log('logoutHandler -> err', err);
-	}
-};
-
-const getCurrenUserHandler = () => {
-	const user = firebase.getCurrentUser();
-	console.log(
-		'Currently logged user:',
-		user ? (user.displayName ? user.displayName : user.email) : 'none'
-	);
-};
-
-const addData = async dispatch => {
-	try {
-		await firebase.addData('sensors', null);
-	} catch (err) {
-		logObj(err);
-		dispatch(setErrorAction(err));
-	}
-};
-
 const Dev = () => {
 	const classes = useStyles();
-	const dispatch = useDispatch();
-	const settings = useSelector(state => state.ui.settings);
-	// const [chart, setChart] = useState([{ y: 0, x: new Date().getTime() }]);
 	const widthMaxXS = useMediaQuery('(max-width:599.99px)');
 
-	// Redirect to loggin
-	const loggedIn = useRedirect();
+	/************************************************************
+	 * Redux, global state
+	 ************************************************************/
 
-	// Debug add dummy data on interval
+	const dispatch = useDispatch();
+	const showAllErrors = useSelector((store) => store.ui.settings.showAllErrors);
+	const themeHandler = (e) => dispatch(setDarkThemeAction(e.target.checked));
+	const devMenuHandler = (e) => dispatch(setDevMenuAction(e.target.checked));
+
+	/************************************************************
+	 * Debug add dummy data on interval
+	 ************************************************************/
+
 	const intervalRef = useRef();
 	const [started, setStarted] = useState(false);
-	const [state, setState] = useState({ x: new Date().getTime(), y: 0 });
-	const startInterval = _ => {
+	const [data, setData] = useState({ x: new Date().getTime(), y: 0 });
+
+	// Update chart data on interval
+	const startInterval = () => {
 		if (started) {
 			clearInterval(intervalRef.current);
 			setStarted(false);
@@ -86,135 +63,157 @@ const Dev = () => {
 			intervalRef.current = setInterval(() => {
 				const x = new Date().getTime();
 				const y = Math.floor(Math.random() * 50) + 1;
-				setState({ x: x, y: y });
+				setData({ x: x, y: y });
 			}, 2000);
 			setStarted(true);
 		}
 	};
 
-	// const addItem = item => {
-	//   setChart([item]);
-	// };
+	/************************************************************
+	 * Errors
+	 ************************************************************/
 
-	// useEffect(() => {
-	//   const labels = document.querySelectorAll(
-	//     ".chart-container .axis, .chart-container .chart-label"
-	//   );
-	//   labels &&
-	//     labels.forEach(label => {
-	//       if (settings.darkTheme) label.classList.add("fill-white");
-	//       else label.classList.remove("fill-white");
-	//     });
-	// }, [settings.darkTheme]);
+	const [error, setError] = useState('');
+	const changeError = (e) => {
+		const { value } = e.target;
+		setError(value);
+	};
 
-	// Sensors limits
-	const [limits, setLimits] = useState({});
+	/************************************************************
+	 * Sensors limits
+	 ************************************************************/
 
-	// Loading effect
-	useEffect(() => {
-		loggedIn &&
-			firebase
-				.getDocumentData('settings', 'arduino0')
-				.then(doc => {
-					if (!doc.exists) {
-						console.log('No such document!');
-						return;
-					}
-					const data = doc.data();
-					setLimits({
-						temperature: data.temperature,
-						humidity: data.humidity,
-						co2: data.co2
-					});
-				})
-				.catch(error => {
-					console.log('Error getting document:', error);
-				});
-	}, [loggedIn]);
+	const [limits, setLimits] = useState({ max: 0, min: 0 });
 
-	// Compose title
-	const composeTitle = title => {
-		console.log('Dev -> limits', limits);
-		const sensor = title.toLowerCase();
-		if (limits[sensor])
-			return `${title} (upper: ${limits[sensor].max}, lower: ${limits[sensor].min})`;
-		else return title;
+	// On key press event handler
+	const textKeyPress = (e) => {
+		if (!isNumber(e.key)) e.preventDefault();
+	};
+
+	// Limits text change handler
+	const changeTextHandler = (e) => {
+		let { name, value } = e.target;
+		(value === '' && (value = '0')) || (value = trimLeadingZeros(value));
+		setLimits({ ...limits, [name]: value });
 	};
 
 	const tempBand = {
 		color: green[200],
 		from: 10,
-		to: 35
+		to: 35,
 	};
 
 	return (
-		<>
-			{loggedIn && (
-				<div>
-					<Button
-						variant='contained'
-						className={classes.button}
-						onClick={() => dispatch(loginAction('ivan.brajkovic@icloud.com', '123456789'))}
-					>
-						Login
-					</Button>
-					<Button
-						variant='contained'
-						className={classes.button}
-						onClick={() => dispatch(logoutAction())}
-					>
-						Logout
-					</Button>
-					<Button variant='contained' className={classes.button} onClick={getCurrenUserHandler}>
-						Get user
-					</Button>
-					<Button variant='contained' className={classes.button} onClick={createUser}>
-						New user
-					</Button>
-					<Button variant='contained' className={classes.button} onClick={() => addData(dispatch)}>
-						Add data
-					</Button>
-					<Button
-						variant='contained'
-						className={classes.button}
-						onClick={() => dispatch(darkThemeAction(!settings.darkTheme))}
-					>
-						Dark teme
-					</Button>
-					<Button
-						variant='contained'
-						className={classes.button}
-						onClick={() => dispatch(devMenuAction(!settings.devMenu))}
-					>
-						Dev menu
-					</Button>
-					<Button variant='contained' className={classes.button} onClick={startInterval}>
-						{started ? 'Stop' : 'Start'}
-					</Button>
+		<div>
+			<Box mb={[1, 2]}>
+				<Button
+					variant='contained'
+					className={classes.button}
+					onClick={() => dispatch(setShowAllErrors(!showAllErrors))}
+				>
+					{(showAllErrors && 'Filter errors') || 'All errors'}
+				</Button>
 
-					<br />
-					<br />
+				<Button
+					variant='contained'
+					className={classes.button}
+					onClick={() => dispatch(firebaseLoginAction('ivan.brajkovic@icloud.com', '123456789'))}
+				>
+					Login
+				</Button>
 
-					{/* <div style={{ maxWidth: '80%', margin: '0 auto' }}> */}
-					<div>
-						<DataView
-							size={widthMaxXS ? 250 : 300}
-							elevation={12}
-							//title={composeTitle('Temperature')}
-							title={'Temperature'}
-							symbol={176}
-							data={state}
-							maxItems={10}
-							limits={limits.temperature || defaultLimits}
-							priColor={orange[400]}
-							secColor={null}
-							chartBand={tempBand}
-							showChartTitle={false}
-						/>
-					</div>
-				</div>
-			)}
-		</>
+				<Button
+					variant='contained'
+					className={classes.button}
+					onClick={() => dispatch(firebaseLogoutAction())}
+				>
+					Logout{' '}
+				</Button>
+
+				<Button variant='contained' className={classes.button} onClick={themeHandler}>
+					Dark teme
+				</Button>
+
+				<Button variant='contained' className={classes.button} onClick={devMenuHandler}>
+					Dev menu
+				</Button>
+			</Box>
+
+			<Box mb={[1, 2]}>
+				<TextField
+					label='enter error'
+					className={classes.textField}
+					value={error}
+					onChange={changeError}
+				/>
+
+				<Button
+					variant='contained'
+					className={classes.button}
+					onClick={() =>
+						dispatch(
+							setErrorAction({
+								code: 'dev_message',
+								message: error,
+								details: [],
+							})
+						)
+					}
+				>
+					Set error
+				</Button>
+
+				<Button
+					variant='contained'
+					className={classes.button}
+					onClick={() => dispatch(clearErrorsAction())}
+				>
+					Clear error
+				</Button>
+			</Box>
+
+			<Box mb={[2, 4]} display='flex' alignItems='center'>
+				<TextField
+					label='lower'
+					name='min'
+					value={limits.min}
+					className={classes.textField}
+					onChange={changeTextHandler}
+					onKeyPress={textKeyPress}
+				/>
+
+				<TextField
+					label='upper'
+					name='max'
+					value={limits.max}
+					className={classes.textField}
+					onChange={changeTextHandler}
+					onKeyPress={textKeyPress}
+				/>
+
+				<Button variant='contained' className={classes.button} onClick={startInterval}>
+					{started ? 'Stop' : 'Start'}
+				</Button>
+			</Box>
+
+			{/* <div style={{ maxWidth: '80%', margin: '0 auto' }}> */}
+			<div>
+				<DataView
+					size={widthMaxXS ? 250 : 300}
+					elevation={12}
+					//title={composeTitle('Temperature')}
+					title={'Temperature'}
+					symbol={176}
+					data={data}
+					maxItems={10}
+					limits={limits}
+					priColor={orange[400]}
+					secColor={null}
+					chartBand={tempBand}
+					showChartTitle={false}
+				/>
+			</div>
+		</div>
 	);
 };
 

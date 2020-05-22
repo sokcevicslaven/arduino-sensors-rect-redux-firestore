@@ -1,71 +1,54 @@
 // Topbar navigation
 
 import clsx from 'clsx';
+
+// React
 import React from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 
 // Redux
 import { useSelector, useDispatch } from 'react-redux';
-import { logoutAction, darkThemeAction } from '../../../redux/actions';
+import { firebaseLogoutAction, setDarkThemeAction } from '../../../store/actions';
 
 // Material UI
 import Fab from '@material-ui/core/Fab';
 import Link from '@material-ui/core/Link';
 import AppBar from '@material-ui/core/AppBar';
 import Button from '@material-ui/core/Button';
-import MenuIcon from '@material-ui/icons/Menu';
 import Toolbar from '@material-ui/core/Toolbar';
+import Tooltip from '@material-ui/core/Tooltip';
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
+
+// Material icons
+import MenuIcon from '@material-ui/icons/Menu';
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import Brightness4Icon from '@material-ui/icons/Brightness4';
 import Brightness7Icon from '@material-ui/icons/Brightness7';
-import ExitToAppIcon from '@material-ui/icons/ExitToApp';
-import Tooltip from '@material-ui/core/Tooltip';
 
 // Styles
 import useStyle from './style';
 
 const Topbar = ({ open, drawerWidth, handleDrawerOpen }) => {
 	const classes = useStyle({ drawerWidth: drawerWidth });
+
 	const dispatch = useDispatch();
-	const login = useSelector(state => state.user.login);
-	const displayName = useSelector(state => state.user.details.displayName);
-	const darkTheme = useSelector(state => state.ui.settings.darkTheme);
+	const login = useSelector((state) => state.user.login);
 
-	const createLinks = login => (
-		<>
-			{(login && (
-				<div>
-					{/* <Button color='inherit' onClick={() => dispatch(logoutAction())}>
-						Log out
-					</Button> */}
-					<Tooltip title='Logout' placement='bottom'>
-						<IconButton color='inherit' onClick={() => dispatch(logoutAction())}>
-							<ExitToAppIcon />
-						</IconButton>
-					</Tooltip>
+	// User initials
+	const userInitials = useSelector((state) => state.user.details.displayName);
 
-					<Fab size='small' className={classes.avatar}>
-						<Link to='/' component={RouterLink} underline='none' color='inherit' variant='inherit'>
-							<Typography variant='h6'>{displayName}</Typography>
-						</Link>
-					</Fab>
-				</div>
-			)) || (
-				<Button component={RouterLink} to={'/login'} color='inherit'>
-					Log in
-				</Button>
-			)}
-		</>
-	);
+	// Theme
+	const darkTheme = useSelector((state) => state.ui.settings.darkTheme);
+	const themeHandler = () => dispatch(setDarkThemeAction(!darkTheme));
+	const logoutHandler = () => dispatch(firebaseLogoutAction());
 
 	return (
 		<AppBar
 			position='fixed'
-			// color='default'
 			color='primary'
 			className={clsx(classes.appBar, {
-				[classes.appBarShift]: open
+				[classes.appBarShift]: open,
 			})}
 		>
 			<Toolbar>
@@ -76,9 +59,6 @@ const Topbar = ({ open, drawerWidth, handleDrawerOpen }) => {
 					onClick={handleDrawerOpen}
 					edge='start'
 					className={classes.menuButton}
-					//className={clsx(classes.menuButton, {
-					//	[classes.hide]: false
-					//})}
 				>
 					<MenuIcon />
 				</IconButton>
@@ -88,15 +68,41 @@ const Topbar = ({ open, drawerWidth, handleDrawerOpen }) => {
 					Arduino Sensors
 				</Typography>
 
-				{/* Dark mode */}
+				{/* Dark mode button*/}
 				<Tooltip title={(darkTheme && 'Light theme') || 'Dark theme'} placement='bottom'>
-					<IconButton color='inherit' onClick={() => dispatch(darkThemeAction(!darkTheme))}>
+					<IconButton color='inherit' onClick={themeHandler}>
 						{(darkTheme && <Brightness4Icon />) || <Brightness7Icon />}
 					</IconButton>
 				</Tooltip>
 
-				{/* Links */}
-				{createLinks(login)}
+				{(login && (
+					<div>
+						{/* Logout button */}
+						<Tooltip title='Logout' placement='bottom'>
+							<IconButton color='inherit' onClick={logoutHandler}>
+								<ExitToAppIcon />
+							</IconButton>
+						</Tooltip>
+
+						{/* User avatar */}
+						<Fab size='small' className={classes.avatar}>
+							<Link
+								to='/'
+								component={RouterLink}
+								underline='none'
+								color='inherit'
+								variant='inherit'
+							>
+								<Typography variant='h6'>{userInitials}</Typography>
+							</Link>
+						</Fab>
+					</div>
+				)) || (
+					// Login button
+					<Button component={RouterLink} to={'/login'} color='inherit'>
+						Log in
+					</Button>
+				)}
 			</Toolbar>
 		</AppBar>
 	);

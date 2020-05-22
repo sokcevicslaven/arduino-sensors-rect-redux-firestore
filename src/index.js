@@ -4,7 +4,7 @@ import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { createStore, applyMiddleware, compose } from 'redux';
 import ReduxThunk from 'redux-thunk';
-import rootReducer from './redux/reducers';
+import rootReducer from './store/reducers';
 // MUI
 import CssBaseline from '@material-ui/core/CssBaseline';
 // Components

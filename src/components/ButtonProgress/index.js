@@ -1,6 +1,10 @@
 // Button with circular progress bar
 
+// React
 import React from 'react';
+
+// Redux
+import { useSelector } from 'react-redux';
 
 // Materual UI
 import Fade from '@material-ui/core/Fade';
@@ -10,8 +14,11 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 // Custom styles
 import useStyles from './style.js';
 
-const ButtonProgress = ({ loading, children }) => {
+const ButtonProgress = ({ children }) => {
 	const classes = useStyles();
+
+	// Loading status
+	const loading = useSelector((state) => state.ui.loading);
 
 	return (
 		<Button
@@ -26,7 +33,7 @@ const ButtonProgress = ({ loading, children }) => {
 				<Fade
 					in={loading}
 					style={{
-						transitionDelay: loading ? '800ms' : '0ms'
+						transitionDelay: loading ? '800ms' : '0ms',
 					}}
 					unmountOnExit
 				>

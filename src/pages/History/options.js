@@ -5,29 +5,29 @@ import blue from '@material-ui/core/colors/blue';
 import cyan from '@material-ui/core/colors/cyan';
 import orange from '@material-ui/core/colors/orange';
 
-const makeOptions = props => {
-	console.log('TCL: makeOptions()');
+const makeOptions = (props) => {
+	// console.log('TCL: makeOptions()');
 
 	return {
 		chart: {
 			type: 'spline',
 			backgroundColor: 'transparent',
 			style: {
-				fontFamily: 'Roboto'
-			}
+				fontFamily: 'Roboto',
+			},
 		},
 
 		time: {
-			timezoneOffset: -60
+			timezoneOffset: -60,
 		},
 
 		title: {
 			text: 'History chart',
-			margin: 50
+			margin: 50,
 		},
 
 		subtitle: {
-			text: null
+			text: null,
 		},
 
 		colors: [orange[600], blue[700], cyan[600]],
@@ -36,8 +36,8 @@ const makeOptions = props => {
 			// enabled: false
 			margin: 24,
 			itemStyle: {
-				fontWeight: 'normal'
-			}
+				fontWeight: 'normal',
+			},
 		},
 
 		// rangeSelector: {
@@ -51,40 +51,40 @@ const makeOptions = props => {
 			labels: {
 				format: '{value: %e.%b %H:%M}',
 				align: 'right',
-				rotation: -45
+				rotation: -45,
 			},
 			minPadding: 0.03,
-			maxPadding: 0.03
+			maxPadding: 0.03,
 		},
 
 		yAxis: {
 			title: {
-				text: null
-			}
+				text: null,
+			},
 		},
 
 		tooltip: {
 			crosshairs: true,
-			shared: true
+			shared: true,
 		},
 
 		series: [
 			{
 				name: 'Temperature',
 				// data: props.series[0]
-				data: []
+				data: [],
 			},
 			{
 				name: 'Humidity',
 				// data: props.series[1]
-				data: []
+				data: [],
 			},
 			{
 				name: 'CO2',
 				// data: props.series[2]
-				data: []
-			}
-		]
+				data: [],
+			},
+		],
 	};
 };
 

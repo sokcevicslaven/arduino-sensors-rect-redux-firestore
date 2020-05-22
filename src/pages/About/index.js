@@ -9,7 +9,7 @@ import useMediaQuery from '@material-ui/core/useMediaQuery';
 import Card from '../../components/Card';
 
 // Card data
-import { ivanCard, slavenCard, aleksandarCard } from './data';
+import { ivanData, slavenData, aleksandarData } from './data';
 
 const About = () => {
 	const widthMaxXS = useMediaQuery('(max-width:599.99px)');
@@ -18,13 +18,13 @@ const About = () => {
 		<Box mt={widthMaxXS ? 3 : 6}>
 			<Grid container spacing={4} justify='space-around'>
 				<Grid item>
-					<Card {...ivanCard} />
+					<Card {...ivanData} />
 				</Grid>
 				<Grid item>
-					<Card {...slavenCard} />
+					<Card {...slavenData} />
 				</Grid>
 				<Grid item>
-					<Card {...aleksandarCard} />
+					<Card {...aleksandarData} />
 				</Grid>
 			</Grid>
 		</Box>

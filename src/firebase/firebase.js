@@ -13,12 +13,12 @@ const firebaseConfig = {
 	projectId: 'arduino-sensors-754e5',
 	storageBucket: 'arduino-sensors-754e5.appspot.com',
 	messagingSenderId: '940139731983',
-	appId: '1:940139731983:web:3f15975a429e3d9ad7577a'
+	appId: '1:940139731983:web:3f15975a429e3d9ad7577a',
 };
 
 class Firebase {
 	constructor() {
-		console.log('TCL: Firebase -> constructor');
+		// console.log('TCL: Firebase -> constructor');
 
 		// Initialize Firebase
 		app.initializeApp(firebaseConfig);
@@ -33,10 +33,17 @@ class Firebase {
 	/**
 	 * Login user
 	 * * Return promise
-	 * @param email The registration email
-	 * @param password The registration password
+	 * @param {string} email The registration email
+	 * @param {string} password The registration password
 	 */
 	login = (email, password) => this.auth.signInWithEmailAndPassword(email, password);
+
+	/**
+	 * Login user with custom token
+	 * * Return promise
+	 * @param {string} token Custom token
+	 */
+	loginWithCustomToken = (token) => this.auth.signInWithCustomToken(token);
 
 	/**
 	 * Logout user
@@ -47,9 +54,9 @@ class Firebase {
 	/**
 	 * Sign user, create new user
 	 * * Return promise (void)
-	 * @param initials User display name
-	 * @param email The registration email
-	 * @param password The registration password
+	 * @param {string} initials User display name
+	 * @param {string} email The registration email
+	 * @param {string} password The registration password
 	 */
 	signup = (email, password) => this.auth.createUserWithEmailAndPassword(email, password);
 
@@ -80,26 +87,18 @@ class Firebase {
 	 * @param document Document to add/set data
 	 * @param data Data
 	 */
-	addDocumentData = (collection, document, data) => {
-		return this.fire
-			.collection(collection)
-			.doc(document)
-			.set(data);
-	};
+	addDocumentData = (collection, document, data) =>
+		this.fire.collection(collection).doc(document).set(data);
 
 	/**
 	 * Update document to this collection with the specified data
-	 * * Return Promise<void>
 	 * @param collection Document collections
 	 * @param document Document to retreive
 	 * @param data Data
+	 * @returns Promise void or error
 	 */
-	updateDocumentData = (collection, document, data) => {
-		return this.fire
-			.collection(collection)
-			.doc(document)
-			.update(data);
-	};
+	updateDocumentData = (collection, document, data) =>
+		this.fire.collection(collection).doc(document).update(data);
 
 	/**
 	 * Reads the document
@@ -108,54 +107,85 @@ class Firebase {
 	 * @param document Document to retreive
 	 */
 	getDocumentData = (collection, document) =>
-		this.fire
-			.collection(collection)
-			.doc(document)
-			.get();
+		new Promise((resolve, reject) => {
+			this.fire
+				.collection(collection)
+				.doc(document)
+				.get()
+				.then((doc) => {
+					if (!doc.exists) resolve(null);
+					else resolve(doc.data());
+				})
+				.catch((error) => reject(error));
+		});
 
 	/**
-	 * Reads the username document
-	 * * Return Promise<DocumentSnapshot>
+	 * Reads all document in a collection
+	 * @param collection Document collections
+	 * @returns Promise with data or error
 	 */
-	getByUsername = username =>
-		this.fire
-			.collection('users')
-			.doc(username)
-			.get();
+	getCollectionData = (collection) =>
+		new Promise((resolve, reject) => {
+			this.fire
+				.collection(collection)
+				.get()
+				.then((querySnapshot) => {
+					const data = [];
+					querySnapshot.forEach((doc) =>
+						data.push({
+							arduino: doc.id,
+							settings: doc.data(),
+						})
+					);
+					resolve(data);
+				})
+				.catch((error) => reject(error));
+		});
 
-	getHistoryChart = (date, cb) => {
-		console.log('getHistoryChart -> date', date);
+	// /**
+	//  * Reads the username document
+	//  * * Return Promise<DocumentSnapshot>
+	//  */
+	// getByUsername = (username) => this.fire.collection('users').doc(username).get();
 
-		const dateFrom = new Date(date.from);
-		const dateTo = new Date(date.to);
-		dateTo.setDate(dateTo.getDate() + 1);
+	/**
+	 * Get all arduino data between dates
+	 * @param {object} Dates From date and to date
+	 * @returns Arrys of data arrays
+	 */
+	getHistoryChart = (date) =>
+		new Promise((resolve, reject) => {
+			const dateFrom = new Date(date.from);
+			const dateTo = new Date(date.to);
+			dateTo.setDate(dateTo.getDate() + 1);
 
-		// Check for valid range
-		if (dateFrom > new Date() || dateTo < dateFrom) return;
+			// Check for valid range
+			if (dateFrom > new Date() || dateTo < dateFrom) resolve(null);
 
-		const temperature = [];
-		const humidity = [];
-		const co2 = [];
+			const temperature = [];
+			const humidity = [];
+			const co2 = [];
 
-		this.fire
-			.collection('sensors')
-			.where('date', '>', dateFrom)
-			.where('date', '<', dateTo)
-			.orderBy('date', 'asc')
-			.get()
-			.then(snapshot => {
-				snapshot.forEach(doc => {
-					const data = doc.data();
-					const date = data.date.seconds * 1000;
-					temperature.push([date, data.temperature]);
-					humidity.push([date, data.humidity]);
-					co2.push([date, data.co2]);
-				});
+			this.fire
+				.collection('sensors')
+				.where('date', '>', dateFrom)
+				.where('date', '<', dateTo)
+				.orderBy('date', 'asc')
+				.get()
+				.then((snapshot) => {
+					snapshot.forEach((doc) => {
+						const data = doc.data();
+						const date = data.date.seconds * 1000;
+						temperature.push([date, +data.temperature]);
+						humidity.push([date, +data.humidity]);
+						co2.push([date, +data.co2]);
+					});
 
-				// Call callback fnc
-				cb([temperature, humidity, co2]);
-			});
-	};
+					// Call callback fnc
+					resolve([temperature, humidity, co2]);
+				})
+				.catch((error) => reject(error));
+		});
 }
 
 export default new Firebase();

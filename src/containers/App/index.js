@@ -14,6 +14,7 @@ import Container from '@material-ui/core/Container';
 // Compponents
 import Nav from '../Nav';
 import Routes from '../../Routes';
+import Snackbar from '../../components/Snackbar';
 
 // Styles
 import useStyles from './style';
@@ -25,8 +26,9 @@ const App = () => {
 	useAuthStateChanged();
 
 	return (
-		<Router>
-			<div className={classes.root}>
+		<div className={classes.root}>
+			<Snackbar />
+			<Router>
 				<Nav />
 				<Container component='main' className={classes.pageContainer}>
 					<div className={classes.toolbarMargin} />
@@ -34,8 +36,8 @@ const App = () => {
 						<Routes />
 					</Switch>
 				</Container>
-			</div>
-		</Router>
+			</Router>
+		</div>
 	);
 };
 

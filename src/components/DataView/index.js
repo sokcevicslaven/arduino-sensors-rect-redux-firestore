@@ -25,10 +25,10 @@ const DataView = ({
 	data = null,
 	maxItems = 10,
 	chartBand = null,
-	chartTitle = false
+	chartTitle = false,
 }) => {
-	console.log('DataView -> limits', limits);
-	console.log('TCL: data', data);
+	// console.log('DataView -> limits', limits);
+	// console.log('TCL: data', data);
 	// console.log('TCL: DataView');
 
 	const classes = useStyles();
