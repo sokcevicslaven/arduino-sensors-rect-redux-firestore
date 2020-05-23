@@ -120,14 +120,13 @@ class Firebase {
 		});
 
 	/**
-	 * Reads all document in a collection
-	 * @param collection Document collections
-	 * @returns Promise with data or error
+	 * Reads all arduinos settings
+	 * @returns Promise with arduino settings or error
 	 */
-	getCollectionData = (collection) =>
+	getArduinoSettings = () =>
 		new Promise((resolve, reject) => {
 			this.fire
-				.collection(collection)
+				.collection('settings')
 				.get()
 				.then((querySnapshot) => {
 					const data = [];

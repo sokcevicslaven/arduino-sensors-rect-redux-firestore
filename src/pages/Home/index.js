@@ -51,7 +51,7 @@ const defaultLimits = {
 };
 
 const Home = () => {
-	console.log('Home -> page');
+	// console.log('Home -> page');
 
 	// Custom style
 	const classes = useStyles();

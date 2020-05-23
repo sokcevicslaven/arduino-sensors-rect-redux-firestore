@@ -45,7 +45,7 @@ const Login = () => {
 	const handleSubmit = (e) => {
 		e.preventDefault();
 		// Get form reference
-		const { email, password } = e.target.form;
+		const { email, password } = e.target;
 		// Dispatch login action
 		dispatch(firebaseLoginAction(email.value, password.value));
 	};

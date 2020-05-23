@@ -112,7 +112,7 @@ const Settings = () => {
 	useEffect(() => {
 		(async () => {
 			try {
-				const data = await firebase.getCollectionData('settings');
+				const data = await firebase.getArduinoSettings();
 				dispatchReducer({ type: 'SET_STATE', payload: data });
 			} catch (error) {
 				dispatch(setErrorAction(error));
