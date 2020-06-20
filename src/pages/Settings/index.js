@@ -96,7 +96,7 @@ const Settings = () => {
 		const { name, checked } = e.target;
 		dispatchReducer({
 			type: 'SET_CONTROL',
-			payload: { selected, name, value: checked },
+			payload: { selected, name, value: +checked },
 		});
 		updateArduino(state.arduinos[selected], dispatchReducer);
 		// updateArduino(state.arduinos[selected].arduino, { [name]: true }, dispatchReducer);

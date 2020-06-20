@@ -55,7 +55,7 @@ const SensorMeter = ({ title, symbol, size, value, limits, priColor, secColor })
 					value={value}
 					className={clsx({
 						[classes.primary]: !error,
-						[classes.error]: error
+						[classes.error]: error,
 					})}
 				/>
 
@@ -64,7 +64,7 @@ const SensorMeter = ({ title, symbol, size, value, limits, priColor, secColor })
 					style={{ marginLeft: (symbol && 8) || 0 }}
 					className={clsx(classes.center, {
 						[classes.primary]: !error,
-						[classes.error]: error
+						[classes.error]: error,
 					})}
 				>
 					{value + charSymbol}
@@ -74,12 +74,12 @@ const SensorMeter = ({ title, symbol, size, value, limits, priColor, secColor })
 			<div className={classes.footer}>
 				<div>
 					<Typography variant='body1'>{max + charSymbol}</Typography>
-					<Typography variant='body2'>Max</Typography>
+					<Typography variant='body2'>Max ever</Typography>
 				</div>
 
 				<div>
 					<Typography variant='body1'>{min + charSymbol}</Typography>
-					<Typography variant='body2'>Min</Typography>
+					<Typography variant='body2'>Min ever</Typography>
 				</div>
 			</div>
 		</div>
