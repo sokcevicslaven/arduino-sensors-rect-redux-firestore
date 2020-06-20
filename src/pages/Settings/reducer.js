@@ -55,8 +55,8 @@ export const settingsReducer = (state, action) => {
 
 			if (name.indexOf('-') > 1) {
 				name = name.split('-');
-				tmp.arduinos[selected].settings[name[0]][name[1]] = value;
-			} else tmp.arduinos[selected].settings[name] = value;
+				tmp.arduinos[selected].settings[name[0]][name[1]] = +value;
+			} else tmp.arduinos[selected].settings[name] = +value;
 
 			tmp.buttonDisabled = false;
 			return tmp;
